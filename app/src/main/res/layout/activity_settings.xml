@@ -46,56 +46,38 @@
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:layout_width="match_parent"
             android:layout_height="@dimen/frame_height"
-            android:theme="@style/SwitchTheme"
-            android:text="@string/night_theme"
+            app:thumbTint="@color/text_gray"
+            app:trackTint="@color/light_gray"
+            android:text="@string/dark_theme"
             android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            android:textColor="@color/settings_text" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/frame_height">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/share_the_app"
-                android:textSize="@dimen/small_text"
-                android:textColor="@color/settings_text"
-                app:drawableEndCompat="@drawable/vector_share" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/frame_height">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/write_to_support"
-                android:textSize="@dimen/small_text"
-                android:textColor="@color/settings_text"
-                app:drawableEndCompat="@drawable/vector_support" />
-
-        </FrameLayout>
-
-        <FrameLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/frame_height"
-            android:orientation="horizontal">
+            android:gravity="center_vertical"
+            android:text="@string/share_the_app"
+            android:textSize="@dimen/small_text"
+            android:textColor="@color/settings_text"
+            app:drawableEndCompat="@drawable/vector_share" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/user_agreement"
-                android:textSize="@dimen/small_text"
-                android:textColor="@color/settings_text"
-                app:drawableEndCompat="@drawable/vector_agreement" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/frame_height"
+            android:gravity="center_vertical"
+            android:text="@string/write_to_support"
+            android:textSize="@dimen/small_text"
+            android:textColor="@color/settings_text"
+            app:drawableEndCompat="@drawable/vector_support" />
 
-        </FrameLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/frame_height"
+            android:gravity="center_vertical"
+            android:text="@string/user_agreement"
+            android:textSize="@dimen/small_text"
+            android:textColor="@color/settings_text"
+            app:drawableEndCompat="@drawable/vector_agreement" />
+
     </LinearLayout>
 </LinearLayout>
