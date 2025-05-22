@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/blue"
-    android:paddingHorizontal="@dimen/main"
+    android:paddingHorizontal="@dimen/padding_main"
     android:paddingTop="14dp"
     android:paddingBottom="28dp">
 
@@ -28,7 +29,7 @@
             android:layout_height="@dimen/button_height"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
-            app:cornerRadius="@dimen/main"
+            app:cornerRadius="@dimen/padding_main"
             android:text="@string/search"
             android:textAllCaps="false"
             android:textSize="@dimen/middle_text"
@@ -36,7 +37,7 @@
             app:icon="@drawable/vector_search"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/between_icon"
-            app:iconTint="@color/black"/>
+            app:iconTint="@color/black" />
 
         <Button
             android:id="@+id/media_button"
@@ -44,8 +45,8 @@
             android:layout_height="@dimen/button_height"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
-            android:layout_marginTop="@dimen/main"
-            app:cornerRadius="@dimen/main"
+            android:layout_marginTop="@dimen/padding_main"
+            app:cornerRadius="@dimen/padding_main"
             android:text="@string/media_library"
             android:textAllCaps="false"
             android:textSize="@dimen/middle_text"
@@ -61,8 +62,8 @@
             android:layout_height="@dimen/button_height"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
-            android:layout_marginTop="@dimen/main"
-            app:cornerRadius="@dimen/main"
+            android:layout_marginTop="@dimen/padding_main"
+            app:cornerRadius="@dimen/padding_main"
             android:text="@string/settings"
             android:textAllCaps="false"
             android:textSize="@dimen/middle_text"

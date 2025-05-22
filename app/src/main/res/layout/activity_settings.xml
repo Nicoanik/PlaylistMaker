@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -20,8 +22,7 @@
             android:background="@color/white"
             android:src="@drawable/vector_back"
             tools:ignore="ContentDescription"
-
-            android:layout_marginEnd="@dimen/vector_end" />
+            android:layout_marginEnd="@dimen/padding_settings" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,101 +35,67 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/frame_height"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_marginTop="24dp"
-        android:orientation="horizontal">
+        android:paddingStart="@dimen/padding_main"
+        android:paddingEnd="@dimen/padding_settings">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/frame_height"
+            android:theme="@style/SwitchTheme"
             android:text="@string/night_theme"
             android:textSize="@dimen/small_text"
             android:textColor="@color/settings_text"
-            android:layout_marginVertical="@dimen/text_margin_vertical"
-            android:layout_marginStart="@dimen/main"/>
-
-        <Switch
-            android:layout_width="56dp"
-            android:layout_height="40dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/between_icon"
-            android:layout_marginEnd="6dp"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-    </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/frame_height">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/frame_height"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/share_the_app"
+                android:textSize="@dimen/small_text"
+                android:textColor="@color/settings_text"
+                app:drawableEndCompat="@drawable/vector_share" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/share_the_app"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text"
-            android:layout_marginVertical="@dimen/text_margin_vertical"
-            android:layout_marginStart="@dimen/main"/>
+        </FrameLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/vector_share"
-            android:layout_marginTop="@dimen/vector_top"
-            android:layout_marginEnd="@dimen/vector_end"
-            android:layout_gravity="end"
-            tools:ignore="ContentDescription" />
-    </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/frame_height">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/frame_height"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/write_to_support"
+                android:textSize="@dimen/small_text"
+                android:textColor="@color/settings_text"
+                app:drawableEndCompat="@drawable/vector_support" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/write_to_support"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text"
-            android:layout_marginVertical="@dimen/text_margin_vertical"
-            android:layout_marginStart="@dimen/main"/>
+        </FrameLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/vector_support"
-            android:layout_marginTop="@dimen/vector_top"
-            android:layout_marginEnd="@dimen/vector_end"
-            android:layout_gravity="end"
-            tools:ignore="ContentDescription" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/frame_height"
+            android:orientation="horizontal">
 
-    </FrameLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/user_agreement"
+                android:textSize="@dimen/small_text"
+                android:textColor="@color/settings_text"
+                app:drawableEndCompat="@drawable/vector_agreement" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/frame_height"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_agreement"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text"
-            android:layout_marginVertical="@dimen/text_margin_vertical"
-            android:layout_marginStart="@dimen/main"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/vector_agreement"
-            android:layout_marginTop="@dimen/vector_top"
-            android:layout_marginEnd="@dimen/vector_end"
-            android:layout_gravity="end"
-            tools:ignore="ContentDescription" />
-    </FrameLayout>
+        </FrameLayout>
+    </LinearLayout>
 </LinearLayout>
