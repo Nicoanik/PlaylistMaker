@@ -14,28 +14,29 @@
 
         <ImageView
             android:id="@+id/back_button_settings"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/back_button"
+            android:layout_height="@dimen/back_button"
             android:scaleType="center"
             android:background="@color/white"
             android:src="@drawable/vector_back"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+
+            android:layout_marginEnd="@dimen/vector_end" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="12dp"
             android:text="@string/settings"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size"/>
+            android:textSize="@dimen/middle_text" />
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/frame_height"
         android:layout_marginTop="24dp"
         android:orientation="horizontal">
 
@@ -43,16 +44,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/night_theme"
-            android:textSize="16sp"
+            android:textSize="@dimen/small_text"
             android:textColor="@color/settings_text"
-            android:layout_marginVertical="21dp"
-            android:layout_marginStart="@dimen/between_main"/>
+            android:layout_marginVertical="@dimen/text_margin_vertical"
+            android:layout_marginStart="@dimen/main"/>
 
         <Switch
             android:layout_width="56dp"
             android:layout_height="40dp"
             android:layout_gravity="end"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/between_icon"
             android:layout_marginEnd="6dp"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
@@ -60,48 +61,48 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/frame_height"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/share_the_app"
-            android:textSize="16sp"
+            android:textSize="@dimen/small_text"
             android:textColor="@color/settings_text"
-            android:layout_marginVertical="21dp"
-            android:layout_marginStart="@dimen/between_main"/>
+            android:layout_marginVertical="@dimen/text_margin_vertical"
+            android:layout_marginStart="@dimen/main"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/vector_share"
-            android:layout_marginTop="22dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="@dimen/vector_top"
+            android:layout_marginEnd="@dimen/vector_end"
             android:layout_gravity="end"
             tools:ignore="ContentDescription" />
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/frame_height"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/write_to_support"
-            android:textSize="16sp"
+            android:textSize="@dimen/small_text"
             android:textColor="@color/settings_text"
-            android:layout_marginVertical="21dp"
-            android:layout_marginStart="@dimen/between_main"/>
+            android:layout_marginVertical="@dimen/text_margin_vertical"
+            android:layout_marginStart="@dimen/main"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/vector_support"
-            android:layout_marginTop="22dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="@dimen/vector_top"
+            android:layout_marginEnd="@dimen/vector_end"
             android:layout_gravity="end"
             tools:ignore="ContentDescription" />
 
@@ -109,24 +110,24 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/frame_height"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_agreement"
-            android:textSize="16sp"
+            android:textSize="@dimen/small_text"
             android:textColor="@color/settings_text"
-            android:layout_marginVertical="21dp"
-            android:layout_marginStart="@dimen/between_main"/>
+            android:layout_marginVertical="@dimen/text_margin_vertical"
+            android:layout_marginStart="@dimen/main"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/vector_agreement"
-            android:layout_marginTop="22dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="@dimen/vector_top"
+            android:layout_marginEnd="@dimen/vector_end"
             android:layout_gravity="end"
             tools:ignore="ContentDescription" />
     </FrameLayout>
