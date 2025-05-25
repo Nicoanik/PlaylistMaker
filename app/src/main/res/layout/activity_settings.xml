@@ -31,52 +31,57 @@
             android:text="@string/settings"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/middle_text" />
+            android:textSize="@dimen/middle_text"
+            style="@style/TextStyleMedium"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginTop="24dp"
+        android:orientation="vertical"
         android:paddingStart="@dimen/padding_main"
         android:paddingEnd="@dimen/padding_settings">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            style="@style/TextStyleRegular"
             android:layout_width="match_parent"
             android:layout_height="@dimen/frame_height"
-            app:thumbTint="@color/text_gray"
-            app:trackTint="@color/light_gray"
             android:text="@string/dark_theme"
+            android:textColor="@color/settings_text"
             android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text" />
+            app:thumbTint="@color/text_gray"
+            app:trackTint="@color/light_gray" />
 
         <TextView
+            style="@style/TextStyleRegular"
             android:layout_width="match_parent"
             android:layout_height="@dimen/frame_height"
             android:gravity="center_vertical"
             android:text="@string/share_the_app"
-            android:textSize="@dimen/small_text"
             android:textColor="@color/settings_text"
+            android:textSize="@dimen/small_text"
             app:drawableEndCompat="@drawable/vector_share" />
 
         <TextView
+            style="@style/TextStyleRegular"
             android:layout_width="match_parent"
             android:layout_height="@dimen/frame_height"
             android:gravity="center_vertical"
             android:text="@string/write_to_support"
-            android:textSize="@dimen/small_text"
             android:textColor="@color/settings_text"
+            android:textSize="@dimen/small_text"
             app:drawableEndCompat="@drawable/vector_support" />
 
         <TextView
+            style="@style/TextStyleRegular"
             android:layout_width="match_parent"
             android:layout_height="@dimen/frame_height"
             android:gravity="center_vertical"
             android:text="@string/user_agreement"
-            android:textSize="@dimen/small_text"
             android:textColor="@color/settings_text"
+            android:textSize="@dimen/small_text"
             app:drawableEndCompat="@drawable/vector_agreement" />
 
     </LinearLayout>
