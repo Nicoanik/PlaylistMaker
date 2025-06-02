@@ -48,16 +48,19 @@
             android:text="@string/dark_theme" />
 
         <TextView
+            android:id="@+id/share_button_settings"
             style="@style/button_activity_settings"
             android:text="@string/share_the_app"
             app:drawableEndCompat="@drawable/vector_share" />
 
         <TextView
+            android:id="@+id/support_button_settings"
             style="@style/button_activity_settings"
             android:text="@string/write_to_support"
             app:drawableEndCompat="@drawable/vector_support" />
 
         <TextView
+            android:id="@+id/agreement_button_settings"
             style="@style/button_activity_settings"
             android:text="@string/user_agreement"
             app:drawableEndCompat="@drawable/vector_agreement" />
