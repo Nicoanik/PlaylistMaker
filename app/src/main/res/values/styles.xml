@@ -6,6 +6,9 @@
     <style name="ModeActivitySettings">
         <item name="android:background">@color/white</item>
     </style>
+    <style name="ModeActivitySearch">
+        <item name="android:background">@color/white</item>
+    </style>
     <style name="TextStyleMedium500">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
@@ -19,7 +22,7 @@
         <item name="android:layout_height">@dimen/button_height</item>
         <item name="android:layout_weight">1</item>
         <item name="android:backgroundTint">@color/white</item>
-        <item name="cornerRadius">@dimen/padding_main</item>
+        <item name="cornerRadius">@dimen/main</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/middle_text</item>
         <item name="android:textColor">@color/black</item>
@@ -41,8 +44,19 @@
         <item name="trackTint">@color/light_gray</item>
         <item name="android:drawableTint">@color/text_gray</item>
     </style>
-    <style name="vector_back">
+    <style name="toolbar">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">@dimen/middle_text</item>
         <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
         <item name="tint">@color/black</item>
+    </style>
+    <style name="edit_text">
+        <item name="android:backgroundTint">@color/light_gray</item>
+        <item name="android:textColorHint">@color/text_gray</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/light_gray</item>
+        <item name="tint">@color/text_gray</item>
     </style>
 </resources>

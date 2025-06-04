@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/padding_main"
+    android:paddingHorizontal="@dimen/main"
     android:paddingTop="14dp"
     android:paddingBottom="28dp">
 
@@ -32,7 +32,7 @@
 
         <Button
             style="@style/button_activity_main"
-            android:layout_marginVertical="@dimen/padding_main"
+            android:layout_marginVertical="@dimen/main"
             android:id="@+id/media_button"
             android:text="@string/media_library"
             app:icon="@drawable/vector_media" />
