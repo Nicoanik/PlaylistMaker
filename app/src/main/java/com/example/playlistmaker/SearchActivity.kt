@@ -1,9 +1,11 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -18,17 +20,19 @@ class SearchActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
 
-        val linearLayout = findViewById<LinearLayout>(R.id.container)
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
+        inputEditText.setText(editText)
 
         val backButton = findViewById<ImageView>(R.id.back_button_search)
         backButton.setOnClickListener {
             finish()
         }
 
+        val clearButton = findViewById<ImageView>(R.id.clearIcon)
         clearButton.setOnClickListener {
-            inputEditText.setText("")
+            inputEditText.setText(TEXT_DEF)
+            val imm = inputEditText.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(inputEditText.windowToken, 0)
         }
 
         val textWatcher = object : TextWatcher {
@@ -36,6 +40,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+                editText = inputEditText.text.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -49,5 +54,22 @@ class SearchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+    }
+
+    private var editText: String = TEXT_DEF
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(EDIT_TEXT, editText)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        editText = savedInstanceState.getString(EDIT_TEXT, TEXT_DEF)
+    }
+
+    companion object {
+        const val EDIT_TEXT = "EDIT_TEXT"
+        const val TEXT_DEF = ""
     }
 }

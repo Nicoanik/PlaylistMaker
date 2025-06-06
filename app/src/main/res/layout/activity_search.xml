@@ -68,6 +68,7 @@
                 android:textSize="@dimen/small_text"
                 android:hint="@string/search"
                 android:maxLines="1"
+                android:maxLength="30"
                 android:inputType="text"
                 style="@style/edit_text" />
 
@@ -75,7 +76,7 @@
                 android:id="@+id/clearIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
                 android:visibility="gone" />
             </LinearLayout>
