@@ -68,7 +68,7 @@
                 android:layout_marginEnd="@dimen/padding_12"
                 android:src="@drawable/vector_clear"
                 android:visibility="gone"
-                app:tint="@color/Light_Icon" />
+                app:tint="@color/text_gray" />
         </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
