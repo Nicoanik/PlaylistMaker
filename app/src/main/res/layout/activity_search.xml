@@ -64,8 +64,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                android:visibility="gone" />
+                android:layout_marginVertical="@dimen/between_icon"
+                android:layout_marginEnd="@dimen/padding_12"
+                android:src="@drawable/vector_clear"
+                android:visibility="gone"
+                app:tint="@color/Light_Icon" />
         </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
