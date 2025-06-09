@@ -46,12 +46,13 @@
 
             <EditText
                 android:id="@+id/inputEditText"
-                android:drawableStart="@drawable/vector_search"
+                android:drawableStart="@drawable/vector_search_16x16"
                 android:layout_marginStart="@dimen/padding_12"
                 android:drawablePadding="@dimen/dp_8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="@dimen/small_text"
+                android:textCursorDrawable="@drawable/cursor_blue"
                 android:hint="@string/search"
                 android:maxLines="1"
                 android:maxLength="30"

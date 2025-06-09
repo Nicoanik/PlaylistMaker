@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="ModeActivityMain">
-        <item name="android:background">@color/blue</item>
+        <item name="android:background">@color/YP_blue</item>
     </style>
     <style name="ModeActivitySettings">
         <item name="android:background">@color/white</item>
