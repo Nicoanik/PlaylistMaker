@@ -3,81 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    style="@style/ModeActivitySettings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="4dp">
 
         <ImageView
             android:id="@+id/back_button_settings"
+            style="@style/toolbar"
             android:layout_width="@dimen/back_button"
             android:layout_height="@dimen/back_button"
+            android:layout_marginEnd="@dimen/padding_12"
             android:scaleType="center"
-            android:background="@color/white"
             android:src="@drawable/vector_back"
-            tools:ignore="ContentDescription"
-            android:layout_marginEnd="@dimen/padding_settings" />
+            tools:ignore="ContentDescription" />
 
         <TextView
+            style="@style/toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/settings"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
             android:textSize="@dimen/middle_text" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        style="@style/button_activity_settings"
         android:layout_marginTop="24dp"
-        android:paddingStart="@dimen/padding_main"
-        android:paddingEnd="@dimen/padding_settings">
+        android:text="@string/dark_theme" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/frame_height"
-            app:thumbTint="@color/text_gray"
-            app:trackTint="@color/light_gray"
-            android:text="@string/dark_theme"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text" />
+    <TextView
+        android:id="@+id/share_button_settings"
+        style="@style/button_activity_settings"
+        android:text="@string/share_the_app"
+        app:drawableEndCompat="@drawable/vector_share" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/frame_height"
-            android:gravity="center_vertical"
-            android:text="@string/share_the_app"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text"
-            app:drawableEndCompat="@drawable/vector_share" />
+    <TextView
+        android:id="@+id/support_button_settings"
+        style="@style/button_activity_settings"
+        android:text="@string/write_to_support"
+        app:drawableEndCompat="@drawable/vector_support" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/frame_height"
-            android:gravity="center_vertical"
-            android:text="@string/write_to_support"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text"
-            app:drawableEndCompat="@drawable/vector_support" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/frame_height"
-            android:gravity="center_vertical"
-            android:text="@string/user_agreement"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/settings_text"
-            app:drawableEndCompat="@drawable/vector_agreement" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/agreement_button_settings"
+        style="@style/button_activity_settings"
+        android:text="@string/user_agreement"
+        app:drawableEndCompat="@drawable/vector_agreement" />
 </LinearLayout>
