@@ -71,4 +71,10 @@
                 app:tint="@color/text_gray" />
         </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/track_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/main"/>
 </LinearLayout>

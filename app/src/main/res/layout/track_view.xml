@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/frame_height"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/padding_12">
+
+    <ImageView
+        android:id="@+id/album_cover"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="66dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="44dp"
+        style="@style/button_activity_settings"
+        android:textSize="16sp"
+        android:text="Track"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginStart="66dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="14dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/button_activity_settings"
+            android:textSize="11sp"
+            android:text="Artist"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/vector_agreement"
+        android:layout_gravity="end|center_vertical" />
+
+</FrameLayout>
