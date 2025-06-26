@@ -2,9 +2,10 @@
 <resources>
     <dimen name="main">16dp</dimen>
     <dimen name="button_height">0dp</dimen>
-    <dimen name="between_icon">10dp</dimen>
+    <dimen name="between_icon">8dp</dimen>
     <dimen name="small_text">16sp</dimen>
     <dimen name="middle_text">22sp</dimen>
+    <dimen name="little_text">11sp</dimen>
     <dimen name="frame_height">61dp</dimen>
     <dimen name="back_button">48dp</dimen>
     <dimen name="text_margin_vertical">21dp</dimen>
@@ -12,5 +13,10 @@
     <dimen name="padding_12">12dp</dimen>
     <dimen name="padding_toolbar">4dp</dimen>
     <dimen name="dp_8">8dp</dimen>
-
+    <dimen name="album_cover">45dp</dimen>
+    <dimen name="track_text_start">66dp</dimen>
+    <dimen name="track_text_end">44dp</dimen>
+    <dimen name="track_text_top_and_bottom">14dp</dimen>
+    <dimen name="track_text_marginBottom">28dp</dimen>
+    <dimen name="artist_text_marginTop">34dp</dimen>
 </resources>

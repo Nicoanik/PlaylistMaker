@@ -19,7 +19,7 @@
             android:layout_width="@dimen/back_button"
             android:layout_height="@dimen/back_button"
             android:scaleType="center"
-            android:src="@drawable/vector_back"
+            android:src="@drawable/ic_back_arrow_24"
             tools:ignore="ContentDescription"
             android:layout_marginEnd="@dimen/padding_12"
             style="@style/toolbar"/>
@@ -46,13 +46,13 @@
 
             <EditText
                 android:id="@+id/inputEditText"
-                android:drawableStart="@drawable/vector_search_16x16"
+                android:drawableStart="@drawable/ic_search_16"
                 android:layout_marginStart="@dimen/padding_12"
                 android:drawablePadding="@dimen/dp_8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="@dimen/small_text"
-                android:textCursorDrawable="@drawable/cursor_blue"
+                android:textCursorDrawable="@drawable/color_cursor_blue"
                 android:hint="@string/search"
                 android:maxLines="1"
                 android:maxLength="30"
@@ -66,9 +66,15 @@
                 android:layout_gravity="end"
                 android:layout_marginVertical="@dimen/between_icon"
                 android:layout_marginEnd="@dimen/padding_12"
-                android:src="@drawable/vector_clear"
+                android:src="@drawable/ic_x_16"
                 android:visibility="gone"
                 app:tint="@color/text_gray" />
         </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/track_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/main"/>
 </LinearLayout>

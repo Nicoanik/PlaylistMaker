@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/frame_height"
+    android:paddingHorizontal="@dimen/padding_12">
+
+    <ImageView
+        android:contentDescription="@null"
+        android:id="@+id/album_cover"
+        android:layout_width="@dimen/album_cover"
+        android:layout_height="@dimen/album_cover"
+        android:layout_gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/track_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/track_text_start"
+        android:layout_marginTop="@dimen/track_text_top_and_bottom"
+        android:layout_marginEnd="@dimen/track_text_end"
+        android:layout_marginBottom="@dimen/track_text_marginBottom"
+        android:ellipsize="end"
+        android:maxLines="1"
+        style="@style/track_text" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/track_text_start"
+        android:layout_marginTop="@dimen/artist_text_marginTop"
+        android:layout_marginEnd="@dimen/track_text_end"
+        android:layout_marginBottom="@dimen/track_text_top_and_bottom">
+
+        <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:ellipsize="end"
+            android:maxLines="1"
+            style="@style/artist_text" />
+
+        <ImageView
+            android:contentDescription="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_dot_dash_13"
+            style="@style/artist_text" />
+
+        <TextView
+            android:id="@+id/track_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/artist_text" />
+    </LinearLayout>
+
+    <ImageView
+        android:contentDescription="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_forward_arrow_24"
+        android:layout_gravity="end|center_vertical"
+        style="@style/artist_text" />
+
+</FrameLayout>

@@ -21,7 +21,7 @@
             android:layout_height="@dimen/back_button"
             android:layout_marginEnd="@dimen/padding_12"
             android:scaleType="center"
-            android:src="@drawable/vector_back"
+            android:src="@drawable/ic_back_arrow_24"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -43,17 +43,17 @@
         android:id="@+id/share_button_settings"
         style="@style/button_activity_settings"
         android:text="@string/share_the_app"
-        app:drawableEndCompat="@drawable/vector_share" />
+        app:drawableEndCompat="@drawable/ic_share_24" />
 
     <TextView
         android:id="@+id/support_button_settings"
         style="@style/button_activity_settings"
         android:text="@string/write_to_support"
-        app:drawableEndCompat="@drawable/vector_support" />
+        app:drawableEndCompat="@drawable/ic_support_24" />
 
     <TextView
         android:id="@+id/agreement_button_settings"
         style="@style/button_activity_settings"
         android:text="@string/user_agreement"
-        app:drawableEndCompat="@drawable/vector_agreement" />
+        app:drawableEndCompat="@drawable/ic_forward_arrow_24" />
 </LinearLayout>
