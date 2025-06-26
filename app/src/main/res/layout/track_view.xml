@@ -23,11 +23,10 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:scrollHorizontally="true"
-        style="@style/track_text"
-        android:text="Metallica"/>
+        style="@style/track_text" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_marginStart="@dimen/track_text_start"
@@ -38,14 +37,12 @@
         <TextView
             android:id="@+id/artist_name"
             android:layout_width="0dp"
-            android:layout_weight="1"
-
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:baselineAligned="false"
             android:ellipsize="end"
             android:maxLines="1"
-            android:scrollHorizontally="true"
-            style="@style/artist_text"
-            android:text="njgkhjkjgkjfkgjgkgjkfjnuujngiunijuiunvuitunvjviu"/>
+            style="@style/artist_text" />
 
         <ImageView
             android:contentDescription="@null"
@@ -56,10 +53,9 @@
 
         <TextView
             android:id="@+id/track_time"
-            style="@style/artist_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="8:26" />
+            style="@style/artist_text" />
     </LinearLayout>
 
     <ImageView
