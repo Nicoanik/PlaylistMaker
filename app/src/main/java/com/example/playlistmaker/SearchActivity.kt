@@ -56,8 +56,8 @@ class SearchActivity : AppCompatActivity() {
         val recycler = findViewById<RecyclerView>(R.id.track_list)
 
         val trackList = listOf(
-            Track("Smells Like Teen Spirit iruhiunirtugni ugiunh iunb  rthrt",
-                "Nirvana",
+            Track("Smells Like Teen Spirit",
+                "Nirvana iuvnir hiiui biruh vuiuh vg jni ufiu iu iub ifiu fgibn iuh vit tg",
                 "5:01",
                 "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"),
             Track("Billie Jean",
