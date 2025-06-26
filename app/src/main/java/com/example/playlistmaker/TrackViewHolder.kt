@@ -21,7 +21,7 @@ class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .centerCrop()
-            .transform(RoundedCorners(10))
+            .transform(RoundedCorners(2))
             .into(artworkUrl100View)
     }
 }
