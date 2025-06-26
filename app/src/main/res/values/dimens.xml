@@ -2,7 +2,7 @@
 <resources>
     <dimen name="main">16dp</dimen>
     <dimen name="button_height">0dp</dimen>
-    <dimen name="between_icon">10dp</dimen>
+    <dimen name="between_icon">8dp</dimen>
     <dimen name="small_text">16sp</dimen>
     <dimen name="middle_text">22sp</dimen>
     <dimen name="little_text">11sp</dimen>

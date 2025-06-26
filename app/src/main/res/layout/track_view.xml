@@ -46,7 +46,7 @@
             android:contentDescription="@null"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/vector_ic"
+            android:src="@drawable/ic_dot_dash_13"
             style="@style/artist_text" />
 
         <TextView
@@ -60,7 +60,7 @@
         android:contentDescription="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/vector_agreement"
+        android:src="@drawable/ic_forward_arrow_24"
         android:layout_gravity="end|center_vertical"
         style="@style/artist_text" />
 
