@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/frame_height"
-    android:orientation="horizontal"
     android:paddingHorizontal="@dimen/padding_12">
 
     <ImageView
@@ -22,7 +21,6 @@
         android:layout_marginBottom="@dimen/track_text_marginBottom"
         android:ellipsize="end"
         android:maxLines="1"
-        android:scrollHorizontally="true"
         style="@style/track_text" />
 
     <LinearLayout
