@@ -94,7 +94,8 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginTop="102dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_errors_light_120"/>
 
             <TextView
                 android:id="@+id/placeholderMessage"
@@ -110,11 +111,13 @@
                 android:text="Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету"/>
 
             <Button
-                android:layout_width="91dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="24dp"
-                android:layout_gravity="center_horizontal"
-                cornerRadius="54dp"/>
+                android:id="@+id/refreshButton"
+                style="@style/refresh_button"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:visibility="visible"
+                android:text="Обновить"/>
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>
