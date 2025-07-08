@@ -19,7 +19,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.random.Random
 
 class SearchActivity : AppCompatActivity() {
 
@@ -84,8 +83,8 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        val inputEditText = findViewById<EditText>(R.id.inputEditText)
-        inputEditText.setText(editText)
+//        val inputEditText = findViewById<EditText>(R.id.inputEditText)
+//        inputEditText.setText(editText)
 
         val backButton = findViewById<ImageView>(R.id.back_button_search)
         backButton.setOnClickListener {
@@ -94,9 +93,9 @@ class SearchActivity : AppCompatActivity() {
 
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         clearButton.setOnClickListener {
-            inputEditText.setText(TEXT_DEF)
-            val imm = inputEditText.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(inputEditText.windowToken, 0)
+            queryInput.setText(TEXT_DEF)
+            val imm = queryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
         }
 
         val textWatcher = object : TextWatcher {
@@ -104,12 +103,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
-                editText = inputEditText.text.toString()
+                editText = queryInput.text.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {}
         }
-        inputEditText.addTextChangedListener(textWatcher)
+        queryInput.addTextChangedListener(textWatcher)
 
         val recycler = findViewById<RecyclerView>(R.id.track_list)
 

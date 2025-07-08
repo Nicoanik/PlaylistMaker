@@ -1,4 +1,3 @@
 package com.example.playlistmaker
 
-class TracksResponse {
-}
+class TracksResponse(val results: List<Track>)
