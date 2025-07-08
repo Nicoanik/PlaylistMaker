@@ -3,10 +3,12 @@ package com.example.playlistmaker
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -32,8 +34,11 @@ class SearchActivity : AppCompatActivity() {
     private val itunesService =retrofit.create(ItunesApi::class.java)
 
     private lateinit var queryInput: EditText
+    private lateinit var tracksList: RecyclerView
 
-    private val trackList = ArrayList<Track>()
+    private val tracks = ArrayList<Track>()
+
+    private val adapter = TracksAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +50,13 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        queryInput =findViewById(R.id.inputEditText)
+        queryInput = findViewById(R.id.inputEditText)
+        tracksList = findViewById(R.id.tracks_list)
+
+        adapter.tracks = tracks
+
+        tracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        tracksList.adapter = adapter
 
         queryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -57,12 +68,12 @@ class SearchActivity : AppCompatActivity() {
                                                 response: Response<TracksResponse>
                         ) {
                             if (response.code() == 200) {
-                                trackList.clear()
+                                tracks.clear()
                                 if (response.body()?.results?.isNotEmpty() == true) {
-                                    trackList.addAll(response.body()?.results!!)
+                                    tracks.addAll(response.body()?.results!!)
                                     adapter.notifyDataSetChanged()
                                 }
-                                if (trackList.isEmpty()) {
+                                if (tracks.isEmpty()) {
                                     showMessage(getString(R.string.nothing_found), "")
                                 } else {
                                     showMessage("", "")
@@ -110,7 +121,7 @@ class SearchActivity : AppCompatActivity() {
         }
         queryInput.addTextChangedListener(textWatcher)
 
-        val recycler = findViewById<RecyclerView>(R.id.track_list)
+//        val recycler = findViewById<RecyclerView>(R.id.track_list)
 
 //        val trackList = listOf(
 //            Track("Smells Like Teen Spirit",
@@ -135,8 +146,23 @@ class SearchActivity : AppCompatActivity() {
 //                "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg")
 //        )
 
-        recycler.layoutManager = LinearLayoutManager(this)
-        recycler.adapter = TrackAdapter(trackList)
+//        recycler.layoutManager = LinearLayoutManager(this)
+//        recycler.adapter = TrackAdapter(tracks)
+
+        private fun showMessage(text: String, additionalMessage: String) {
+            if (text.isNotEmpty()) {
+                placeholderMessage.visibility = View.VISIBLE
+                tracks.clear()
+                adapter.notifyDataSetChanged()
+                placeholderMessage.text = text
+                if (additionalMessage.isNotEmpty()) {
+                    Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
+                        .show()
+                }
+            } else {
+                placeholderMessage.visibility = View.GONE
+            }
+        }
     }
 
     private var editText: String = TEXT_DEF
