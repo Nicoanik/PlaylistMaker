@@ -51,6 +51,8 @@
                 android:drawablePadding="@dimen/dp_8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
                 android:textSize="@dimen/small_text"
                 android:textCursorDrawable="@drawable/color_cursor_blue"
                 android:hint="@string/search"
