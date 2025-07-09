@@ -107,13 +107,13 @@
                 android:text="@string/something_went_wrong" />
 
             <Button
-                android:id="@+id/refreshButton"
+                android:id="@+id/buttonRefresh"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_36"
                 android:layout_marginTop="@dimen/dp_24"
                 android:layout_gravity="center_horizontal"
-                android:insetTop="0"
-                android:insetBottom="0"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 style="@style/button_refresh"
                 android:visibility="visible"
                 android:text="Обновить"/>
