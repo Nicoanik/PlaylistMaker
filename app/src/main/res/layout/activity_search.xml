@@ -112,7 +112,7 @@
                 android:layout_height="@dimen/dp_36"
                 android:layout_marginTop="@dimen/dp_24"
                 android:layout_gravity="center_horizontal"
-                android:insetTop="0dp"
+                android:insetTop="0"
                 android:insetBottom="0"
                 style="@style/button_refresh"
                 android:visibility="visible"
