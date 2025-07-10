@@ -33,9 +33,9 @@ class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
             .into(artworkUrl100View)
     }
 
-    private fun timeConversion(time: String?) : String {
+    private fun timeConversion(time: Long?) : String {
         if (time == null) return ""
-        val time = SimpleDateFormat("mm:ss", Locale.getDefault()).format(time.toLong())
+        val time = SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
         return time
     }
 
