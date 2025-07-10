@@ -88,8 +88,11 @@
         <item name="android:textSize">@dimen/text_14sp</item>
         <item name="android:letterSpacing">0</item>
     </style>
-    <style name="search_image_view">
+    <style name="error_image_view">
         <item name="android:src">@drawable/ic_errors_light_120</item>
+    </style>
+    <style name="internet_image_view">
+        <item name="android:src">@drawable/ic_internet_light_120</item>
     </style>
     <style name="text_placeholder">
         <item name="android:layout_marginHorizontal">@dimen/dp_24</item>
