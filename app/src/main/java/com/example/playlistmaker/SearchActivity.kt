@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -39,7 +38,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderMessage: TextView
     private lateinit var placeholderErrorImage: ImageView
     private lateinit var placeholderInternetImage: ImageView
-    private lateinit var buttonRefrash: Button
+    private lateinit var buttonRefresh: Button
     private lateinit var queryInput: EditText
     private lateinit var tracksList: RecyclerView
 
@@ -60,7 +59,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage = findViewById(R.id.placeholderMessage)
         placeholderErrorImage = findViewById(R.id.placeholderErrorImage)
         placeholderInternetImage = findViewById(R.id.placeholderInternetImage)
-        buttonRefrash = findViewById(R.id.buttonRefresh)
+        buttonRefresh = findViewById(R.id.buttonRefresh)
         queryInput = findViewById(R.id.queryInput)
         tracksList = findViewById(R.id.tracks_list)
 
@@ -71,46 +70,16 @@ class SearchActivity : AppCompatActivity() {
 
         queryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
-                if (queryInput.text.isNotEmpty()) {
-                    itunesService.search(queryInput.text.toString()).enqueue(object :
-                        Callback<TracksResponse> {
-                        override fun onResponse(call: Call<TracksResponse>,
-                                                response: Response<TracksResponse>
-                        ) {
-                            if (response.code() == 200) {
-                                tracks.clear()
-                                if (response.body()?.results?.isNotEmpty() == true) {
-                                    tracks.addAll(response.body()?.results!!)
-                                    adapter.notifyDataSetChanged()
-                                }
-                                if (tracks.isEmpty()) {
-                                    placeholderMessage.visibility = View.VISIBLE
-                                    placeholderErrorImage.visibility = View.VISIBLE
-                                    showMessage(getString(R.string.nothing_found), "")
-                                } else {
-                                    showMessage("", "")
-                                }
-                            } else {
-                                placeholderMessage.visibility = View.VISIBLE
-                                placeholderInternetImage.visibility = View.VISIBLE
-                                showMessage(getString(R.string.something_went_wrong), response.code().toString())
-                            }
-                        }
-
-                        override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                            placeholderMessage.visibility = View.VISIBLE
-                            placeholderInternetImage.visibility = View.VISIBLE
-                            showMessage(getString(R.string.something_went_wrong), t.message.toString())
-                        }
-
-                    })
-                }
+                request()
                 true
             }
             false
         }
 
+        buttonRefresh.setOnClickListener {
+            placeholderGone()
+            request()
+        }
         queryInput.setText(editText)
 
         val backButton = findViewById<ImageView>(R.id.back_button_search)
@@ -122,9 +91,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             queryInput.setText(TEXT_DEF)
             tracks.clear()
-            placeholderMessage.visibility = View.GONE
-            placeholderErrorImage.visibility = View.GONE
-            placeholderInternetImage.visibility = View.GONE
+            placeholderGone()
             val imm = queryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
         }
@@ -142,6 +109,44 @@ class SearchActivity : AppCompatActivity() {
         queryInput.addTextChangedListener(textWatcher)
     }
 
+    private fun request() {
+        if (queryInput.text.isNotEmpty()) {
+            itunesService.search(queryInput.text.toString()).enqueue(object :
+                Callback<TracksResponse> {
+                override fun onResponse(call: Call<TracksResponse>,
+                                        response: Response<TracksResponse>
+                ) {
+                    if (response.code() == 200) {
+                        tracks.clear()
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            tracks.addAll(response.body()?.results!!)
+                            adapter.notifyDataSetChanged()
+                        }
+                        if (tracks.isEmpty()) {
+                            placeholderMessage.visibility = View.VISIBLE
+                            placeholderErrorImage.visibility = View.VISIBLE
+                            showMessage(getString(R.string.nothing_found), "")
+                        } else {
+                            showMessage("", "")
+                        }
+                    } else {
+                        placeholderMessage.visibility = View.VISIBLE
+                        placeholderInternetImage.visibility = View.VISIBLE
+                        buttonRefresh.visibility = View.VISIBLE
+                        showMessage(getString(R.string.something_went_wrong), response.code().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                    placeholderMessage.visibility = View.VISIBLE
+                    placeholderInternetImage.visibility = View.VISIBLE
+                    buttonRefresh.visibility = View.VISIBLE
+                    showMessage(getString(R.string.something_went_wrong), t.message.toString())
+                }
+
+            })
+        }
+    }
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
             tracks.clear()
@@ -152,10 +157,15 @@ class SearchActivity : AppCompatActivity() {
                     .show()
             }
         } else {
-            placeholderMessage.visibility = View.GONE
-            placeholderErrorImage.visibility = View.GONE
-            placeholderInternetImage.visibility = View.GONE
+            placeholderGone()
         }
+    }
+
+    private fun placeholderGone() {
+        placeholderMessage.visibility = View.GONE
+        placeholderErrorImage.visibility = View.GONE
+        placeholderInternetImage.visibility = View.GONE
+        buttonRefresh.visibility = View.GONE
     }
 
     private var editText: String = TEXT_DEF

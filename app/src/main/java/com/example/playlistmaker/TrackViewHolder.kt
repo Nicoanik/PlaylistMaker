@@ -3,7 +3,6 @@ package com.example.playlistmaker
 import android.content.Context
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -25,7 +24,7 @@ class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     fun bind(model: Track) {
         trackNameView.text = model.trackName
         artistNameView.text = model.artistName
-        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime.toInt())
+        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime.toLong())
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.album_cover_placeholder)
