@@ -69,8 +69,8 @@
                 android:layout_marginVertical="@dimen/dp_8"
                 android:layout_marginEnd="@dimen/dp_12"
                 android:src="@drawable/ic_x_16"
-                android:visibility="gone"
-                app:tint="@color/text_gray" />
+                style="@style/edit_text"
+                android:visibility="gone" />
         </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
 

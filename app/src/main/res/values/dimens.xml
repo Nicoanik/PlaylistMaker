@@ -10,9 +10,9 @@
     <dimen name="dp_21">21dp</dimen>
     <dimen name="dp_24">24dp</dimen>
     <dimen name="dp_28">28dp</dimen>
+    <dimen name="dp_32">32dp</dimen>
     <dimen name="dp_34">34dp</dimen>
     <dimen name="dp_36">36dp</dimen>
-    <dimen name="dp_44">44dp</dimen>
     <dimen name="dp_45">45dp</dimen>
     <dimen name="dp_48">48dp</dimen>
     <dimen name="dp_54">54dp</dimen>
