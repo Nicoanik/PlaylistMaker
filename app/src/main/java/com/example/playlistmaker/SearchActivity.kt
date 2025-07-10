@@ -42,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var queryInput: EditText
     private lateinit var tracksList: RecyclerView
 
-    private val tracks = ArrayList<Track>()
+    private val tracks: MutableList<Track> = mutableListOf()
 
     private val adapter = TracksAdapter()
 
@@ -117,19 +117,15 @@ class SearchActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<TracksResponse>,
                                         response: Response<TracksResponse>
                 ) {
-                    if (response.code() == 200) {
+                    if (response.isSuccessful) {
+                        val tracksJson = response.body()?.results
                         tracks.clear()
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            tracks.addAll(response.body()?.results!!)
-                            adapter.notifyDataSetChanged()
-                        }
+                        tracks.addAll(tracksJson!!)
                         if (tracks.isEmpty()) {
                             placeholderMessage.visibility = View.VISIBLE
                             placeholderErrorImage.visibility = View.VISIBLE
-                            showMessage(getString(R.string.nothing_found), "")
-                        } else {
-                            showMessage("", "")
-                        }
+                            showMessage(getString(R.string.nothing_found), "")}
+                        else { adapter.notifyDataSetChanged() }
                     } else {
                         placeholderMessage.visibility = View.VISIBLE
                         placeholderInternetImage.visibility = View.VISIBLE
