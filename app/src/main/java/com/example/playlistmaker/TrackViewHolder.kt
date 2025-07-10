@@ -24,13 +24,19 @@ class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     fun bind(model: Track) {
         trackNameView.text = model.trackName
         artistNameView.text = model.artistName
-        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime.toLong())
+        trackTimeView.text = timeConversion(model.trackTime)
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.album_cover_placeholder)
             .centerCrop()
             .transform(RoundedCorners(dpToPx(2f, itemView.context)))
             .into(artworkUrl100View)
+    }
+
+    private fun timeConversion(time: String?) : String {
+        if (time == null) return ""
+        val time = SimpleDateFormat("mm:ss", Locale.getDefault()).format(time.toLong())
+        return time
     }
 
     private fun dpToPx(dp: Float, context: Context): Int {

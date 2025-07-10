@@ -92,6 +92,7 @@ class SearchActivity : AppCompatActivity() {
             queryInput.setText(TEXT_DEF)
             tracks.clear()
             placeholderGone()
+            adapter.notifyDataSetChanged()
             val imm = queryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
         }
