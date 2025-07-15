@@ -6,9 +6,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.example.playlistmaker.App.Companion.THEME_MODE
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +28,14 @@ class SettingsActivity : AppCompatActivity() {
         val backButton = findViewById<ImageView>(R.id.back_button_settings)
         backButton.setOnClickListener{
             finish()
+        }
+
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+            val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+            sharedPrefs.edit { putBoolean(THEME_MODE, checked) }
         }
 
         val shareButton = findViewById<TextView>(R.id.share_button_settings)
