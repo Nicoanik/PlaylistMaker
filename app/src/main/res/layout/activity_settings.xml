@@ -17,9 +17,9 @@
         <ImageView
             android:id="@+id/back_button_settings"
             style="@style/toolbar"
-            android:layout_width="@dimen/back_button"
-            android:layout_height="@dimen/back_button"
-            android:layout_marginEnd="@dimen/padding_12"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginEnd="@dimen/dp_12"
             android:scaleType="center"
             android:src="@drawable/ic_back_arrow_24"
             tools:ignore="ContentDescription" />
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/settings"
-            android:textSize="@dimen/middle_text" />
+            android:textSize="@dimen/text_22sp" />
 
     </LinearLayout>
 
