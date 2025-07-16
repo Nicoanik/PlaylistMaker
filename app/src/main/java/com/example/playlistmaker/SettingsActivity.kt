@@ -11,10 +11,17 @@ import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
-import com.example.playlistmaker.App.Companion.THEME_MODE
+import com.example.playlistmaker.App.Companion.THEME_MODE_KEY
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var backButton: ImageView
+    private lateinit var themeSwitcher: SwitchMaterial
+    private lateinit var shareButton: TextView
+    private lateinit var supportButton: TextView
+    private lateinit var agreementButton: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,20 +32,27 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val backButton = findViewById<ImageView>(R.id.back_button_settings)
+        backButton = findViewById(R.id.back_button_settings)
+        themeSwitcher = findViewById(R.id.themeSwitcher)
+        shareButton = findViewById(R.id.share_button_settings)
+        supportButton = findViewById(R.id.support_button_settings)
+        agreementButton = findViewById(R.id.agreement_button_settings)
+
         backButton.setOnClickListener{
             finish()
         }
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-        themeSwitcher.isChecked = (applicationContext as App).darkTheme
-        themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as App).switchTheme(checked)
-            val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-            sharedPrefs.edit { putBoolean(THEME_MODE, checked) }
+        setSwitcher()
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            if (switcher.isPressed) {
+                (applicationContext as App).switchTheme(checked)
+                val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+                sharedPrefs.edit { putBoolean(THEME_MODE_KEY, checked) }
+            } else {
+                setSwitcher()
+            }
         }
 
-        val shareButton = findViewById<TextView>(R.id.share_button_settings)
         shareButton.setOnClickListener{
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.setType("text/plain")
@@ -46,7 +60,6 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
 
-        val supportButton = findViewById<TextView>(R.id.support_button_settings)
         supportButton.setOnClickListener{
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = "mailto:".toUri()
@@ -56,11 +69,18 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(supportIntent)
         }
 
-        val agreementButton = findViewById<TextView>(R.id.agreement_button_settings)
         agreementButton.setOnClickListener{
             val address = getString(R.string.agreement_url).toUri()
             val agreementIntent = Intent(Intent.ACTION_VIEW, address)
             startActivity(agreementIntent)
+        }
+    }
+
+    private fun setSwitcher() {
+        if ((applicationContext as App).themeModeKeyActive) {
+            themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        } else {
+            themeSwitcher.isChecked = (applicationContext as App).checkThemeMode()
         }
     }
 }
