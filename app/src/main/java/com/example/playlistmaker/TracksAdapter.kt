@@ -3,7 +3,7 @@ package com.example.playlistmaker
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class TracksAdapter(): RecyclerView.Adapter<TrackViewHolder> () {
+class TracksAdapter: RecyclerView.Adapter<TrackViewHolder> () {
 
     var tracks: List<Track> = listOf()
 

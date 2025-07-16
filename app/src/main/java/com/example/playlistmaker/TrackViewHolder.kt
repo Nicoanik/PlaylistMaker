@@ -35,8 +35,7 @@ class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
 
     private fun timeConversion(time: Long?) : String {
         if (time == null) return ""
-        val time = SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
-        return time
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
     }
 
     private fun dpToPx(dp: Float, context: Context): Int {
