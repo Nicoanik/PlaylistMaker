@@ -3,6 +3,7 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 
 class App: Application() {
 
@@ -14,7 +15,7 @@ class App: Application() {
 
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
-//        sharedPrefs.edit { remove(THEME_MODE) } // Для проверки холодного старта
+//        sharedPrefs.edit { remove(THEME_MODE_KEY) } // Для проверки холодного старта
 
         if (sharedPrefs.contains(THEME_MODE_KEY)) {
             darkTheme = sharedPrefs.getBoolean(THEME_MODE_KEY, false)
