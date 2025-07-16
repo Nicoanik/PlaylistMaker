@@ -48,9 +48,8 @@ class SettingsActivity : AppCompatActivity() {
                 (applicationContext as App).switchTheme(checked)
                 val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
                 sharedPrefs.edit { putBoolean(THEME_MODE_KEY, checked) }
-            } else {
-                setSwitcher()
             }
+            setSwitcher()
         }
 
         shareButton.setOnClickListener{
