@@ -111,6 +111,15 @@ class SearchActivity : AppCompatActivity() {
             placeholderGone()
             request()
         }
+
+//        val onTrackClickListener = object : OnTrackClickListener {
+//            override fun onTrackClick(track: Track) {
+//                val position =tracks.indexOf(track)
+//                tracks.add(track)
+//                adapter.notifyItemInserted(position)
+//                adapter.notifyItemRangeChanged(position, tracks.size)
+//            }
+//        }
     }
 
     private fun request() {
