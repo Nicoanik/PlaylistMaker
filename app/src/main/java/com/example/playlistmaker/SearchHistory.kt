@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import android.content.SharedPreferences
-import com.example.playlistmaker.App.Companion.THEME_MODE_KEY
 import com.google.gson.Gson
 
 class SearchHistory(val sharedPrefs: SharedPreferences) {
@@ -11,6 +10,7 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
     init {
         getSearchHistory()
     }
+
     fun addTrackToSearchHistory(track: Track) {
         getSearchHistory()
         tracks.remove(track)
@@ -38,7 +38,6 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
     }
 
     companion object {
-        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
         const val SEARCH_HISTORY_KEY = "search_history_key"
     }
 }

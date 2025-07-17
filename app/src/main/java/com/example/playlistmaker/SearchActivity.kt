@@ -221,6 +221,5 @@ class SearchActivity : AppCompatActivity() {
         const val EDIT_TEXT = "EDIT_TEXT"
         const val TEXT_DEF = ""
         const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
-        const val SEARCH_HISTORY_KEY = "search_history_key"
     }
 }
