@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -40,13 +41,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var tvPlaceholderMessage: TextView
     private lateinit var ivPlaceholderErrorImage: ImageView
     private lateinit var ivPlaceholderInternetImage: ImageView
-    private lateinit var refreshButton: Button
+    private lateinit var refreshButtonSearch: Button
+    private lateinit var clearButtonSearchHistory: Button
     private lateinit var edQueryInput: EditText
     private lateinit var rvTracksList: RecyclerView
+    private lateinit var rvSearchHistory: RecyclerView
+    private lateinit var vgSearchHistory: ViewGroup
 
     private val tracks: MutableList<Track> = mutableListOf()
 
-    private val adapter = TracksAdapter()
+    lateinit var adapterTracks: TracksAdapter
+    lateinit var adapterSearches: TracksAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,14 +68,42 @@ class SearchActivity : AppCompatActivity() {
         tvPlaceholderMessage = findViewById(R.id.tv_placeholder_message)
         ivPlaceholderErrorImage = findViewById(R.id.iv_placeholder_error_image)
         ivPlaceholderInternetImage = findViewById(R.id.iv_placeholder_internet_image)
-        refreshButton = findViewById(R.id.refresh_button)
+        refreshButtonSearch = findViewById(R.id.refresh_button_search)
+        clearButtonSearchHistory = findViewById(R.id.clear_button_search_history)
         edQueryInput = findViewById(R.id.ed_queryInput)
         rvTracksList = findViewById(R.id.rv_tracks_list)
+        rvSearchHistory = findViewById(R.id.rv_search_history)
+        vgSearchHistory = findViewById(R.id.vg_search_history)
 
-        adapter.tracks = tracks
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        val searchHistory = SearchHistory(sharedPrefs)
 
+        if (searchHistory.tracks.isNotEmpty()) {
+            vgSearchHistory.visibility = View.VISIBLE
+        }
+
+        clearButtonSearchHistory.setOnClickListener {
+            searchHistory.clearSearchHistory()
+            vgSearchHistory.visibility = View.GONE
+        }
+
+        val onItemClickListener = object : OnItemClickListener {
+            override fun onItemClick(track: Track) {
+                searchHistory.addTrackToSearchHistory(track)
+                adapterSearches.notifyDataSetChanged()
+            }
+        }
+
+        adapterTracks = TracksAdapter(onItemClickListener)
+        adapterSearches = TracksAdapter(onItemClickListener)
+
+        adapterTracks.tracks = tracks
         rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rvTracksList.adapter = adapter
+        rvTracksList.adapter = adapterTracks
+
+        adapterSearches.tracks = searchHistory.tracks
+        rvSearchHistory.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rvSearchHistory.adapter = adapterSearches
 
         backButton.setOnClickListener {
             finish()
@@ -90,6 +123,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
+                vgSearchHistory.isVisible = s.isNullOrEmpty()
                 editText = edQueryInput.text.toString()
             }
 
@@ -102,24 +136,16 @@ class SearchActivity : AppCompatActivity() {
             edQueryInput.setText(TEXT_DEF)
             tracks.clear()
             placeholderGone()
-            adapter.notifyDataSetChanged()
+            adapterTracks.notifyDataSetChanged()
             val imm = edQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(edQueryInput.windowToken, 0)
+            vgSearchHistory.visibility = View.VISIBLE
         }
 
-        refreshButton.setOnClickListener {
+        refreshButtonSearch.setOnClickListener {
             placeholderGone()
             request()
         }
-
-//        val onTrackClickListener = object : OnTrackClickListener {
-//            override fun onTrackClick(track: Track) {
-//                val position =tracks.indexOf(track)
-//                tracks.add(track)
-//                adapter.notifyItemInserted(position)
-//                adapter.notifyItemRangeChanged(position, tracks.size)
-//            }
-//        }
     }
 
     private fun request() {
@@ -137,11 +163,13 @@ class SearchActivity : AppCompatActivity() {
                             tvPlaceholderMessage.visibility = View.VISIBLE
                             ivPlaceholderErrorImage.visibility = View.VISIBLE
                             showMessage(getString(R.string.nothing_found), "")}
-                        else { adapter.notifyDataSetChanged() }
+                        else {
+                            adapterTracks.notifyDataSetChanged()
+                        }
                     } else {
                         tvPlaceholderMessage.visibility = View.VISIBLE
                         ivPlaceholderInternetImage.visibility = View.VISIBLE
-                        refreshButton.visibility = View.VISIBLE
+                        refreshButtonSearch.visibility = View.VISIBLE
                         showMessage(getString(R.string.something_went_wrong), response.code().toString())
                     }
                 }
@@ -149,7 +177,7 @@ class SearchActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
                     tvPlaceholderMessage.visibility = View.VISIBLE
                     ivPlaceholderInternetImage.visibility = View.VISIBLE
-                    refreshButton.visibility = View.VISIBLE
+                    refreshButtonSearch.visibility = View.VISIBLE
                     showMessage(getString(R.string.something_went_wrong), t.message.toString())
                 }
 
@@ -159,7 +187,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
             tracks.clear()
-            adapter.notifyDataSetChanged()
+            adapterTracks.notifyDataSetChanged()
             tvPlaceholderMessage.text = text
             if (additionalMessage.isNotEmpty()) {
                 Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
@@ -174,7 +202,7 @@ class SearchActivity : AppCompatActivity() {
         tvPlaceholderMessage.visibility = View.GONE
         ivPlaceholderErrorImage.visibility = View.GONE
         ivPlaceholderInternetImage.visibility = View.GONE
-        refreshButton.visibility = View.GONE
+        refreshButtonSearch.visibility = View.GONE
     }
 
     private var editText: String = TEXT_DEF
@@ -192,5 +220,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val EDIT_TEXT = "EDIT_TEXT"
         const val TEXT_DEF = ""
+        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
+        const val SEARCH_HISTORY_KEY = "search_history_key"
     }
 }
