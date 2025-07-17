@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/activity_search"
     style="@style/ModeActivitySearch"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -45,7 +45,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/queryInput"
+                android:id="@+id/ed_queryInput"
                 android:drawableStart="@drawable/ic_search_16"
                 android:layout_marginStart="@dimen/dp_12"
                 android:drawablePadding="@dimen/dp_8"
@@ -62,7 +62,7 @@
                 style="@style/edit_text" />
 
             <ImageView
-                android:id="@+id/clearIcon"
+                android:id="@+id/clear_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -79,7 +79,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tracks_list"
+            android:id="@+id/rv_tracks_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dp_16"/>
@@ -96,40 +96,40 @@
                 android:layout_marginTop="@dimen/dp_102">
 
                 <ImageView
-                    android:id="@+id/placeholderErrorImage"
+                    android:id="@+id/iv_placeholder_error_image"
+                    style="@style/error_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    style="@style/error_image_view"
                     android:visibility="gone" />
 
                 <ImageView
-                    android:id="@+id/placeholderInternetImage"
+                    android:id="@+id/iv_placeholder_internet_image"
+                    style="@style/internet_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    style="@style/internet_image_view"
                     android:visibility="gone" />
 
             </FrameLayout>
 
             <TextView
-                android:id="@+id/placeholderMessage"
+                android:id="@+id/tv_placeholder_message"
+                style="@style/text_placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
-                style="@style/text_placeholder"
                 android:visibility="gone" />
 
             <Button
-                android:id="@+id/buttonRefresh"
+                android:id="@+id/refresh_button"
+                style="@style/button_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_36"
-                android:layout_marginTop="@dimen/dp_24"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_24"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                style="@style/button_refresh"
-                android:visibility="gone"
-                android:text="@string/refrash"/>
+                android:text="@string/refrash"
+                android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

@@ -34,13 +34,15 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val itunesService = retrofit.create(ItunesApi::class.java)
+    private lateinit var backButton: ImageView
+    private lateinit var clearButton: ImageView
 
-    private lateinit var placeholderMessage: TextView
-    private lateinit var placeholderErrorImage: ImageView
-    private lateinit var placeholderInternetImage: ImageView
-    private lateinit var buttonRefresh: Button
-    private lateinit var queryInput: EditText
-    private lateinit var tracksList: RecyclerView
+    private lateinit var tvPlaceholderMessage: TextView
+    private lateinit var ivPlaceholderErrorImage: ImageView
+    private lateinit var ivPlaceholderInternetImage: ImageView
+    private lateinit var refreshButton: Button
+    private lateinit var edQueryInput: EditText
+    private lateinit var rvTracksList: RecyclerView
 
     private val tracks: MutableList<Track> = mutableListOf()
 
@@ -50,69 +52,70 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_search)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        placeholderMessage = findViewById(R.id.placeholderMessage)
-        placeholderErrorImage = findViewById(R.id.placeholderErrorImage)
-        placeholderInternetImage = findViewById(R.id.placeholderInternetImage)
-        buttonRefresh = findViewById(R.id.buttonRefresh)
-        queryInput = findViewById(R.id.queryInput)
-        tracksList = findViewById(R.id.tracks_list)
+        backButton = findViewById(R.id.back_button_search)
+        clearButton = findViewById(R.id.clear_button)
+        tvPlaceholderMessage = findViewById(R.id.tv_placeholder_message)
+        ivPlaceholderErrorImage = findViewById(R.id.iv_placeholder_error_image)
+        ivPlaceholderInternetImage = findViewById(R.id.iv_placeholder_internet_image)
+        refreshButton = findViewById(R.id.refresh_button)
+        edQueryInput = findViewById(R.id.ed_queryInput)
+        rvTracksList = findViewById(R.id.rv_tracks_list)
 
         adapter.tracks = tracks
 
-        tracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        tracksList.adapter = adapter
+        rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rvTracksList.adapter = adapter
 
-        queryInput.setOnEditorActionListener { _, actionId, _ ->
+        backButton.setOnClickListener {
+            finish()
+        }
+
+        edQueryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 request()
                 true
             }
             false
         }
-
-        buttonRefresh.setOnClickListener {
-            placeholderGone()
-            request()
-        }
-        queryInput.setText(editText)
-
-        val backButton = findViewById<ImageView>(R.id.back_button_search)
-        backButton.setOnClickListener {
-            finish()
-        }
-
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
-        clearButton.setOnClickListener {
-            queryInput.setText(TEXT_DEF)
-            tracks.clear()
-            placeholderGone()
-            adapter.notifyDataSetChanged()
-            val imm = queryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
-        }
+        edQueryInput.setText(editText)
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
-                editText = queryInput.text.toString()
+                editText = edQueryInput.text.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {}
         }
-        queryInput.addTextChangedListener(textWatcher)
+
+        edQueryInput.addTextChangedListener(textWatcher)
+
+        clearButton.setOnClickListener {
+            edQueryInput.setText(TEXT_DEF)
+            tracks.clear()
+            placeholderGone()
+            adapter.notifyDataSetChanged()
+            val imm = edQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(edQueryInput.windowToken, 0)
+        }
+
+        refreshButton.setOnClickListener {
+            placeholderGone()
+            request()
+        }
     }
 
     private fun request() {
-        if (queryInput.text.isNotEmpty()) {
-            itunesService.search(queryInput.text.toString()).enqueue(object :
+        if (edQueryInput.text.isNotEmpty()) {
+            itunesService.search(edQueryInput.text.toString()).enqueue(object :
                 Callback<TracksResponse> {
                 override fun onResponse(call: Call<TracksResponse>,
                                         response: Response<TracksResponse>
@@ -122,22 +125,22 @@ class SearchActivity : AppCompatActivity() {
                         tracks.clear()
                         tracks.addAll(tracksJson!!)
                         if (tracks.isEmpty()) {
-                            placeholderMessage.visibility = View.VISIBLE
-                            placeholderErrorImage.visibility = View.VISIBLE
+                            tvPlaceholderMessage.visibility = View.VISIBLE
+                            ivPlaceholderErrorImage.visibility = View.VISIBLE
                             showMessage(getString(R.string.nothing_found), "")}
                         else { adapter.notifyDataSetChanged() }
                     } else {
-                        placeholderMessage.visibility = View.VISIBLE
-                        placeholderInternetImage.visibility = View.VISIBLE
-                        buttonRefresh.visibility = View.VISIBLE
+                        tvPlaceholderMessage.visibility = View.VISIBLE
+                        ivPlaceholderInternetImage.visibility = View.VISIBLE
+                        refreshButton.visibility = View.VISIBLE
                         showMessage(getString(R.string.something_went_wrong), response.code().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                    placeholderMessage.visibility = View.VISIBLE
-                    placeholderInternetImage.visibility = View.VISIBLE
-                    buttonRefresh.visibility = View.VISIBLE
+                    tvPlaceholderMessage.visibility = View.VISIBLE
+                    ivPlaceholderInternetImage.visibility = View.VISIBLE
+                    refreshButton.visibility = View.VISIBLE
                     showMessage(getString(R.string.something_went_wrong), t.message.toString())
                 }
 
@@ -148,7 +151,7 @@ class SearchActivity : AppCompatActivity() {
         if (text.isNotEmpty()) {
             tracks.clear()
             adapter.notifyDataSetChanged()
-            placeholderMessage.text = text
+            tvPlaceholderMessage.text = text
             if (additionalMessage.isNotEmpty()) {
                 Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
                     .show()
@@ -159,10 +162,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun placeholderGone() {
-        placeholderMessage.visibility = View.GONE
-        placeholderErrorImage.visibility = View.GONE
-        placeholderInternetImage.visibility = View.GONE
-        buttonRefresh.visibility = View.GONE
+        tvPlaceholderMessage.visibility = View.GONE
+        ivPlaceholderErrorImage.visibility = View.GONE
+        ivPlaceholderInternetImage.visibility = View.GONE
+        refreshButton.visibility = View.GONE
     }
 
     private var editText: String = TEXT_DEF
