@@ -78,9 +78,7 @@ class SearchActivity : AppCompatActivity() {
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPrefs)
 
-        if (searchHistory.tracks.isNotEmpty()) {
-            vgSearchHistory.visibility = View.VISIBLE
-        }
+        vgSearchHistory.isVisible = (searchHistory.tracks.isNotEmpty())
 
         clearButtonSearchHistory.setOnClickListener {
             searchHistory.clearSearchHistory()
@@ -123,7 +121,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
-                vgSearchHistory.isVisible = s.isNullOrEmpty()
+                vgSearchHistory.isVisible = (s.isNullOrEmpty() &&searchHistory.tracks.isNotEmpty())
                 editText = edQueryInput.text.toString()
             }
 
@@ -139,7 +137,7 @@ class SearchActivity : AppCompatActivity() {
             adapterTracks.notifyDataSetChanged()
             val imm = edQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(edQueryInput.windowToken, 0)
-            vgSearchHistory.visibility = View.VISIBLE
+            vgSearchHistory.isVisible = (searchHistory.tracks.isNotEmpty())
         }
 
         refreshButtonSearch.setOnClickListener {

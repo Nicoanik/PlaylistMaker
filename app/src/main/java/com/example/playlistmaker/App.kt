@@ -15,8 +15,6 @@ class App: Application() {
 
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
-//        sharedPrefs.edit { remove(THEME_MODE_KEY) } // Для проверки холодного старта
-
         if (sharedPrefs.contains(THEME_MODE_KEY)) {
             switchTheme(sharedPrefs.getBoolean(THEME_MODE_KEY, false))
         } else {
@@ -39,8 +37,6 @@ class App: Application() {
     fun checkThemeMode(): Boolean {
         return when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> true
-            Configuration.UI_MODE_NIGHT_NO -> false
-            Configuration.UI_MODE_NIGHT_UNDEFINED -> false
             else -> false
         }
     }
