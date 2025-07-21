@@ -65,7 +65,7 @@
                 android:layout_marginEnd="@dimen/dp_12"
                 android:src="@drawable/ic_x_16"
                 style="@style/edit_text"
-                android:visibility="gone" />
+                android:visibility="invisible" />
     </com.google.android.material.card.MaterialCardView>
 
     <FrameLayout
@@ -95,14 +95,14 @@
                     style="@style/error_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone" />
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/iv_placeholder_internet_image"
                     style="@style/internet_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone" />
+                    android:visibility="invisible" />
             </FrameLayout>
 
             <TextView
@@ -111,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
-                android:visibility="gone" />
+                android:visibility="invisible" />
 
             <Button
                 android:id="@+id/refresh_button_search"
@@ -123,7 +123,7 @@
                 android:insetTop="@dimen/dp_0"
                 android:insetBottom="@dimen/dp_0"
                 android:text="@string/button_refresh"
-                android:visibility="gone" />
+                android:visibility="invisible" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/vg_search_history"
@@ -131,7 +131,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:visibility="gone">
+            android:visibility="invisible">
 
             <TextView
                 style="@style/tv_search_history"

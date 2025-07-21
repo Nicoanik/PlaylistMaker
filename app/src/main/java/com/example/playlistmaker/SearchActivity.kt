@@ -82,7 +82,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearButtonSearchHistory.setOnClickListener {
             searchHistory.clearSearchHistory()
-            vgSearchHistory.visibility = View.GONE
+            vgSearchHistory.visibility = View.INVISIBLE
         }
 
         val onItemClickListener = object : OnItemClickListener {
@@ -133,7 +133,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             edQueryInput.setText(TEXT_DEF)
             tracks.clear()
-            placeholderGone()
+            placeholderInvisible()
             adapterTracks.notifyDataSetChanged()
             val imm = edQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(edQueryInput.windowToken, 0)
@@ -141,7 +141,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         refreshButtonSearch.setOnClickListener {
-            placeholderGone()
+            placeholderInvisible()
             request()
         }
     }
@@ -192,15 +192,15 @@ class SearchActivity : AppCompatActivity() {
                     .show()
             }
         } else {
-            placeholderGone()
+            placeholderInvisible()
         }
     }
 
-    private fun placeholderGone() {
-        tvPlaceholderMessage.visibility = View.GONE
-        ivPlaceholderErrorImage.visibility = View.GONE
-        ivPlaceholderInternetImage.visibility = View.GONE
-        refreshButtonSearch.visibility = View.GONE
+    private fun placeholderInvisible() {
+        tvPlaceholderMessage.visibility = View.INVISIBLE
+        ivPlaceholderErrorImage.visibility = View.INVISIBLE
+        ivPlaceholderInternetImage.visibility = View.INVISIBLE
+        refreshButtonSearch.visibility = View.INVISIBLE
     }
 
     private var editText: String = TEXT_DEF
