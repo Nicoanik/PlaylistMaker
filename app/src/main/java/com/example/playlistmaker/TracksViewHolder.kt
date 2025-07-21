@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
+class TracksViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.track_view, parent, false)) {
 
@@ -29,20 +29,19 @@ class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
             .load(model.artworkUrl100)
             .placeholder(R.drawable.album_cover_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(2f, itemView.context)))
+            .transform(RoundedCorners(dpToPx(R.dimen.album_cover_radius_corner, itemView.context)))
             .into(artworkUrl100View)
     }
 
     private fun timeConversion(time: Long?) : String {
         if (time == null) return ""
-        val time = SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
-        return time
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
     }
 
-    private fun dpToPx(dp: Float, context: Context): Int {
+    private fun dpToPx(dp: Int, context: Context): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            dp,
+            dp.toFloat(),
             context.resources.displayMetrics
         ).toInt()
     }
