@@ -9,6 +9,9 @@
     <style name="ModeActivitySearch">
         <item name="android:background">@color/white</item>
     </style>
+    <style name="ModeActivityMedia">
+        <item name="android:background">@color/white</item>
+    </style>
     <style name="TextStyleMedium500">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
@@ -108,5 +111,20 @@
         <item name="android:textSize">@dimen/text_19sp</item>
         <item name="android:textFontWeight">500</item>
         <item name="android:textAlignment">center</item>
+    </style>
+    <style name="track_description_media">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="button_play">
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:tint">@color/black</item>
+    </style>
+    <style name="text_media">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textFontWeight">400</item>
     </style>
 </resources>
