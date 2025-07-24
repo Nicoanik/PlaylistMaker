@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,11 +20,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import androidx.core.content.edit
+import com.example.playlistmaker.MediaActivity.Companion.MEDIA_TRACK_KEY
 
 class SearchActivity : AppCompatActivity() {
 
@@ -82,13 +87,18 @@ class SearchActivity : AppCompatActivity() {
 
         clearButtonSearchHistory.setOnClickListener {
             searchHistory.clearSearchHistory()
-            vgSearchHistory.visibility = View.GONE
+            vgSearchHistory.visibility = View.INVISIBLE
         }
 
+        val mediaIntent = Intent(this, MediaActivity::class.java)
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
                 searchHistory.addTrackToSearchHistory(track)
                 adapterSearches.notifyDataSetChanged()
+                val trackJson = Gson().toJson(track)
+                mediaIntent.putExtra(TRACK_INTENT, trackJson)
+                sharedPrefs.edit { putString(MEDIA_TRACK_KEY, trackJson) }
+                startActivity(mediaIntent)
             }
         }
 
@@ -120,6 +130,7 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                placeholderInvisible()
                 clearButton.isVisible = !s.isNullOrEmpty()
                 vgSearchHistory.isVisible = (s.isNullOrEmpty() &&searchHistory.tracks.isNotEmpty())
                 editText = edQueryInput.text.toString()
@@ -133,7 +144,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             edQueryInput.setText(TEXT_DEF)
             tracks.clear()
-            placeholderGone()
+            placeholderInvisible()
             adapterTracks.notifyDataSetChanged()
             val imm = edQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(edQueryInput.windowToken, 0)
@@ -141,7 +152,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         refreshButtonSearch.setOnClickListener {
-            placeholderGone()
+            placeholderInvisible()
             request()
         }
     }
@@ -192,15 +203,15 @@ class SearchActivity : AppCompatActivity() {
                     .show()
             }
         } else {
-            placeholderGone()
+            placeholderInvisible()
         }
     }
 
-    private fun placeholderGone() {
-        tvPlaceholderMessage.visibility = View.GONE
-        ivPlaceholderErrorImage.visibility = View.GONE
-        ivPlaceholderInternetImage.visibility = View.GONE
-        refreshButtonSearch.visibility = View.GONE
+    private fun placeholderInvisible() {
+        tvPlaceholderMessage.visibility = View.INVISIBLE
+        ivPlaceholderErrorImage.visibility = View.INVISIBLE
+        ivPlaceholderInternetImage.visibility = View.INVISIBLE
+        refreshButtonSearch.visibility = View.INVISIBLE
     }
 
     private var editText: String = TEXT_DEF
@@ -218,6 +229,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val EDIT_TEXT = "EDIT_TEXT"
         const val TEXT_DEF = ""
-        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
+        const val TRACK_INTENT = "track_intent"
     }
 }

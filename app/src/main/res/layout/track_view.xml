@@ -50,7 +50,7 @@
             style="@style/artist_text" />
 
         <TextView
-            android:id="@+id/track_time"
+            android:id="@+id/tv_track_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/artist_text" />

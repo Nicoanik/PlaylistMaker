@@ -40,10 +40,6 @@
         app:cardCornerRadius="@dimen/dp_8"
         style="@style/edit_text">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
             <EditText
                 android:id="@+id/ed_queryInput"
                 android:drawableStart="@drawable/ic_search_16"
@@ -65,13 +61,11 @@
                 android:id="@+id/clear_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginVertical="@dimen/dp_8"
+                android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="@dimen/dp_12"
                 android:src="@drawable/ic_x_16"
                 style="@style/edit_text"
-                android:visibility="gone" />
-        </FrameLayout>
+                android:visibility="invisible" />
     </com.google.android.material.card.MaterialCardView>
 
     <FrameLayout
@@ -101,14 +95,14 @@
                     style="@style/error_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone" />
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/iv_placeholder_internet_image"
                     style="@style/internet_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone" />
+                    android:visibility="invisible" />
             </FrameLayout>
 
             <TextView
@@ -117,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
-                android:visibility="gone" />
+                android:visibility="invisible" />
 
             <Button
                 android:id="@+id/refresh_button_search"
@@ -129,7 +123,7 @@
                 android:insetTop="@dimen/dp_0"
                 android:insetBottom="@dimen/dp_0"
                 android:text="@string/button_refresh"
-                android:visibility="gone" />
+                android:visibility="invisible" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/vg_search_history"
@@ -137,7 +131,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:visibility="gone">
+            android:visibility="invisible">
 
             <TextView
                 style="@style/tv_search_history"
@@ -159,6 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_36"
                 android:layout_marginTop="@dimen/dp_24"
+                android:layout_marginBottom="@dimen/dp_12"
                 android:insetTop="@dimen/dp_0"
                 android:insetBottom="@dimen/dp_0"
                 android:text="@string/clear_button_search_history" />
