@@ -1,8 +1,6 @@
 package com.example.playlistmaker
 
-import android.content.Context
 import android.os.Bundle
-import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -11,9 +9,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
 import com.google.gson.Gson
-import java.text.SimpleDateFormat
-import java.util.Locale
+
 
 class MediaActivity : AppCompatActivity() {
 
@@ -51,10 +49,15 @@ class MediaActivity : AppCompatActivity() {
             finish()
         }
 
-        val mediaTrack = Gson().fromJson(intent.getStringExtra(TRACK), Track::class.java)
+//        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+//        if (sharedPrefs.contains(TRACK_KEY)) {
+//            val mediaTrack = Gson().fromJson(sharedPrefs.getString(TRACK_KEY, null), Track::class.java)
+//        }
+
+        val mediaTrack = Gson().fromJson(intent.getStringExtra(TRACK_INTENT), Track::class.java)
 
         Glide.with(this)
-            .load(mediaTrack.artworkUrl100)
+            .load(mediaTrack.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.album_cover_placeholder)
             .centerCrop()
             .transform(RoundedCorners(dpToPx(8, this)))
@@ -63,26 +66,13 @@ class MediaActivity : AppCompatActivity() {
         tvArtistName.text = mediaTrack.artistName
         tvTrackTime.text = timeConversion(mediaTrack.trackTime)
         tvCollectionName.text = mediaTrack.collectionName
-        tvReleaseDate.text = mediaTrack.releaseDate
+        tvReleaseDate.text = mediaTrack.releaseDate.substring(0, 4)
         tvPrimaryGenreName.text = mediaTrack.primaryGenreName
         tvCountry.text = mediaTrack.country
 
     }
 
     companion object {
-        const val TRACK = "TRACK"
-    }
-
-    private fun timeConversion(time: Long?) : String {
-        if (time == null) return ""
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
-    }
-
-    private fun dpToPx(dp: Int, context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp.toFloat(),
-            context.resources.displayMetrics
-        ).toInt()
+        const val TRACK_KEY = "track_key"
     }
 }

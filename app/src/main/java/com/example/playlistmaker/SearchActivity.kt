@@ -20,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -92,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onItemClick(track: Track) {
                 searchHistory.addTrackToSearchHistory(track)
                 adapterSearches.notifyDataSetChanged()
-                mediaIntent.putExtra(TRACK, Gson().toJson(track))
+                mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
                 startActivity(mediaIntent)
             }
         }
@@ -224,7 +225,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val EDIT_TEXT = "EDIT_TEXT"
         const val TEXT_DEF = ""
-        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
-        const val TRACK = "TRACK"
+//        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
     }
 }
