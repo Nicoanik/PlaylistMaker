@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -85,10 +87,13 @@ class SearchActivity : AppCompatActivity() {
             vgSearchHistory.visibility = View.INVISIBLE
         }
 
+        val mediaIntent = Intent(this, MediaActivity::class.java)
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
                 searchHistory.addTrackToSearchHistory(track)
                 adapterSearches.notifyDataSetChanged()
+                mediaIntent.putExtra(TRACK, Gson().toJson(track))
+                startActivity(mediaIntent)
             }
         }
 
@@ -219,5 +224,6 @@ class SearchActivity : AppCompatActivity() {
         const val EDIT_TEXT = "EDIT_TEXT"
         const val TEXT_DEF = ""
         const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
+        const val TRACK = "TRACK"
     }
 }

@@ -18,7 +18,7 @@ class TracksViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
 
     private val trackNameView: TextView = itemView.findViewById(R.id.track_name)
     private val artistNameView: TextView = itemView.findViewById(R.id.artist_name)
-    private val trackTimeView: TextView = itemView.findViewById(R.id.track_time)
+    private val trackTimeView: TextView = itemView.findViewById(R.id.tv_track_time)
     private val artworkUrl100View: ImageView = itemView.findViewById(R.id.album_cover)
 
     fun bind(model: Track) {

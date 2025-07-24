@@ -148,14 +148,16 @@
         style="@style/track_description_media"/>
 
     <TextView
-        android:id="@+id/track_time"
+        android:id="@+id/tv_track_time"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_32"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/text_barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/text_duration"
-        android:text="5:35"
         style="@style/track_description_media"/>
 
     <TextView
@@ -172,14 +174,16 @@
         style="@style/track_description_media"/>
 
     <TextView
-        android:id="@+id/name_album"
+        android:id="@+id/tv_collection_name"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_32"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/text_barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/text_album"
-        android:text="Yesterday (Remastered 2009)"
         style="@style/track_description_media"/>
 
     <TextView
@@ -196,14 +200,16 @@
         style="@style/track_description_media"/>
 
     <TextView
-        android:id="@+id/name_year"
+        android:id="@+id/tv_release_date"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_32"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/text_barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/text_year"
-        android:text="1965"
         style="@style/track_description_media"/>
 
     <TextView
@@ -220,14 +226,16 @@
         style="@style/track_description_media"/>
 
     <TextView
-        android:id="@+id/name_genre"
+        android:id="@+id/tv_primary_genre_name"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_32"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/text_barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/text_genre"
-        android:text="Rock"
         style="@style/track_description_media"/>
 
     <TextView
@@ -244,14 +252,16 @@
         style="@style/track_description_media"/>
 
     <TextView
-        android:id="@+id/name_country"
+        android:id="@+id/tv_country"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_32"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/text_barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/text_country"
-        android:text="Великобритания"
         style="@style/track_description_media"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
