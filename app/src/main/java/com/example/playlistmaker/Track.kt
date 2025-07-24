@@ -30,5 +30,3 @@ fun dpToPx(dp: Int, context: Context): Int {
         context.resources.displayMetrics
     ).toInt()
 }
-
-const val TRACK_INTENT = "track_intent"

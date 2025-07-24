@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.example.playlistmaker.SearchActivity.Companion.TRACK_INTENT
 import com.google.gson.Gson
 
 
@@ -49,13 +50,20 @@ class MediaActivity : AppCompatActivity() {
             finish()
         }
 
-//        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-//        if (sharedPrefs.contains(TRACK_KEY)) {
-//            val mediaTrack = Gson().fromJson(sharedPrefs.getString(TRACK_KEY, null), Track::class.java)
-//        }
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        val mediaTrackMemory = Gson().fromJson(sharedPrefs.getString(MEDIA_TRACK_KEY, null), Track::class.java)
+        val mediaTrackSearch = Gson().fromJson(intent.getStringExtra(TRACK_INTENT), Track::class.java)
 
-        val mediaTrack = Gson().fromJson(intent.getStringExtra(TRACK_INTENT), Track::class.java)
+        if (mediaTrackSearch != null) {
+            addMediaTrack(mediaTrackSearch)
+        } else {
+            if (mediaTrackMemory != null) {
+                addMediaTrack(mediaTrackMemory)
+            }
+        }
+    }
 
+    fun addMediaTrack (mediaTrack: Track) {
         Glide.with(this)
             .load(mediaTrack.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.album_cover_placeholder)
@@ -69,10 +77,9 @@ class MediaActivity : AppCompatActivity() {
         tvReleaseDate.text = mediaTrack.releaseDate.substring(0, 4)
         tvPrimaryGenreName.text = mediaTrack.primaryGenreName
         tvCountry.text = mediaTrack.country
-
     }
 
     companion object {
-        const val TRACK_KEY = "track_key"
+        const val MEDIA_TRACK_KEY = "media_track_key"
     }
 }

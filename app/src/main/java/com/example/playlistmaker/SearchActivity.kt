@@ -27,6 +27,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import androidx.core.content.edit
+import com.example.playlistmaker.MediaActivity.Companion.MEDIA_TRACK_KEY
 
 class SearchActivity : AppCompatActivity() {
 
@@ -93,7 +95,9 @@ class SearchActivity : AppCompatActivity() {
             override fun onItemClick(track: Track) {
                 searchHistory.addTrackToSearchHistory(track)
                 adapterSearches.notifyDataSetChanged()
-                mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
+                val trackJson = Gson().toJson(track)
+                mediaIntent.putExtra(TRACK_INTENT, trackJson)
+                sharedPrefs.edit { putString(MEDIA_TRACK_KEY, trackJson) }
                 startActivity(mediaIntent)
             }
         }
@@ -225,6 +229,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val EDIT_TEXT = "EDIT_TEXT"
         const val TEXT_DEF = ""
-//        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
+        const val TRACK_INTENT = "track_intent"
     }
 }
