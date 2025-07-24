@@ -125,6 +125,7 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                placeholderInvisible()
                 clearButton.isVisible = !s.isNullOrEmpty()
                 vgSearchHistory.isVisible = (s.isNullOrEmpty() &&searchHistory.tracks.isNotEmpty())
                 editText = edQueryInput.text.toString()

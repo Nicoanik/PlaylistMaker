@@ -27,5 +27,4 @@
     <dimen name="text_16sp">16sp</dimen>
     <dimen name="text_19sp">19sp</dimen>
     <dimen name="text_22sp">22sp</dimen>
-    <dimen name="album_cover_radius_corner">2</dimen>
 </resources>

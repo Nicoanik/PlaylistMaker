@@ -29,7 +29,7 @@ class TracksViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
             .load(model.artworkUrl100)
             .placeholder(R.drawable.album_cover_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(R.dimen.album_cover_radius_corner, itemView.context)))
+            .transform(RoundedCorners(dpToPx(2, itemView.context)))
             .into(artworkUrl100View)
     }
 

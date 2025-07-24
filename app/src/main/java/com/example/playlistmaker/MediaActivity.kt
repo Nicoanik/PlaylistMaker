@@ -1,6 +1,8 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.os.Bundle
+import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -55,6 +57,7 @@ class MediaActivity : AppCompatActivity() {
             .load(mediaTrack.artworkUrl100)
             .placeholder(R.drawable.album_cover_placeholder)
             .centerCrop()
+            .transform(RoundedCorners(dpToPx(8, this)))
             .into(ivAlbumCover)
         tvTrackName.text = mediaTrack.trackName
         tvArtistName.text = mediaTrack.artistName
@@ -73,5 +76,13 @@ class MediaActivity : AppCompatActivity() {
     private fun timeConversion(time: Long?) : String {
         if (time == null) return ""
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
+    }
+
+    private fun dpToPx(dp: Int, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp.toFloat(),
+            context.resources.displayMetrics
+        ).toInt()
     }
 }
