@@ -95,9 +95,8 @@ class SearchActivity : AppCompatActivity() {
             override fun onItemClick(track: Track) {
                 searchHistory.addTrackToSearchHistory(track)
                 adapterSearches.notifyDataSetChanged()
-                val trackJson = Gson().toJson(track)
-                mediaIntent.putExtra(TRACK_INTENT, trackJson)
-                sharedPrefs.edit { putString(MEDIA_TRACK_KEY, trackJson) }
+                mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
+                sharedPrefs.edit { putString(MEDIA_TRACK_KEY, Gson().toJson(track)) }
                 startActivity(mediaIntent)
             }
         }
@@ -114,6 +113,7 @@ class SearchActivity : AppCompatActivity() {
         rvSearchHistory.adapter = adapterSearches
 
         backButton.setOnClickListener {
+            sharedPrefs.edit { remove(SEARCH_TRACKS) }
             finish()
         }
 
@@ -134,6 +134,13 @@ class SearchActivity : AppCompatActivity() {
                 clearButton.isVisible = !s.isNullOrEmpty()
                 vgSearchHistory.isVisible = (s.isNullOrEmpty() &&searchHistory.tracks.isNotEmpty())
                 editText = edQueryInput.text.toString()
+                if (sharedPrefs.contains(SEARCH_TRACKS)) {
+                    val json = sharedPrefs.getString(SEARCH_TRACKS, null)
+                    if  (json != null) {
+                        tracks.addAll(Gson().fromJson(json, Array<Track>::class.java))
+                        adapterSearches.notifyDataSetChanged()
+                    }
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -173,6 +180,8 @@ class SearchActivity : AppCompatActivity() {
                             ivPlaceholderErrorImage.visibility = View.VISIBLE
                             showMessage(getString(R.string.nothing_found), "")}
                         else {
+                            val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+                            sharedPrefs.edit { putString(SEARCH_TRACKS, Gson().toJson(tracks)) }
                             adapterTracks.notifyDataSetChanged()
                         }
                     } else {
@@ -230,5 +239,6 @@ class SearchActivity : AppCompatActivity() {
         const val EDIT_TEXT = "EDIT_TEXT"
         const val TEXT_DEF = ""
         const val TRACK_INTENT = "track_intent"
+        const val SEARCH_TRACKS = "search_tracks"
     }
 }

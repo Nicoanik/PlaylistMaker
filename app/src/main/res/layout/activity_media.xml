@@ -196,7 +196,7 @@
         app:layout_constraintTag="text_year"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_album"
-        android:text="@string/teaxt_year"
+        android:text="@string/text_year"
         style="@style/track_description_media"/>
 
     <TextView

@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import androidx.core.content.edit
 
 class SearchHistory(val sharedPrefs: SharedPreferences) {
 
@@ -21,7 +22,7 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
 
     private fun saveSearchHistory() {
         val json = Gson().toJson(tracks)
-        sharedPrefs.edit().putString(SEARCH_HISTORY_KEY, json).apply()
+        sharedPrefs.edit { putString(SEARCH_HISTORY_KEY, json) }
     }
 
     fun getSearchHistory() {
@@ -33,7 +34,7 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
     }
 
     fun clearSearchHistory() {
-        sharedPrefs.edit().remove(SEARCH_HISTORY_KEY).apply()
+        sharedPrefs.edit { remove(SEARCH_HISTORY_KEY) }
         tracks.clear()
     }
 
