@@ -113,7 +113,6 @@ class SearchActivity : AppCompatActivity() {
         rvSearchHistory.adapter = adapterSearches
 
         backButton.setOnClickListener {
-            sharedPrefs.edit { remove(SEARCH_TRACKS) }
             finish()
         }
 
@@ -132,15 +131,8 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 placeholderInvisible()
                 clearButton.isVisible = !s.isNullOrEmpty()
-                vgSearchHistory.isVisible = (s.isNullOrEmpty() &&searchHistory.tracks.isNotEmpty())
+                vgSearchHistory.isVisible = (s.isNullOrEmpty() && tracks.isEmpty() && searchHistory.tracks.isNotEmpty())
                 editText = edQueryInput.text.toString()
-                if (sharedPrefs.contains(SEARCH_TRACKS)) {
-                    val json = sharedPrefs.getString(SEARCH_TRACKS, null)
-                    if  (json != null) {
-                        tracks.addAll(Gson().fromJson(json, Array<Track>::class.java))
-                        adapterSearches.notifyDataSetChanged()
-                    }
-                }
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -180,8 +172,6 @@ class SearchActivity : AppCompatActivity() {
                             ivPlaceholderErrorImage.visibility = View.VISIBLE
                             showMessage(getString(R.string.nothing_found), "")}
                         else {
-                            val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-                            sharedPrefs.edit { putString(SEARCH_TRACKS, Gson().toJson(tracks)) }
                             adapterTracks.notifyDataSetChanged()
                         }
                     } else {
@@ -228,11 +218,14 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EDIT_TEXT, editText)
+        outState.putString(SEARCH_TRACKS, Gson().toJson(tracks))
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         editText = savedInstanceState.getString(EDIT_TEXT, TEXT_DEF)
+        val json = savedInstanceState.getString(SEARCH_TRACKS, null)
+        tracks.addAll((Gson().fromJson(json, Array<Track>::class.java)))
     }
 
     companion object {
