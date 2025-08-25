@@ -27,8 +27,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import androidx.core.content.edit
-import com.example.playlistmaker.MediaActivity.Companion.MEDIA_TRACK_KEY
 
 class SearchActivity : AppCompatActivity() {
 
@@ -90,13 +88,12 @@ class SearchActivity : AppCompatActivity() {
             vgSearchHistory.visibility = View.INVISIBLE
         }
 
-        val mediaIntent = Intent(this, MediaActivity::class.java)
+        val mediaIntent = Intent(this, AudioPlayerActivity::class.java)
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
                 searchHistory.addTrackToSearchHistory(track)
                 adapterSearches.notifyDataSetChanged()
                 mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
-                sharedPrefs.edit { putString(MEDIA_TRACK_KEY, Gson().toJson(track)) }
                 startActivity(mediaIntent)
             }
         }
