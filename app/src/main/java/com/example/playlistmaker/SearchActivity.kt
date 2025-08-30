@@ -88,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
             vgSearchHistory.visibility = View.INVISIBLE
         }
 
-        val mediaIntent = Intent(this, AudioPlayerActivity::class.java)
+        val mediaIntent = Intent(this, MediaPlayerActivity::class.java)
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
                 searchHistory.addTrackToSearchHistory(track)

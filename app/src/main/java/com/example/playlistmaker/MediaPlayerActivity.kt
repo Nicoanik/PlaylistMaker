@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.SearchActivity.Companion.TRACK_INTENT
 import com.google.gson.Gson
 
-class AudioPlayerActivity : AppCompatActivity() {
+class MediaPlayerActivity : AppCompatActivity() {
 
     private lateinit var backButton: ImageView
     private lateinit var ivAlbumCover: ImageView
@@ -27,8 +27,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_audio_player)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_audio_player)) { v, insets ->
+        setContentView(R.layout.activity_media_player)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_media_player)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
