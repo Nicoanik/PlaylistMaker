@@ -189,6 +189,7 @@ class SearchActivity : AppCompatActivity() {
             })
         }
     }
+
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
             tracks.clear()
