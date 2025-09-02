@@ -2,6 +2,8 @@ package com.example.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -11,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -30,17 +33,27 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-    private val itunesBaseUrl = "https://itunes.apple.com"
+    companion object {
+        const val EDIT_TEXT = "EDIT_TEXT"
+        const val TEXT_DEF = ""
+        const val TRACK_INTENT = "track_intent"
+        const val SEARCH_TRACKS = "search_tracks"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    }
 
+    private var isClickAllowed = true
+    private val searchRunnable = Runnable { request() }
+
+    private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
     private val itunesService = retrofit.create(ItunesApi::class.java)
+
     private lateinit var backButton: ImageView
     private lateinit var clearButton: ImageView
-
     private lateinit var tvPlaceholderMessage: TextView
     private lateinit var ivPlaceholderErrorImage: ImageView
     private lateinit var ivPlaceholderInternetImage: ImageView
@@ -50,11 +63,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var rvTracksList: RecyclerView
     private lateinit var rvSearchHistory: RecyclerView
     private lateinit var vgSearchHistory: ViewGroup
+    private lateinit var progressBar: ProgressBar
 
     private val tracks: MutableList<Track> = mutableListOf()
 
     lateinit var adapterTracks: TracksAdapter
     lateinit var adapterSearches: TracksAdapter
+
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +93,7 @@ class SearchActivity : AppCompatActivity() {
         rvTracksList = findViewById(R.id.rv_tracks_list)
         rvSearchHistory = findViewById(R.id.rv_search_history)
         vgSearchHistory = findViewById(R.id.vg_search_history)
+        progressBar = findViewById(R.id.progressBar)
 
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPrefs)
@@ -91,10 +108,12 @@ class SearchActivity : AppCompatActivity() {
         val mediaIntent = Intent(this, MediaPlayerActivity::class.java)
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
-                searchHistory.addTrackToSearchHistory(track)
-                adapterSearches.notifyDataSetChanged()
-                mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
-                startActivity(mediaIntent)
+                if (clickDebounce()) {
+                    searchHistory.addTrackToSearchHistory(track)
+                    adapterSearches.notifyDataSetChanged()
+                    mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
+                    startActivity(mediaIntent)
+                }
             }
         }
 
@@ -130,6 +149,7 @@ class SearchActivity : AppCompatActivity() {
                 clearButton.isVisible = !s.isNullOrEmpty()
                 vgSearchHistory.isVisible = (s.isNullOrEmpty() && tracks.isEmpty() && searchHistory.tracks.isNotEmpty())
                 editText = edQueryInput.text.toString()
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -155,11 +175,15 @@ class SearchActivity : AppCompatActivity() {
 
     private fun request() {
         if (edQueryInput.text.isNotEmpty()) {
+            rvTracksList.isVisible = false
+            progressBar.isVisible = true
             itunesService.search(edQueryInput.text.toString()).enqueue(object :
                 Callback<TracksResponse> {
                 override fun onResponse(call: Call<TracksResponse>,
                                         response: Response<TracksResponse>
                 ) {
+                    progressBar.isVisible = false
+                    rvTracksList.isVisible = true
                     if (response.isSuccessful) {
                         val tracksJson = response.body()?.results
                         tracks.clear()
@@ -180,6 +204,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                    progressBar.isVisible = false
                     tvPlaceholderMessage.visibility = View.VISIBLE
                     ivPlaceholderInternetImage.visibility = View.VISIBLE
                     refreshButtonSearch.visibility = View.VISIBLE
@@ -226,10 +251,17 @@ class SearchActivity : AppCompatActivity() {
         tracks.addAll((Gson().fromJson(json, Array<Track>::class.java)))
     }
 
-    companion object {
-        const val EDIT_TEXT = "EDIT_TEXT"
-        const val TEXT_DEF = ""
-        const val TRACK_INTENT = "track_intent"
-        const val SEARCH_TRACKS = "search_tracks"
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun searchDebounce() {
+        mainHandler.removeCallbacks(searchRunnable)
+        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 }

@@ -72,6 +72,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:indeterminateTint="@color/YP_blue"
+            android:layout_marginTop="@dimen/dp_140"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_tracks_list"
             android:layout_width="match_parent"
