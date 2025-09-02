@@ -17,12 +17,12 @@ class TracksViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     private val trackTimeView: TextView = itemView.findViewById(R.id.tv_track_time)
     private val artworkUrl100View: ImageView = itemView.findViewById(R.id.album_cover)
 
-    fun bind(model: Track) {
-        trackNameView.text = model.trackName
-        artistNameView.text = model.artistName
-        trackTimeView.text = timeConversion(model.trackTime)
+    fun bind(track: Track) {
+        trackNameView.text = track.trackName
+        artistNameView.text = track.artistName
+        trackTimeView.text = timeConversion(track.trackTime)
         Glide.with(itemView)
-            .load(model.artworkUrl100)
+            .load(track.artworkUrl100)
             .placeholder(R.drawable.album_cover_placeholder)
             .centerCrop()
             .transform(RoundedCorners(dpToPx(2, itemView.context)))

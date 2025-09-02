@@ -3,13 +3,7 @@
     <style name="ModeActivityMain">
         <item name="android:background">@color/YP_blue</item>
     </style>
-    <style name="ModeActivitySettings">
-        <item name="android:background">@color/white</item>
-    </style>
-    <style name="ModeActivitySearch">
-        <item name="android:background">@color/white</item>
-    </style>
-    <style name="ModeActivityMedia">
+    <style name="ModeActivity">
         <item name="android:background">@color/white</item>
     </style>
     <style name="TextStyleMedium500">

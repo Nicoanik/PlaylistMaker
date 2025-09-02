@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
-    style="@style/ModeActivitySearch"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@style/ModeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,6 +71,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:indeterminateTint="@color/YP_blue"
+            android:layout_marginTop="@dimen/dp_140"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_tracks_list"
