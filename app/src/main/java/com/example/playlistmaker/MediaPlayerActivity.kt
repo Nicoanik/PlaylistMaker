@@ -20,16 +20,19 @@ import java.util.Locale
 
 class MediaPlayerActivity : AppCompatActivity() {
 
+    enum class PlayerState(val state: Int) {
+        DEFAULT(0),
+        PREPARED(1),
+        PLAYING(2),
+        PAUSED(3)
+    }
+
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
         private const val PLAYBACK_DEF = "00:00"
     }
 
     private var mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
+    private var playerState = PlayerState.DEFAULT
 
     private lateinit var backButton: ImageView
     private lateinit var playButton: ImageButton
@@ -99,11 +102,11 @@ class MediaPlayerActivity : AppCompatActivity() {
         mediaPlayer.setDataSource(mediaTrack.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
+            playerState = PlayerState.PREPARED
         }
         mediaPlayer.setOnCompletionListener {
             playButton.setImageResource(R.drawable.play_button_100)
-            playerState = STATE_PREPARED
+            playerState = PlayerState.PREPARED
             mainHandler.removeCallbacksAndMessages(null)
             playbackProgress.text = PLAYBACK_DEF
         }
@@ -112,7 +115,7 @@ class MediaPlayerActivity : AppCompatActivity() {
     private fun startPlayer() {
         mediaPlayer.start()
         playButton.setImageResource(R.drawable.pause_button_100)
-        playerState = STATE_PLAYING
+        playerState = PlayerState.PLAYING
         mainHandler.post(
             object : Runnable {
                 override fun run() {
@@ -126,18 +129,19 @@ class MediaPlayerActivity : AppCompatActivity() {
     private fun pausePlayer() {
         mediaPlayer.pause()
         playButton.setImageResource(R.drawable.play_button_100)
-        playerState = STATE_PAUSED
+        playerState = PlayerState.PAUSED
         mainHandler.removeCallbacksAndMessages(null)
     }
 
     private fun playbackControl() {
         when(playerState) {
-            STATE_PLAYING -> {
+            PlayerState.PLAYING -> {
                 pausePlayer()
             }
-            STATE_PREPARED, STATE_PAUSED -> {
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
                 startPlayer()
             }
+            else -> Unit
         }
     }
 
