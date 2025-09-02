@@ -22,6 +22,5 @@
     <string name="text_year">Год</string>
     <string name="text_genre">Жанр</string>
     <string name="text_country">Страна</string>
-    <string name="temporary_resource_playback_progress">0:30</string>
     <string name="text_media_activity">Я ещё не готов, меня надо сначала сверстать :)</string>
 </resources>

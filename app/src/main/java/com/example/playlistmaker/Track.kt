@@ -15,7 +15,8 @@ data class Track(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    val artworkUrl100: String
+    val artworkUrl100: String,
+    val previewUrl: String
 )
 
 fun timeConversion(time: Long?) : String {

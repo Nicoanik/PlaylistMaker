@@ -25,7 +25,7 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
         sharedPrefs.edit { putString(SEARCH_HISTORY_KEY, json) }
     }
 
-    fun getSearchHistory() {
+    private fun getSearchHistory() {
         tracks.clear()
         if (sharedPrefs.contains(SEARCH_HISTORY_KEY)) {
             val json = sharedPrefs.getString(SEARCH_HISTORY_KEY, "")

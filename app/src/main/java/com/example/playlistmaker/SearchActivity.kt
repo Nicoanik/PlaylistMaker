@@ -102,7 +102,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearButtonSearchHistory.setOnClickListener {
             searchHistory.clearSearchHistory()
-            vgSearchHistory.visibility = View.INVISIBLE
+            vgSearchHistory.isVisible = false
         }
 
         val mediaIntent = Intent(this, MediaPlayerActivity::class.java)
@@ -139,6 +139,7 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
+        
         edQueryInput.setText(editText)
 
         val textWatcher = object : TextWatcher {
