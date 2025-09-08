@@ -41,7 +41,7 @@
         style="@style/edit_text">
 
             <EditText
-                android:id="@+id/ed_queryInput"
+                android:id="@+id/et_queryInput"
                 android:drawableStart="@drawable/ic_search_16"
                 android:layout_marginStart="@dimen/dp_12"
                 android:drawablePadding="@dimen/dp_8"

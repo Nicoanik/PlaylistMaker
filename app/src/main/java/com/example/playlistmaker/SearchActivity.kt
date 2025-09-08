@@ -42,6 +42,8 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
+    private var editText: String = TEXT_DEF
+
     private var isClickAllowed = true
     private val searchRunnable = Runnable { request() }
 
@@ -59,7 +61,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var ivPlaceholderInternetImage: ImageView
     private lateinit var refreshButtonSearch: Button
     private lateinit var clearButtonSearchHistory: Button
-    private lateinit var edQueryInput: EditText
+    private lateinit var etQueryInput: EditText
     private lateinit var rvTracksList: RecyclerView
     private lateinit var rvSearchHistory: RecyclerView
     private lateinit var vgSearchHistory: ViewGroup
@@ -89,7 +91,7 @@ class SearchActivity : AppCompatActivity() {
         ivPlaceholderInternetImage = findViewById(R.id.iv_placeholder_internet_image)
         refreshButtonSearch = findViewById(R.id.refresh_button_search)
         clearButtonSearchHistory = findViewById(R.id.clear_button_search_history)
-        edQueryInput = findViewById(R.id.ed_queryInput)
+        etQueryInput = findViewById(R.id.et_queryInput)
         rvTracksList = findViewById(R.id.rv_tracks_list)
         rvSearchHistory = findViewById(R.id.rv_search_history)
         vgSearchHistory = findViewById(R.id.vg_search_history)
@@ -132,40 +134,47 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        edQueryInput.setOnEditorActionListener { _, actionId, _ ->
+        etQueryInput.setText(editText)
+
+        etQueryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 request()
                 true
             }
             false
         }
-        
-        edQueryInput.setText(editText)
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.isNullOrEmpty()) {
+                    tracks.clear()
+                    adapterTracks.notifyDataSetChanged()
+                }
                 placeholderInvisible()
                 clearButton.isVisible = !s.isNullOrEmpty()
                 vgSearchHistory.isVisible = (s.isNullOrEmpty() && tracks.isEmpty() && searchHistory.tracks.isNotEmpty())
-                editText = edQueryInput.text.toString()
+                editText = etQueryInput.text.toString()
                 searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        edQueryInput.addTextChangedListener(textWatcher)
+        etQueryInput.addTextChangedListener(textWatcher)
 
         clearButton.setOnClickListener {
-            edQueryInput.setText(TEXT_DEF)
+            etQueryInput.setText(TEXT_DEF)
             tracks.clear()
             placeholderInvisible()
             adapterTracks.notifyDataSetChanged()
-            val imm = edQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(edQueryInput.windowToken, 0)
             vgSearchHistory.isVisible = (searchHistory.tracks.isNotEmpty())
+        }
+
+        rvTracksList.setOnTouchListener { _, _ ->
+            val imm = etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(etQueryInput.windowToken, 0)
         }
 
         refreshButtonSearch.setOnClickListener {
@@ -175,10 +184,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun request() {
-        if (edQueryInput.text.isNotEmpty()) {
+        if (etQueryInput.text.isNotEmpty()) {
             rvTracksList.isVisible = false
             progressBar.isVisible = true
-            itunesService.search(edQueryInput.text.toString()).enqueue(object :
+            itunesService.search(etQueryInput.text.toString()).enqueue(object :
                 Callback<TracksResponse> {
                 override fun onResponse(call: Call<TracksResponse>,
                                         response: Response<TracksResponse>
@@ -236,8 +245,6 @@ class SearchActivity : AppCompatActivity() {
         ivPlaceholderInternetImage.visibility = View.INVISIBLE
         refreshButtonSearch.visibility = View.INVISIBLE
     }
-
-    private var editText: String = TEXT_DEF
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
