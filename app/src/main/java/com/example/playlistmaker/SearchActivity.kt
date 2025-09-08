@@ -172,10 +172,16 @@ class SearchActivity : AppCompatActivity() {
             vgSearchHistory.isVisible = (searchHistory.tracks.isNotEmpty())
         }
 
-        rvTracksList.setOnTouchListener { _, _ ->
-            val imm = etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(etQueryInput.windowToken, 0)
-        }
+        rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    etQueryInput.clearFocus()
+                    val imm = etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(etQueryInput.windowToken, 0)
+                }
+            }
+        })
 
         refreshButtonSearch.setOnClickListener {
             placeholderInvisible()
