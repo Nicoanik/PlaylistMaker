@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import androidx.core.content.edit
 
-class SearchHistory(val sharedPrefs: SharedPreferences) {
+class SearchHistory(private val sharedPrefs: SharedPreferences) {
 
     val tracks: MutableList<Track> = mutableListOf()
 

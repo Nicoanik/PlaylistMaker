@@ -18,4 +18,3 @@ class TracksAdapter(private val onItemClickListener: OnItemClickListener): Recyc
 
     override fun getItemCount(): Int = tracks.size
 }
-
