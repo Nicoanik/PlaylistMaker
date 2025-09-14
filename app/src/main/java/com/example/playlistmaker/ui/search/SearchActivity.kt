@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,6 +23,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.ui.mediaplayer.MediaPlayerActivity
+import com.example.playlistmaker.OnItemClickListener
+import com.example.playlistmaker.R
+import com.example.playlistmaker.SearchHistory
+import com.example.playlistmaker.data.dto.TracksSearchResponse
+import com.example.playlistmaker.data.network.ItunesApiService
+import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,7 +58,7 @@ class SearchActivity : AppCompatActivity() {
         .baseUrl(itunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val itunesService = retrofit.create(ItunesApi::class.java)
+    private val itunesService = retrofit.create(ItunesApiService::class.java)
 
     private lateinit var backButton: ImageView
     private lateinit var clearButton: ImageView
@@ -192,9 +199,9 @@ class SearchActivity : AppCompatActivity() {
             rvTracksList.isVisible = false
             progressBar.isVisible = true
             itunesService.search(etQueryInput.text.toString()).enqueue(object :
-                Callback<TracksResponse> {
-                override fun onResponse(call: Call<TracksResponse>,
-                                        response: Response<TracksResponse>
+                Callback<TracksSearchResponse> {
+                override fun onResponse(call: Call<TracksSearchResponse>,
+                                        response: Response<TracksSearchResponse>
                 ) {
                     progressBar.isVisible = false
                     rvTracksList.isVisible = true
@@ -217,7 +224,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
                     progressBar.isVisible = false
                     tvPlaceholderMessage.visibility = View.VISIBLE
                     ivPlaceholderInternetImage.visibility = View.VISIBLE

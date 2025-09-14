@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import com.google.gson.Gson
 import androidx.core.content.edit
 import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.example.playlistmaker.domain.models.Track
 
 class SearchHistory(context: Context) {
 
