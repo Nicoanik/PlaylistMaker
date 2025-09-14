@@ -23,7 +23,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -97,8 +96,7 @@ class SearchActivity : AppCompatActivity() {
         vgSearchHistory = findViewById(R.id.vg_search_history)
         progressBar = findViewById(R.id.progressBar)
 
-        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        val searchHistory = SearchHistory(sharedPrefs)
+        val searchHistory = SearchHistory(this)
 
         vgSearchHistory.isVisible = (searchHistory.tracks.isNotEmpty())
 

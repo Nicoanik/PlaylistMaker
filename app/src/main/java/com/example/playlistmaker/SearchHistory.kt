@@ -1,10 +1,14 @@
 package com.example.playlistmaker
 
-import android.content.SharedPreferences
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import com.google.gson.Gson
 import androidx.core.content.edit
+import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
 
-class SearchHistory(private val sharedPrefs: SharedPreferences) {
+class SearchHistory(context: Context) {
+
+    private val sharedPrefs = context.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
     val tracks: MutableList<Track> = mutableListOf()
 
