@@ -53,12 +53,12 @@ class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
     private val searchRunnable = Runnable { request() }
 
-    private val itunesBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val itunesService = retrofit.create(ItunesApiService::class.java)
+//    private val itunesBaseUrl = "https://itunes.apple.com"
+//    private val retrofit = Retrofit.Builder()
+//        .baseUrl(itunesBaseUrl)
+//        .addConverterFactory(GsonConverterFactory.create())
+//        .build()
+//    private val itunesService = retrofit.create(ItunesApiService::class.java)
 
     private lateinit var backButton: ImageView
     private lateinit var clearButton: ImageView
