@@ -9,7 +9,6 @@ class App: Application() {
 
     companion object {
         const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
-        const val THEME_MODE_KEY = "theme_mode_key"
     }
 
     var darkTheme = false
@@ -19,11 +18,10 @@ class App: Application() {
         super.onCreate()
 
         Creator.initApplication(this)
+        val settingsAppInteractor = Creator.provideSettingsAppInteractor()
 
-        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-
-        if (sharedPrefs.contains(THEME_MODE_KEY)) {
-            switchTheme(sharedPrefs.getBoolean(THEME_MODE_KEY, false))
+        if (settingsAppInteractor.checkSettingsThemeMode()) {
+            switchTheme(settingsAppInteractor.getSettingThemMode())
         } else {
             darkTheme = checkThemeMode()
         }

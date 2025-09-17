@@ -6,13 +6,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.presentation.App
-import com.example.playlistmaker.presentation.App.Companion.PLAYLIST_MAKER_PREFERENCES
-import com.example.playlistmaker.presentation.App.Companion.THEME_MODE_KEY
 import com.example.playlistmaker.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 
@@ -23,6 +21,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var shareButton: TextView
     private lateinit var supportButton: TextView
     private lateinit var agreementButton: TextView
+
+    private val settingsAppInteractor = Creator.provideSettingsAppInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +48,7 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             if (switcher.isPressed) {
                 (applicationContext as App).switchTheme(checked)
-                val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-                sharedPrefs.edit { putBoolean(THEME_MODE_KEY, checked) }
+                settingsAppInteractor.saveSettingsThemeMode(checked)
             }
             setSwitcher()
         }
