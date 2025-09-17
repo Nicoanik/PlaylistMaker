@@ -1,17 +1,44 @@
 package com.example.playlistmaker
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
+import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.example.playlistmaker.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.TracksRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.api.TracksRepository
+import com.example.playlistmaker.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.TracksInteractorImpl
 
 object Creator {
+
+    private lateinit var application: Application
+
+    fun initApplication (application: Application) {
+        this.application = application
+    }
+
+    private fun provideSharedPreferences() : SharedPreferences {
+        return  application.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, Context.MODE_PRIVATE)
+    }
+
+    private fun getSearchHistoryRepository(): SearchHistoryRepository {
+        return SearchHistoryRepositoryImpl(provideSharedPreferences())
+    }
+
+    fun provideSearchHistoryInteractor(): SearchHistoryInteractor {
+        return SearchHistoryInteractorImpl(getSearchHistoryRepository())
+    }
+
     private fun getTracksRepository(): TracksRepository {
         return TracksRepositoryImpl(RetrofitNetworkClient())
     }
 
-    fun provideMoviesInteractor(): TracksInteractor {
+    fun provideTracksInteractor(): TracksInteractor {
         return TracksInteractorImpl(getTracksRepository())
     }
 }

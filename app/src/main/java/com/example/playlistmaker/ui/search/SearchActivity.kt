@@ -27,7 +27,6 @@ import com.example.playlistmaker.Creator
 import com.example.playlistmaker.ui.mediaplayer.MediaPlayerActivity
 import com.example.playlistmaker.OnItemClickListener
 import com.example.playlistmaker.R
-import com.example.playlistmaker.SearchHistory
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.Resource
 import com.example.playlistmaker.domain.models.Track
@@ -55,8 +54,10 @@ class SearchActivity : AppCompatActivity() {
 //        .addConverterFactory(GsonConverterFactory.create())
 //        .build()
 //    private val itunesService = retrofit.create(ItunesApiService::class.java)
-    private val tracksInteractor = Creator.provideMoviesInteractor()
-    private lateinit var searchHistory: SearchHistory
+//    private lateinit var searchHistory: SearchHistory
+
+    private val tracksInteractor = Creator.provideTracksInteractor()
+    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
     private lateinit var backButton: ImageView
     private lateinit var clearButton: ImageView
@@ -88,7 +89,7 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        searchHistory = SearchHistory(this)
+//        searchHistory = SearchHistory(this)
 
         backButton = findViewById(R.id.back_button_search)
         clearButton = findViewById(R.id.clear_button)
@@ -103,10 +104,10 @@ class SearchActivity : AppCompatActivity() {
         vgSearchHistory = findViewById(R.id.vg_search_history)
         progressBar = findViewById(R.id.progressBar)
 
-        vgSearchHistory.isVisible = (searchHistory.tracks.isNotEmpty())
+        vgSearchHistory.isVisible = (searchHistoryInteractor.getSearchHistory().isNotEmpty())
 
         clearButtonSearchHistory.setOnClickListener {
-            searchHistory.clearSearchHistory()
+            searchHistoryInteractor.clearSearchHistory()
             vgSearchHistory.isVisible = false
         }
 
@@ -114,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
                 if (clickDebounce()) {
-                    searchHistory.addTrackToSearchHistory(track)
+                    searchHistoryInteractor.addTrackToSearchHistory(track)
                     adapterSearches.notifyDataSetChanged()
                     mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
                     startActivity(mediaIntent)
@@ -129,7 +130,7 @@ class SearchActivity : AppCompatActivity() {
         rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvTracksList.adapter = adapterTracks
 
-        adapterSearches.tracks = searchHistory.tracks
+        adapterSearches.tracks = searchHistoryInteractor.getSearchHistory()
         rvSearchHistory.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvSearchHistory.adapter = adapterSearches
 
@@ -157,7 +158,7 @@ class SearchActivity : AppCompatActivity() {
                 }
                 placeholderInvisible()
                 clearButton.isVisible = !s.isNullOrEmpty()
-                vgSearchHistory.isVisible = (s.isNullOrEmpty() && tracks.isEmpty() && searchHistory.tracks.isNotEmpty())
+                vgSearchHistory.isVisible = (s.isNullOrEmpty() && tracks.isEmpty() && searchHistoryInteractor.getSearchHistory().isNotEmpty())
                 editText = etQueryInput.text.toString()
                 searchDebounce()
             }
@@ -172,7 +173,7 @@ class SearchActivity : AppCompatActivity() {
             tracks.clear()
             placeholderInvisible()
             adapterTracks.notifyDataSetChanged()
-            vgSearchHistory.isVisible = (searchHistory.tracks.isNotEmpty())
+            vgSearchHistory.isVisible = (searchHistoryInteractor.getSearchHistory().isNotEmpty())
         }
 
         rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -231,8 +232,8 @@ class SearchActivity : AppCompatActivity() {
 //
 //            })
             tracksInteractor.searchTracks(
-                expression = etQueryInput.text.toString(),
-                consumer = object : TracksInteractor.TracksConsumer {
+                etQueryInput.text.toString(),
+                object : TracksInteractor.TracksConsumer {
                     override fun consume(foundTracks: Resource<List<Track>>) {
                         mainHandler.post {
                             progressBar.isVisible = false
