@@ -77,7 +77,7 @@ class MediaPlayerActivity : AppCompatActivity() {
         val mediaTrack = Gson().fromJson(intent.getStringExtra(TRACK_INTENT), Track::class.java)
 
         Glide.with(this)
-            .load(mediaTrack.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
+            .load(mediaTrack.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.album_cover_placeholder)
             .centerCrop()
             .transform(RoundedCorners(dpToPx(8, this)))
@@ -86,7 +86,7 @@ class MediaPlayerActivity : AppCompatActivity() {
         tvArtistName.text = mediaTrack.artistName
         tvTrackTime.text = timeConversion(mediaTrack.trackTime)
         tvCollectionName.text = mediaTrack.collectionName
-        tvReleaseDate.text = mediaTrack.releaseDate?.substring(0, 4)
+        tvReleaseDate.text = mediaTrack.releaseDate.substring(0, 4)
         tvPrimaryGenreName.text = mediaTrack.primaryGenreName
         tvCountry.text = mediaTrack.country
         playbackProgress.text = PLAYBACK_DEF

@@ -198,7 +198,7 @@ class SearchActivity : AppCompatActivity() {
                                 tvPlaceholderMessage.visibility = View.VISIBLE
                                 ivPlaceholderInternetImage.visibility = View.VISIBLE
                                 refreshButtonSearch.visibility = View.VISIBLE
-                                showMessage(getString(R.string.something_went_wrong), "")
+                                showMessage(getString(R.string.something_went_wrong), foundTracks.message)
                             } else if (foundTracks is Resource.Success) {
                                 tracks.clear()
                                 tracks.addAll(foundTracks.data)
