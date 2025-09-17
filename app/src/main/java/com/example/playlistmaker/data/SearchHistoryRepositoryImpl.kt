@@ -12,7 +12,7 @@ class SearchHistoryRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         const val SEARCH_HISTORY_KEY = "search_history_key"
     }
 
-    private val tracks: MutableList<Track> = mutableListOf()
+    private val tracksHistory: MutableList<Track> = mutableListOf()
 
     init {
         getSearchHistory()
@@ -20,28 +20,28 @@ class SearchHistoryRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
 
     override fun addTrackToSearchHistory(track: Track) {
         getSearchHistory()
-        tracks.remove(track)
-        tracks.add(0, track)
-        if (tracks.size > 10) tracks.removeAt(10)
+        tracksHistory.remove(track)
+        tracksHistory.add(0, track)
+        if (tracksHistory.size > 10) tracksHistory.removeAt(10)
         saveSearchHistory()
     }
 
     override fun saveSearchHistory() {
-        val json = Gson().toJson(tracks)
+        val json = Gson().toJson(tracksHistory)
         sharedPrefs.edit { putString(SEARCH_HISTORY_KEY, json) }
     }
 
     override fun getSearchHistory(): List<Track> {
-        tracks.clear()
         if (sharedPrefs.contains(SEARCH_HISTORY_KEY)) {
+            tracksHistory.clear()
             val json = sharedPrefs.getString(SEARCH_HISTORY_KEY, "")
-            tracks.addAll(Gson().fromJson(json, Array<Track>::class.java))
+            tracksHistory.addAll(Gson().fromJson(json, Array<Track>::class.java))
         }
-        return tracks
+        return tracksHistory
     }
 
     override fun clearSearchHistory() {
         sharedPrefs.edit { remove(SEARCH_HISTORY_KEY) }
-        tracks.clear()
+        tracksHistory.clear()
     }
 }

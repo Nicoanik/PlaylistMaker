@@ -3,7 +3,7 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.example.playlistmaker.presentation.App.Companion.PLAYLIST_MAKER_PREFERENCES
 import com.example.playlistmaker.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.TracksRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient

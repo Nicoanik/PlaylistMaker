@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.ui.mediaplayer.MediaPlayerActivity
-import com.example.playlistmaker.OnItemClickListener
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.Resource
@@ -47,14 +46,6 @@ class SearchActivity : AppCompatActivity() {
 
     private var isClickAllowed = true
     private val searchRunnable = Runnable { request() }
-
-//    private val itunesBaseUrl = "https://itunes.apple.com"
-//    private val retrofit = Retrofit.Builder()
-//        .baseUrl(itunesBaseUrl)
-//        .addConverterFactory(GsonConverterFactory.create())
-//        .build()
-//    private val itunesService = retrofit.create(ItunesApiService::class.java)
-//    private lateinit var searchHistory: SearchHistory
 
     private val tracksInteractor = Creator.provideTracksInteractor()
     private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
@@ -88,8 +79,6 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-//        searchHistory = SearchHistory(this)
 
         backButton = findViewById(R.id.back_button_search)
         clearButton = findViewById(R.id.clear_button)
@@ -197,40 +186,6 @@ class SearchActivity : AppCompatActivity() {
         if (etQueryInput.text.isNotEmpty()) {
             rvTracksList.isVisible = false
             progressBar.isVisible = true
-//            itunesService.search(etQueryInput.text.toString()).enqueue(object :
-//                Callback<TracksSearchResponse> {
-//                override fun onResponse(call: Call<TracksSearchResponse>,
-//                                        response: Response<TracksSearchResponse>) {
-//                    progressBar.isVisible = false
-//                    rvTracksList.isVisible = true
-//                    if (response.isSuccessful) {
-//                        val tracksJson = response.body()?.results
-//                        tracks.clear()
-//                        tracks.addAll(tracksJson!!)
-//                        if (tracks.isEmpty()) {
-//                            tvPlaceholderMessage.visibility = View.VISIBLE
-//                            ivPlaceholderErrorImage.visibility = View.VISIBLE
-//                            showMessage(getString(R.string.nothing_found), "")}
-//                        else {
-//                            adapterTracks.notifyDataSetChanged()
-//                        }
-//                    } else {
-//                        tvPlaceholderMessage.visibility = View.VISIBLE
-//                        ivPlaceholderInternetImage.visibility = View.VISIBLE
-//                        refreshButtonSearch.visibility = View.VISIBLE
-//                        showMessage(getString(R.string.something_went_wrong), response.code().toString())
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
-//                    progressBar.isVisible = false
-//                    tvPlaceholderMessage.visibility = View.VISIBLE
-//                    ivPlaceholderInternetImage.visibility = View.VISIBLE
-//                    refreshButtonSearch.visibility = View.VISIBLE
-//                    showMessage(getString(R.string.something_went_wrong), t.message.toString())
-//                }
-//
-//            })
             tracksInteractor.searchTracks(
                 etQueryInput.text.toString(),
                 object : TracksInteractor.TracksConsumer {
@@ -314,4 +269,6 @@ class SearchActivity : AppCompatActivity() {
         mainHandler.removeCallbacks(searchRunnable)
         mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
+
+
 }
