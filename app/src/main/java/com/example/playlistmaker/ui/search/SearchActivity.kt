@@ -23,19 +23,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.ui.mediaplayer.MediaPlayerActivity
 import com.example.playlistmaker.OnItemClickListener
 import com.example.playlistmaker.R
 import com.example.playlistmaker.SearchHistory
-import com.example.playlistmaker.data.dto.TracksSearchResponse
-import com.example.playlistmaker.data.network.ItunesApiService
+import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.domain.models.Resource
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
@@ -59,6 +55,8 @@ class SearchActivity : AppCompatActivity() {
 //        .addConverterFactory(GsonConverterFactory.create())
 //        .build()
 //    private val itunesService = retrofit.create(ItunesApiService::class.java)
+    private val tracksInteractor = Creator.provideMoviesInteractor()
+    private lateinit var searchHistory: SearchHistory
 
     private lateinit var backButton: ImageView
     private lateinit var clearButton: ImageView
@@ -90,6 +88,8 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
+        searchHistory = SearchHistory(this)
+
         backButton = findViewById(R.id.back_button_search)
         clearButton = findViewById(R.id.clear_button)
         tvPlaceholderMessage = findViewById(R.id.tv_placeholder_message)
@@ -102,8 +102,6 @@ class SearchActivity : AppCompatActivity() {
         rvSearchHistory = findViewById(R.id.rv_search_history)
         vgSearchHistory = findViewById(R.id.vg_search_history)
         progressBar = findViewById(R.id.progressBar)
-
-        val searchHistory = SearchHistory(this)
 
         vgSearchHistory.isVisible = (searchHistory.tracks.isNotEmpty())
 
@@ -198,41 +196,73 @@ class SearchActivity : AppCompatActivity() {
         if (etQueryInput.text.isNotEmpty()) {
             rvTracksList.isVisible = false
             progressBar.isVisible = true
-            itunesService.search(etQueryInput.text.toString()).enqueue(object :
-                Callback<TracksSearchResponse> {
-                override fun onResponse(call: Call<TracksSearchResponse>,
-                                        response: Response<TracksSearchResponse>
-                ) {
-                    progressBar.isVisible = false
-                    rvTracksList.isVisible = true
-                    if (response.isSuccessful) {
-                        val tracksJson = response.body()?.results
-                        tracks.clear()
-                        tracks.addAll(tracksJson!!)
-                        if (tracks.isEmpty()) {
-                            tvPlaceholderMessage.visibility = View.VISIBLE
-                            ivPlaceholderErrorImage.visibility = View.VISIBLE
-                            showMessage(getString(R.string.nothing_found), "")}
-                        else {
-                            adapterTracks.notifyDataSetChanged()
+//            itunesService.search(etQueryInput.text.toString()).enqueue(object :
+//                Callback<TracksSearchResponse> {
+//                override fun onResponse(call: Call<TracksSearchResponse>,
+//                                        response: Response<TracksSearchResponse>) {
+//                    progressBar.isVisible = false
+//                    rvTracksList.isVisible = true
+//                    if (response.isSuccessful) {
+//                        val tracksJson = response.body()?.results
+//                        tracks.clear()
+//                        tracks.addAll(tracksJson!!)
+//                        if (tracks.isEmpty()) {
+//                            tvPlaceholderMessage.visibility = View.VISIBLE
+//                            ivPlaceholderErrorImage.visibility = View.VISIBLE
+//                            showMessage(getString(R.string.nothing_found), "")}
+//                        else {
+//                            adapterTracks.notifyDataSetChanged()
+//                        }
+//                    } else {
+//                        tvPlaceholderMessage.visibility = View.VISIBLE
+//                        ivPlaceholderInternetImage.visibility = View.VISIBLE
+//                        refreshButtonSearch.visibility = View.VISIBLE
+//                        showMessage(getString(R.string.something_went_wrong), response.code().toString())
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
+//                    progressBar.isVisible = false
+//                    tvPlaceholderMessage.visibility = View.VISIBLE
+//                    ivPlaceholderInternetImage.visibility = View.VISIBLE
+//                    refreshButtonSearch.visibility = View.VISIBLE
+//                    showMessage(getString(R.string.something_went_wrong), t.message.toString())
+//                }
+//
+//            })
+            tracksInteractor.searchTracks(
+                expression = etQueryInput.text.toString(),
+                consumer = object : TracksInteractor.TracksConsumer {
+                    override fun consume(foundTracks: Resource<List<Track>>) {
+                        mainHandler.post {
+                            progressBar.isVisible = false
+                            rvTracksList.isVisible = true
+                            if (foundTracks is Resource.Error) {
+                                progressBar.isVisible = false
+                                tvPlaceholderMessage.visibility = View.VISIBLE
+                                ivPlaceholderInternetImage.visibility = View.VISIBLE
+                                refreshButtonSearch.visibility = View.VISIBLE
+                                showMessage(getString(R.string.something_went_wrong), "")
+                            } else if (foundTracks is Resource.Success) {
+                                tracks.clear()
+                                tracks.addAll(foundTracks.data)
+                                if (tracks.isEmpty()) {
+                                    tvPlaceholderMessage.visibility = View.VISIBLE
+                                    ivPlaceholderErrorImage.visibility = View.VISIBLE
+                                    showMessage(getString(R.string.nothing_found), "")}
+                                else {
+                                    adapterTracks.notifyDataSetChanged()
+                                }
+                            } else {
+                                tvPlaceholderMessage.visibility = View.VISIBLE
+                                ivPlaceholderInternetImage.visibility = View.VISIBLE
+                                refreshButtonSearch.visibility = View.VISIBLE
+                                showMessage(getString(R.string.something_went_wrong), "")
+                            }
                         }
-                    } else {
-                        tvPlaceholderMessage.visibility = View.VISIBLE
-                        ivPlaceholderInternetImage.visibility = View.VISIBLE
-                        refreshButtonSearch.visibility = View.VISIBLE
-                        showMessage(getString(R.string.something_went_wrong), response.code().toString())
                     }
                 }
-
-                override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
-                    progressBar.isVisible = false
-                    tvPlaceholderMessage.visibility = View.VISIBLE
-                    ivPlaceholderInternetImage.visibility = View.VISIBLE
-                    refreshButtonSearch.visibility = View.VISIBLE
-                    showMessage(getString(R.string.something_went_wrong), t.message.toString())
-                }
-
-            })
+            )
         }
     }
 

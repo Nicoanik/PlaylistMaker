@@ -1,10 +1,6 @@
 package com.example.playlistmaker.data.dto
 
-import android.content.Context
-import android.util.TypedValue
 import com.google.gson.annotations.SerializedName
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 data class TrackDto(
     val trackId: String,
