@@ -24,7 +24,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
-import com.example.playlistmaker.ui.mediaplayer.MediaPlayerActivity
+import com.example.playlistmaker.ui.media_player.MediaPlayerActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.Resource

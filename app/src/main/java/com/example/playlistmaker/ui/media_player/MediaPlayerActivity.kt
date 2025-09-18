@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.mediaplayer
+package com.example.playlistmaker.ui.media_player
 
 import android.media.MediaPlayer
 import android.os.Bundle
