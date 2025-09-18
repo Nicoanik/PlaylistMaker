@@ -5,11 +5,6 @@ import com.example.playlistmaker.domain.api.SettingsAppRepository
 import androidx.core.content.edit
 
 class SettingsAppRepositoryImpl(private val sharedPrefs: SharedPreferences) : SettingsAppRepository {
-
-    companion object {
-        const val THEME_MODE_KEY = "theme_mode_key"
-    }
-
     override fun checkSettingsThemeMode(): Boolean {
         return (sharedPrefs.contains(THEME_MODE_KEY))
     }
@@ -20,5 +15,9 @@ class SettingsAppRepositoryImpl(private val sharedPrefs: SharedPreferences) : Se
 
     override fun getSettingThemMode(): Boolean {
         return sharedPrefs.getBoolean(THEME_MODE_KEY, false)
+    }
+
+    companion object {
+        const val THEME_MODE_KEY = "theme_mode_key"
     }
 }

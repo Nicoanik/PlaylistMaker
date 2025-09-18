@@ -7,10 +7,6 @@ import com.example.playlistmaker.Creator
 
 class App: Application() {
 
-    companion object {
-        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
-    }
-
     var darkTheme = false
     var themeModeKeyActive = false
 
@@ -44,5 +40,9 @@ class App: Application() {
             Configuration.UI_MODE_NIGHT_YES -> true
             else -> false
         }
+    }
+
+    companion object {
+        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
     }
 }

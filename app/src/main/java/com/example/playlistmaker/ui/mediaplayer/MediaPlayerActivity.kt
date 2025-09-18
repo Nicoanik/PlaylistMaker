@@ -31,10 +31,6 @@ class MediaPlayerActivity : AppCompatActivity() {
         PAUSED(3)
     }
 
-    companion object {
-        private const val PLAYBACK_DEF = "00:00"
-    }
-
     private var mediaPlayer = MediaPlayer()
     private var playerState = PlayerState.DEFAULT
 
@@ -157,5 +153,9 @@ class MediaPlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+    }
+
+    companion object {
+        private const val PLAYBACK_DEF = "00:00"
     }
 }

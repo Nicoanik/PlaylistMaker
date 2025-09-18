@@ -33,22 +33,11 @@ import com.google.gson.Gson
 
 class SearchActivity : AppCompatActivity() {
 
-    companion object {
-        const val EDIT_TEXT = "EDIT_TEXT"
-        const val TEXT_DEF = ""
-        const val TRACK_INTENT = "track_intent"
-        const val SEARCH_TRACKS = "search_tracks"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-    }
-
+    private val tracks: MutableList<Track> = mutableListOf()
     private var editText: String = TEXT_DEF
 
     private var isClickAllowed = true
     private val searchRunnable = Runnable { request() }
-
-    private val tracksInteractor = Creator.provideTracksInteractor()
-    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
     private lateinit var backButton: ImageView
     private lateinit var clearButton: ImageView
@@ -63,11 +52,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var vgSearchHistory: ViewGroup
     private lateinit var progressBar: ProgressBar
 
-    private val tracks: MutableList<Track> = mutableListOf()
-
     lateinit var adapterTracks: TracksAdapter
     lateinit var adapterSearches: TracksAdapter
 
+    private val tracksInteractor = Creator.provideTracksInteractor()
+    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
     private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -270,5 +259,12 @@ class SearchActivity : AppCompatActivity() {
         mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
-
+    companion object {
+        const val EDIT_TEXT = "EDIT_TEXT"
+        const val TEXT_DEF = ""
+        const val TRACK_INTENT = "track_intent"
+        const val SEARCH_TRACKS = "search_tracks"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    }
 }
