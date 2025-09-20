@@ -1,11 +1,12 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.domain.models.Track
 
 class TracksAdapter(private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<TracksViewHolder> () {
 
-    var tracks: MutableList<Track> = mutableListOf()
+    var tracks: List<Track> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder = TracksViewHolder(parent)
 
@@ -19,3 +20,6 @@ class TracksAdapter(private val onItemClickListener: OnItemClickListener): Recyc
     override fun getItemCount(): Int = tracks.size
 }
 
+interface OnItemClickListener {
+    fun onItemClick(track: Track)
+}

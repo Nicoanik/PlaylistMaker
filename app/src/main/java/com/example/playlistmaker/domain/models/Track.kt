@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain.models
 
 import android.content.Context
 import android.util.TypedValue
@@ -13,7 +13,7 @@ data class Track(
     @SerializedName("trackTimeMillis") val trackTime: Long,
     val collectionName: String,
     val releaseDate: String,
-    val primaryGenreName: String,
+    val primaryGenreName: String?,
     val country: String,
     val artworkUrl100: String,
     val previewUrl: String

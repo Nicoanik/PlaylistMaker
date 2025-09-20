@@ -1,8 +1,9 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.Creator
 
 class App: Application() {
 
@@ -12,10 +13,11 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        Creator.initApplication(this)
+        val settingsAppInteractor = Creator.provideSettingsAppInteractor()
 
-        if (sharedPrefs.contains(THEME_MODE_KEY)) {
-            switchTheme(sharedPrefs.getBoolean(THEME_MODE_KEY, false))
+        if (settingsAppInteractor.checkSettingsThemeMode()) {
+            switchTheme(settingsAppInteractor.getSettingThemMode())
         } else {
             darkTheme = checkThemeMode()
         }
@@ -42,6 +44,5 @@ class App: Application() {
 
     companion object {
         const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
-        const val THEME_MODE_KEY = "theme_mode_key"
     }
 }

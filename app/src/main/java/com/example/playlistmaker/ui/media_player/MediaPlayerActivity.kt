@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.media_player
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -13,7 +13,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.SearchActivity.Companion.TRACK_INTENT
+import com.example.playlistmaker.R
+import com.example.playlistmaker.ui.search.SearchActivity.Companion.TRACK_INTENT
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.models.dpToPx
+import com.example.playlistmaker.domain.models.timeConversion
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -25,10 +29,6 @@ class MediaPlayerActivity : AppCompatActivity() {
         PREPARED(1),
         PLAYING(2),
         PAUSED(3)
-    }
-
-    companion object {
-        private const val PLAYBACK_DEF = "00:00"
     }
 
     private var mediaPlayer = MediaPlayer()
@@ -153,5 +153,9 @@ class MediaPlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+    }
+
+    companion object {
+        private const val PLAYBACK_DEF = "00:00"
     }
 }
