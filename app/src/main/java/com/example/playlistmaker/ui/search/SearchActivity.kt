@@ -226,10 +226,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun placeholderInvisible() {
-        tvPlaceholderMessage.visibility = View.INVISIBLE
-        ivPlaceholderErrorImage.visibility = View.INVISIBLE
-        ivPlaceholderInternetImage.visibility = View.INVISIBLE
-        refreshButtonSearch.visibility = View.INVISIBLE
+        tvPlaceholderMessage.isVisible = false
+        ivPlaceholderErrorImage.isVisible = false
+        ivPlaceholderInternetImage.isVisible = false
+        refreshButtonSearch.isVisible = false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
