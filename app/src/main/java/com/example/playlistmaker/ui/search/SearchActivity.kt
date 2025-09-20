@@ -57,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracksInteractor = Creator.provideTracksInteractor()
     private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
-    private val mainHandler = Handler(Looper.getMainLooper())
+    private val handlerMain = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -179,29 +179,29 @@ class SearchActivity : AppCompatActivity() {
                 etQueryInput.text.toString(),
                 object : TracksInteractor.TracksConsumer {
                     override fun consume(foundTracks: Resource<List<Track>>) {
-                        mainHandler.post {
+                        handlerMain.post {
                             progressBar.isVisible = false
                             rvTracksList.isVisible = true
                             if (foundTracks is Resource.Error) {
                                 progressBar.isVisible = false
-                                tvPlaceholderMessage.visibility = View.VISIBLE
-                                ivPlaceholderInternetImage.visibility = View.VISIBLE
-                                refreshButtonSearch.visibility = View.VISIBLE
+                                tvPlaceholderMessage.isVisible = true
+                                ivPlaceholderInternetImage.isVisible = true
+                                refreshButtonSearch.isVisible = true
                                 showMessage(getString(R.string.something_went_wrong), foundTracks.message)
                             } else if (foundTracks is Resource.Success) {
                                 tracks.clear()
                                 tracks.addAll(foundTracks.data)
                                 if (tracks.isEmpty()) {
-                                    tvPlaceholderMessage.visibility = View.VISIBLE
-                                    ivPlaceholderErrorImage.visibility = View.VISIBLE
+                                    tvPlaceholderMessage.isVisible = true
+                                    ivPlaceholderErrorImage.isVisible = true
                                     showMessage(getString(R.string.nothing_found), "")}
                                 else {
                                     adapterTracks.notifyDataSetChanged()
                                 }
                             } else {
-                                tvPlaceholderMessage.visibility = View.VISIBLE
-                                ivPlaceholderInternetImage.visibility = View.VISIBLE
-                                refreshButtonSearch.visibility = View.VISIBLE
+                                tvPlaceholderMessage.isVisible = true
+                                ivPlaceholderInternetImage.isVisible = true
+                                refreshButtonSearch.isVisible = true
                                 showMessage(getString(R.string.something_went_wrong), "")
                             }
                         }
@@ -249,14 +249,14 @@ class SearchActivity : AppCompatActivity() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            handlerMain.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
     }
 
     private fun searchDebounce() {
-        mainHandler.removeCallbacks(searchRunnable)
-        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        handlerMain.removeCallbacks(searchRunnable)
+        handlerMain.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     companion object {
