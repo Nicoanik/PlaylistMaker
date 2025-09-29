@@ -11,41 +11,33 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.settings.domain.model.ThemeSettings
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var backButton: ImageView
-    private lateinit var themeSwitcher: SwitchMaterial
-    private lateinit var shareButton: TextView
-    private lateinit var supportButton: TextView
-    private lateinit var agreementButton: TextView
+    private lateinit var binding: ActivitySettingsBinding
 
     private val settingsAppInteractor = Creator.provideSettingsInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_settings)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        backButton = findViewById(R.id.back_button_settings)
-        themeSwitcher = findViewById(R.id.themeSwitcher)
-        shareButton = findViewById(R.id.share_button_settings)
-        supportButton = findViewById(R.id.support_button_settings)
-        agreementButton = findViewById(R.id.agreement_button_settings)
-
-        backButton.setOnClickListener{
+        binding.backButtonSettings.setOnClickListener{
             finish()
         }
 
         setSwitcher()
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        binding.themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             if (switcher.isPressed) {
                 (applicationContext as ThemeSettings).switchTheme(checked)
                 settingsAppInteractor.saveSettingsThemeMode(checked)
@@ -53,14 +45,14 @@ class SettingsActivity : AppCompatActivity() {
             setSwitcher()
         }
 
-        shareButton.setOnClickListener{
+        binding.shareButtonSettings.setOnClickListener{
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.setType("text/plain")
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text))
             startActivity(shareIntent)
         }
 
-        supportButton.setOnClickListener{
+        binding.supportButtonSettings.setOnClickListener{
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = "mailto:".toUri()
             supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_mail)))
@@ -69,7 +61,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(supportIntent)
         }
 
-        agreementButton.setOnClickListener{
+        binding.agreementButtonSettings.setOnClickListener{
             val address = getString(R.string.agreement_url).toUri()
             val agreementIntent = Intent(Intent.ACTION_VIEW, address)
             startActivity(agreementIntent)
@@ -78,9 +70,9 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setSwitcher() {
         if ((applicationContext as ThemeSettings).themeModeKeyActive) {
-            themeSwitcher.isChecked = (applicationContext as ThemeSettings).darkTheme
+            binding.themeSwitcher.isChecked = (applicationContext as ThemeSettings).darkTheme
         } else {
-            themeSwitcher.isChecked = (applicationContext as ThemeSettings).checkThemeMode()
+            binding.themeSwitcher.isChecked = (applicationContext as ThemeSettings).checkThemeMode()
         }
     }
 }
