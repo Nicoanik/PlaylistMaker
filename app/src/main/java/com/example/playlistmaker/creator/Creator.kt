@@ -8,11 +8,11 @@ import com.example.playlistmaker.settings.data.impl.SettingsRepositoryImpl
 import com.example.playlistmaker.search.data.impl.SearchTracksRepositoryImpl
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.search.domain.SearchHistoryInteractor
-import com.example.playlistmaker.search.data.SearchHistoryRepository
+import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.example.playlistmaker.settings.domain.SettingsInteractor
-import com.example.playlistmaker.settings.data.SettingsRepository
+import com.example.playlistmaker.settings.domain.SettingsRepository
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
-import com.example.playlistmaker.search.data.SearchTracksRepository
+import com.example.playlistmaker.search.domain.SearchTracksRepository
 import com.example.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.settings.domain.impl.SettingsInteractorImpl
 import com.example.playlistmaker.search.domain.impl.SearchTracksInteractorImpl

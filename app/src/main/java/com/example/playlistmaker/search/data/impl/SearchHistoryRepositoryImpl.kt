@@ -3,7 +3,7 @@ package com.example.playlistmaker.search.data.impl
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.data.SearchHistoryRepository
+import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.google.gson.Gson
 
 class SearchHistoryRepositoryImpl(private val sharedPrefs: SharedPreferences) :

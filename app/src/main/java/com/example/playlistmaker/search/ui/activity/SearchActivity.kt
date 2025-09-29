@@ -28,8 +28,6 @@ import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.models.Resource
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
-import com.example.playlistmaker.search.ui.OnItemClickListener
-import com.example.playlistmaker.search.ui.TracksAdapter
 import com.google.gson.Gson
 import kotlin.collections.addAll
 

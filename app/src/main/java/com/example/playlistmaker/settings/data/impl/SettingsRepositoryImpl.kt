@@ -2,7 +2,7 @@ package com.example.playlistmaker.settings.data.impl
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.example.playlistmaker.settings.data.SettingsRepository
+import com.example.playlistmaker.settings.domain.SettingsRepository
 
 class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : SettingsRepository {
     override fun checkSettingsThemeMode(): Boolean {
