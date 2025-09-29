@@ -6,14 +6,8 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,33 +18,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.models.Resource
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
+import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
 import kotlin.collections.addAll
 
 class SearchActivity : AppCompatActivity() {
+
+    private var viewModel: SearchViewModel? = null
+    private lateinit var binding: ActivitySearchBinding
 
     private val tracks: MutableList<Track> = mutableListOf()
     private var editText: String = TEXT_DEF
 
     private var isClickAllowed = true
     private val searchRunnable = Runnable { request() }
-
-    private lateinit var backButton: ImageView
-    private lateinit var clearButton: ImageView
-    private lateinit var tvPlaceholderMessage: TextView
-    private lateinit var ivPlaceholderErrorImage: ImageView
-    private lateinit var ivPlaceholderInternetImage: ImageView
-    private lateinit var refreshButtonSearch: Button
-    private lateinit var clearButtonSearchHistory: Button
-    private lateinit var etQueryInput: EditText
-    private lateinit var rvTracksList: RecyclerView
-    private lateinit var rvSearchHistory: RecyclerView
-    private lateinit var vgSearchHistory: ViewGroup
-    private lateinit var progressBar: ProgressBar
 
     lateinit var adapterTracks: TracksAdapter
     lateinit var adapterSearches: TracksAdapter
@@ -62,31 +48,19 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_search)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        backButton = findViewById(R.id.back_button_search)
-        clearButton = findViewById(R.id.clear_button)
-        tvPlaceholderMessage = findViewById(R.id.tv_placeholder_message)
-        ivPlaceholderErrorImage = findViewById(R.id.iv_placeholder_error_image)
-        ivPlaceholderInternetImage = findViewById(R.id.iv_placeholder_internet_image)
-        refreshButtonSearch = findViewById(R.id.refresh_button_search)
-        clearButtonSearchHistory = findViewById(R.id.clear_button_search_history)
-        etQueryInput = findViewById(R.id.et_queryInput)
-        rvTracksList = findViewById(R.id.rv_tracks_list)
-        rvSearchHistory = findViewById(R.id.rv_search_history)
-        vgSearchHistory = findViewById(R.id.vg_search_history)
-        progressBar = findViewById(R.id.progressBar)
+        binding.vgSearchHistory.isVisible = (searchHistoryInteractor.getSearchHistory().isNotEmpty())
 
-        vgSearchHistory.isVisible = (searchHistoryInteractor.getSearchHistory().isNotEmpty())
-
-        clearButtonSearchHistory.setOnClickListener {
+        binding.clearButtonSearchHistory.setOnClickListener {
             searchHistoryInteractor.clearSearchHistory()
-            vgSearchHistory.isVisible = false
+            binding.vgSearchHistory.isVisible = false
         }
 
         val mediaIntent = Intent(this, PlayerActivity::class.java)
@@ -105,21 +79,21 @@ class SearchActivity : AppCompatActivity() {
         adapterSearches = TracksAdapter(onItemClickListener)
 
         adapterTracks.tracks = tracks
-        rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rvTracksList.adapter = adapterTracks
+        binding.rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rvTracksList.adapter = adapterTracks
 
         adapterSearches.tracks = searchHistoryInteractor.getSearchHistory()
-        rvSearchHistory.layoutManager =
+        binding.rvSearchHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rvSearchHistory.adapter = adapterSearches
+        binding.rvSearchHistory.adapter = adapterSearches
 
-        backButton.setOnClickListener {
+        binding.backButtonSearch.setOnClickListener {
             finish()
         }
 
-        etQueryInput.setText(editText)
+        binding.etQueryInput.setText(editText)
 
-        etQueryInput.setOnEditorActionListener { _, actionId, _ ->
+        binding.etQueryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 request()
                 true
@@ -136,73 +110,77 @@ class SearchActivity : AppCompatActivity() {
                     adapterTracks.notifyDataSetChanged()
                 }
                 placeholderInvisible()
-                clearButton.isVisible = !s.isNullOrEmpty()
-                vgSearchHistory.isVisible = (s.isNullOrEmpty() && tracks.isEmpty() && searchHistoryInteractor.getSearchHistory().isNotEmpty())
-                editText = etQueryInput.text.toString()
+                binding.clearButton.isVisible = !s.isNullOrEmpty()
+                binding.vgSearchHistory.isVisible = (s.isNullOrEmpty() && tracks.isEmpty() && searchHistoryInteractor.getSearchHistory().isNotEmpty())
+                editText = binding.etQueryInput.text.toString()
                 searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        etQueryInput.addTextChangedListener(textWatcher)
+        binding.etQueryInput.addTextChangedListener(textWatcher)
 
-        clearButton.setOnClickListener {
-            etQueryInput.setText(TEXT_DEF)
+        binding.clearButton.setOnClickListener {
+            binding.etQueryInput.setText(TEXT_DEF)
             tracks.clear()
             placeholderInvisible()
             adapterTracks.notifyDataSetChanged()
-            vgSearchHistory.isVisible = (searchHistoryInteractor.getSearchHistory().isNotEmpty())
+            binding.vgSearchHistory.isVisible = (searchHistoryInteractor.getSearchHistory().isNotEmpty())
         }
 
-        rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    etQueryInput.clearFocus()
-                    val imm = etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(etQueryInput.windowToken, 0)
+                    binding.etQueryInput.clearFocus()
+                    val imm = binding.etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(binding.etQueryInput.windowToken, 0)
                 }
             }
         })
 
-        refreshButtonSearch.setOnClickListener {
+        binding.refreshButtonSearch.setOnClickListener {
             placeholderInvisible()
             request()
         }
     }
 
     private fun request() {
-        if (etQueryInput.text.isNotEmpty()) {
-            rvTracksList.isVisible = false
-            progressBar.isVisible = true
+        if (binding.etQueryInput.text.isNotEmpty()) {
+            binding.rvTracksList.isVisible = false
+            binding.progressBar.isVisible = true
             tracksInteractor.searchTracks(
-                etQueryInput.text.toString(),
+                binding.etQueryInput.text.toString(),
                 object : SearchTracksInteractor.TracksConsumer {
                     override fun consume(foundTracks: Resource<List<Track>>) {
                         handlerMain.post {
-                            progressBar.isVisible = false
-                            rvTracksList.isVisible = true
+                            binding.progressBar.isVisible = false
+                            binding.rvTracksList.isVisible = true
                             if (foundTracks is Resource.Error) {
-                                progressBar.isVisible = false
-                                tvPlaceholderMessage.isVisible = true
-                                ivPlaceholderInternetImage.isVisible = true
-                                refreshButtonSearch.isVisible = true
+                                binding.apply {
+                                    progressBar.isVisible = false
+                                    tvPlaceholderMessage.isVisible = true
+                                    ivPlaceholderInternetImage.isVisible = true
+                                    refreshButtonSearch.isVisible = true
+                                }
                                 showMessage(getString(R.string.something_went_wrong), foundTracks.message)
                             } else if (foundTracks is Resource.Success) {
                                 tracks.clear()
                                 tracks.addAll(foundTracks.data)
                                 if (tracks.isEmpty()) {
-                                    tvPlaceholderMessage.isVisible = true
-                                    ivPlaceholderErrorImage.isVisible = true
+                                    binding.tvPlaceholderMessage.isVisible = true
+                                    binding.ivPlaceholderErrorImage.isVisible = true
                                     showMessage(getString(R.string.nothing_found), "")}
                                 else {
                                     adapterTracks.notifyDataSetChanged()
                                 }
                             } else {
-                                tvPlaceholderMessage.isVisible = true
-                                ivPlaceholderInternetImage.isVisible = true
-                                refreshButtonSearch.isVisible = true
+                                binding.apply {
+                                    tvPlaceholderMessage.isVisible = true
+                                    ivPlaceholderInternetImage.isVisible = true
+                                    refreshButtonSearch.isVisible = true
+                                }
                                 showMessage(getString(R.string.something_went_wrong), "")
                             }
                         }
@@ -216,7 +194,7 @@ class SearchActivity : AppCompatActivity() {
         if (text.isNotEmpty()) {
             tracks.clear()
             adapterTracks.notifyDataSetChanged()
-            tvPlaceholderMessage.text = text
+            binding.tvPlaceholderMessage.text = text
             if (additionalMessage.isNotEmpty()) {
                 Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
                     .show()
@@ -227,10 +205,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun placeholderInvisible() {
-        tvPlaceholderMessage.isVisible = false
-        ivPlaceholderErrorImage.isVisible = false
-        ivPlaceholderInternetImage.isVisible = false
-        refreshButtonSearch.isVisible = false
+        binding.apply {
+            tvPlaceholderMessage.isVisible = false
+            ivPlaceholderErrorImage.isVisible = false
+            ivPlaceholderInternetImage.isVisible = false
+            refreshButtonSearch.isVisible = false
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
