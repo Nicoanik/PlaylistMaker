@@ -6,7 +6,7 @@
     android:id="@+id/activity_media_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.media_player.MediaPlayerActivity"
+    tools:context=".player.ui.activity.PlayerActivity"
     style="@style/ModeActivity">
 
     <ImageView
