@@ -7,16 +7,16 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 data class Track(
-    val trackId: String,
-    val trackName: String,
-    val artistName: String,
-    @SerializedName("trackTimeMillis") val trackTime: Long,
-    val collectionName: String,
-    val releaseDate: String,
+    val trackId: String?,
+    val trackName: String?,
+    val artistName: String?,
+    @SerializedName("trackTimeMillis") val trackTime: Long?,
+    val collectionName: String?,
+    val releaseDate: String?,
     val primaryGenreName: String?,
-    val country: String,
-    val artworkUrl100: String,
-    val previewUrl: String
+    val country: String?,
+    val artworkUrl100: String?,
+    val previewUrl: String?
 )
 
 fun timeConversion(time: Long?) : String {

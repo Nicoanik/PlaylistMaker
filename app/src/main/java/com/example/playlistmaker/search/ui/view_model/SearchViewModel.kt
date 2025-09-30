@@ -25,6 +25,9 @@ class SearchViewModel(private val context: Context): ViewModel() {
     private val showToast = SingleLiveEvent<String?>()
     fun observeShowToast(): LiveData<String?> = showToast
 
+    private val searchHistoryLiveData = MutableLiveData<List<Track>>()
+    fun observeSearchHistory(): LiveData<List<Track>> = searchHistoryLiveData
+
     private val tracksSearchInteractor = Creator.provideSearchTracksInteractor()
     private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
@@ -103,8 +106,8 @@ class SearchViewModel(private val context: Context): ViewModel() {
         stateLiveData.postValue(state)
     }
 
-    fun getSearchHistory(): List<Track> {
-        return searchHistoryInteractor.getSearchHistory()
+    fun getSearchHistory() {
+        searchHistoryLiveData.postValue(searchHistoryInteractor.getSearchHistory())
     }
 
     fun addTrackToSearchHistory(track: Track) {

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class PlayerViewModel(private val url: String): ViewModel() {
+class PlayerViewModel(private val url: String?): ViewModel() {
 
     private val timerLiveData = MutableLiveData(PLAYBACK_DEF)
     fun observeProgressTime(): LiveData<String> = timerLiveData
@@ -100,7 +100,7 @@ class PlayerViewModel(private val url: String): ViewModel() {
     companion object {
         const val PLAYBACK_DEF = "00:00"
 
-        fun getFactory(url: String): ViewModelProvider.Factory = viewModelFactory {
+        fun getFactory(url: String?): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 PlayerViewModel(url)
             }

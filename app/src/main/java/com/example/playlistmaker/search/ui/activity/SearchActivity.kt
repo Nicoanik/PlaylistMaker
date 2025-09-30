@@ -68,18 +68,21 @@ class SearchActivity : AppCompatActivity() {
             showToast(it.toString())
         }
 
+        viewModel?.observeSearchHistory()?.observe(this) {
+            showSearchHistory(it)
+        }
+
         adapterTracks = TracksAdapter(onItemClickListener)
         adapterSearches = TracksAdapter(onItemClickListener)
 
         binding.rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvTracksList.adapter = adapterTracks
 
-        adapterSearches.tracks = viewModel?.getSearchHistory()!!
+        viewModel?.getSearchHistory()
+
         binding.rvSearchHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvSearchHistory.adapter = adapterSearches
-
-        binding.vgSearchHistory.isVisible = (viewModel?.getSearchHistory()?.isNotEmpty() == true)
 
         binding.clearButtonSearchHistory.setOnClickListener {
             viewModel?.clearSearchHistory()
@@ -108,7 +111,7 @@ class SearchActivity : AppCompatActivity() {
                 }
                 placeholderInvisible()
                 binding.clearButton.isVisible = !s.isNullOrEmpty()
-                binding.vgSearchHistory.isVisible = (s.isNullOrEmpty() && adapterTracks.tracks.isEmpty() && viewModel?.getSearchHistory()?.isNotEmpty() == true)
+                binding.vgSearchHistory.isVisible = (s.isNullOrEmpty() && adapterTracks.tracks.isEmpty() && adapterSearches.tracks.isNotEmpty())
                 viewModel?.searchDebounce(s?.toString() ?: TEXT_DEF)
             }
 
@@ -122,7 +125,7 @@ class SearchActivity : AppCompatActivity() {
             adapterTracks.tracks = listOf()
             placeholderInvisible()
             adapterTracks.notifyDataSetChanged()
-            binding.vgSearchHistory.isVisible = (viewModel?.getSearchHistory()?.isNotEmpty() == true)
+            binding.vgSearchHistory.isVisible = (adapterSearches.tracks.isNotEmpty())
         }
 
         binding.rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -200,6 +203,16 @@ class SearchActivity : AppCompatActivity() {
 
     fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    fun showSearchHistory(tracksSearchHistory: List<Track>) {
+        if (tracksSearchHistory.isNotEmpty()) {
+            adapterSearches.tracks = tracksSearchHistory
+            adapterSearches.notifyDataSetChanged()
+            binding.vgSearchHistory.isVisible = true
+        }
+
+
     }
 
     fun render(state: SearchState) {
