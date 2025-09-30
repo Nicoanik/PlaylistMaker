@@ -1,11 +1,11 @@
-package com.example.playlistmaker.settings.domain.model
+package com.example.playlistmaker
 
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.creator.Creator
 
-class ThemeSettings: Application() {
+class App: Application() {
 
     var darkTheme = false
     var themeModeKeyActive = false

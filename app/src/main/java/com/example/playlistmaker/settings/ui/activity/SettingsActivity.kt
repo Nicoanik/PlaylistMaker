@@ -2,8 +2,6 @@ package com.example.playlistmaker.settings.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -12,8 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
-import com.example.playlistmaker.settings.domain.model.ThemeSettings
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.example.playlistmaker.App
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -39,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
         setSwitcher()
         binding.themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             if (switcher.isPressed) {
-                (applicationContext as ThemeSettings).switchTheme(checked)
+                (applicationContext as App).switchTheme(checked)
                 settingsAppInteractor.saveSettingsThemeMode(checked)
             }
             setSwitcher()
@@ -69,10 +66,10 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setSwitcher() {
-        if ((applicationContext as ThemeSettings).themeModeKeyActive) {
-            binding.themeSwitcher.isChecked = (applicationContext as ThemeSettings).darkTheme
+        if ((applicationContext as App).themeModeKeyActive) {
+            binding.themeSwitcher.isChecked = (applicationContext as App).darkTheme
         } else {
-            binding.themeSwitcher.isChecked = (applicationContext as ThemeSettings).checkThemeMode()
+            binding.themeSwitcher.isChecked = (applicationContext as App).checkThemeMode()
         }
     }
 }

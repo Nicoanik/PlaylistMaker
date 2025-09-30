@@ -16,7 +16,7 @@ import com.example.playlistmaker.search.domain.SearchTracksRepository
 import com.example.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.settings.domain.impl.SettingsInteractorImpl
 import com.example.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
-import com.example.playlistmaker.settings.domain.model.ThemeSettings
+import com.example.playlistmaker.App
 
 object Creator {
 
@@ -27,14 +27,14 @@ object Creator {
     }
 
     private fun provideSharedPreferences() : SharedPreferences {
-        return  application.getSharedPreferences(ThemeSettings.Companion.PLAYLIST_MAKER_PREFERENCES, Context.MODE_PRIVATE)
+        return  application.getSharedPreferences(App.Companion.PLAYLIST_MAKER_PREFERENCES, Context.MODE_PRIVATE)
     }
 
     private fun getTracksRepository(): SearchTracksRepository {
         return SearchTracksRepositoryImpl(RetrofitNetworkClient())
     }
 
-    fun provideTracksInteractor(): SearchTracksInteractor {
+    fun provideSearchTracksInteractor(): SearchTracksInteractor {
         return SearchTracksInteractorImpl(getTracksRepository())
     }
 
