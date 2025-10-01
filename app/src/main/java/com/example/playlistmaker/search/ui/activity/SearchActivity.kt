@@ -21,7 +21,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
-import com.example.playlistmaker.search.ui.view_model.HistoryState
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
@@ -60,6 +59,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         viewModel = ViewModelProvider(this, SearchViewModel.getFactory())[SearchViewModel::class.java]
+
         viewModel?.observeState()?.observe(this) {
             renderSearch(it)
         }
@@ -68,8 +68,10 @@ class SearchActivity : AppCompatActivity() {
             showToast(it.toString())
         }
 
-        viewModel?.observeSearchHistory()?.observe(this) {
-            renderHistory(it)
+        viewModel?.observeHistory()?.observe(this) {
+            adapterSearches.tracks.clear()
+            adapterSearches.tracks.addAll(it)
+            adapterSearches.notifyDataSetChanged()
         }
 
         adapterTracks = TracksAdapter(onItemClickListener)
@@ -77,8 +79,6 @@ class SearchActivity : AppCompatActivity() {
 
         binding.rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvTracksList.adapter = adapterTracks
-
-        viewModel?.getSearchHistory()
 
         binding.rvSearchHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -109,8 +109,10 @@ class SearchActivity : AppCompatActivity() {
                 if (s.isNullOrEmpty()) {
                     adapterTracks.tracks.clear()
                     adapterTracks.notifyDataSetChanged()
+                    binding.rvTracksList.isVisible = false
+                    viewModel?.getSearchHistory()
+                    placeholderInvisible()
                 }
-                placeholderInvisible()
                 binding.clearButton.isVisible = !s.isNullOrEmpty()
                 binding.vgSearchHistory.isVisible = (s.isNullOrEmpty() && adapterTracks.tracks.isEmpty() && adapterSearches.tracks.isNotEmpty())
                 viewModel?.searchDebounce(s?.toString() ?: TEXT_DEF)
@@ -183,43 +185,36 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun showContent(tracks: List<Track>) {
-        binding.apply {
-            rvTracksList.isVisible = true
-            tvPlaceholderMessage.isVisible = false
-            progressBar.isVisible = false
-        }
+        adapterTracks.tracks.clear()
         adapterTracks.tracks.addAll(tracks)
         adapterTracks.notifyDataSetChanged()
+        placeholderInvisible()
+        binding.apply {
+            progressBar.isVisible = false
+            vgSearchHistory.isVisible = false
+            rvTracksList.isVisible = true
+        }
     }
 
     fun showEmpty(emptyMessage: String) {
         binding.apply {
             rvTracksList.isVisible = false
+            tvPlaceholderMessage.text = emptyMessage
             tvPlaceholderMessage.isVisible = true
             ivPlaceholderEmptyImage.isVisible = true
             progressBar.isVisible = false
-            tvPlaceholderMessage.text = emptyMessage
         }
     }
 
     fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
-
-    fun renderHistory(state: HistoryState) {
-        when (state) {
-            is HistoryState.GetHistory -> {
-                if (state.trackHistory.isNotEmpty()) {
-                    adapterSearches.tracks.addAll(state.trackHistory)
-                    adapterSearches.notifyDataSetChanged()
-                    binding.vgSearchHistory.isVisible = true
-                }
-            }
-            is HistoryState.AddHistory -> {
-                adapterSearches.tracks.clear()
-                adapterSearches.tracks.addAll(state.tracksHistory)
-                adapterSearches.notifyDataSetChanged()
-            }
+    fun showHistory(tracksHistory: List<Track>) {
+        if (tracksHistory.isNotEmpty()) {
+            adapterSearches.tracks.clear()
+            adapterSearches.tracks.addAll(tracksHistory)
+            adapterSearches.notifyDataSetChanged()
+            binding.vgSearchHistory.isVisible = true
         }
     }
 
@@ -229,6 +224,7 @@ class SearchActivity : AppCompatActivity() {
             is SearchState.Content -> showContent(state.tracks)
             is SearchState.Error -> showError(state.errorMessage)
             is SearchState.Empty -> showEmpty(state.message)
+            is SearchState.History -> showHistory(state.tracksHistory)
         }
     }
 

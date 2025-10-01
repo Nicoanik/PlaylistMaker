@@ -25,15 +25,19 @@ class SearchViewModel(private val context: Context): ViewModel() {
     private val showToast = SingleLiveEvent<String?>()
     fun observeShowToast(): LiveData<String?> = showToast
 
-    private val searchHistoryLiveData = MutableLiveData<HistoryState>()
-    fun observeSearchHistory(): LiveData<HistoryState> = searchHistoryLiveData
+    private val historyLiveData = MutableLiveData<List<Track>>()
+    fun observeHistory(): LiveData<List<Track>> = historyLiveData
 
-    private val tracksSearchInteractor = Creator.provideSearchTracksInteractor()
+    private val tracksSearchInteractor = Creator.provideSearchTracksInteractor(context)
     private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
     private var latestSearchText: String? = null
 
     private val handlerMain = Handler(Looper.getMainLooper())
+
+    init {
+        getSearchHistory()
+    }
 
     fun searchDebounce(changedText: String) {
         if (latestSearchText == changedText) {
@@ -103,12 +107,12 @@ class SearchViewModel(private val context: Context): ViewModel() {
    }
 
     fun getSearchHistory() {
-        renderHistoryState(HistoryState.GetHistory(searchHistoryInteractor.getSearchHistory()))
+        renderSearchState(SearchState.History(searchHistoryInteractor.getSearchHistory()))
     }
 
     fun addTrackToSearchHistory(track: Track) {
         searchHistoryInteractor.addTrackToSearchHistory(track)
-        renderHistoryState(HistoryState.AddHistory(searchHistoryInteractor.getSearchHistory()))
+        renderHistory(searchHistoryInteractor.getSearchHistory())
     }
 
     fun clearSearchHistory() {
@@ -119,8 +123,8 @@ class SearchViewModel(private val context: Context): ViewModel() {
         stateLiveData.postValue(state)
     }
 
-    private fun renderHistoryState(state: HistoryState) {
-        searchHistoryLiveData.postValue(state)
+    private fun renderHistory(historyTracks: List<Track>) {
+        historyLiveData.postValue(historyTracks)
     }
 
     companion object {

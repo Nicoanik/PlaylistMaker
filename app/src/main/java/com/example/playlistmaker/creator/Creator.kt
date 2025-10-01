@@ -37,12 +37,12 @@ object Creator {
         return  application.getSharedPreferences(App.Companion.PLAYLIST_MAKER_PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    private fun getTracksRepository(): SearchTracksRepository {
-        return SearchTracksRepositoryImpl(RetrofitNetworkClient())
+    private fun getTracksRepository(context: Context): SearchTracksRepository {
+        return SearchTracksRepositoryImpl(RetrofitNetworkClient(context))
     }
 
-    fun provideSearchTracksInteractor(): SearchTracksInteractor {
-        return SearchTracksInteractorImpl(getTracksRepository())
+    fun provideSearchTracksInteractor(context: Context): SearchTracksInteractor {
+        return SearchTracksInteractorImpl(getTracksRepository(context))
     }
 
     private fun getSearchHistoryRepository(): SearchHistoryRepository {

@@ -17,4 +17,8 @@ sealed interface SearchState {
     data class Empty(
         val message: String
     ) : SearchState
+
+    data class History(
+        val tracksHistory: List<Track>
+    ) : SearchState
 }
