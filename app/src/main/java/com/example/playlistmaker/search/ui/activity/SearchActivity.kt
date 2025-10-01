@@ -21,6 +21,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
+import com.example.playlistmaker.search.ui.view_model.HistoryState
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
@@ -52,7 +53,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onItemClick(track: Track) {
                 if (clickDebounce()) {
                     viewModel?.addTrackToSearchHistory(track)
-                    adapterSearches.notifyDataSetChanged()
                     mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
                     startActivity(mediaIntent)
                 }
@@ -61,7 +61,7 @@ class SearchActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, SearchViewModel.getFactory())[SearchViewModel::class.java]
         viewModel?.observeState()?.observe(this) {
-            render(it)
+            renderSearch(it)
         }
 
         viewModel?.observeShowToast()?.observe(this) {
@@ -69,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         viewModel?.observeSearchHistory()?.observe(this) {
-            showSearchHistory(it)
+            renderHistory(it)
         }
 
         adapterTracks = TracksAdapter(onItemClickListener)
@@ -84,13 +84,14 @@ class SearchActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvSearchHistory.adapter = adapterSearches
 
-        binding.clearButtonSearchHistory.setOnClickListener {
-            viewModel?.clearSearchHistory()
-            binding.vgSearchHistory.isVisible = false
-        }
-
         binding.backButtonSearch.setOnClickListener {
             finish()
+        }
+
+        binding.clearButtonSearchHistory.setOnClickListener {
+            adapterSearches.tracks.clear()
+            viewModel?.clearSearchHistory()
+            binding.vgSearchHistory.isVisible = false
         }
 
         binding.etQueryInput.setOnEditorActionListener { _, actionId, _ ->
@@ -106,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
-                    adapterTracks.tracks = listOf()
+                    adapterTracks.tracks.clear()
                     adapterTracks.notifyDataSetChanged()
                 }
                 placeholderInvisible()
@@ -121,9 +122,9 @@ class SearchActivity : AppCompatActivity() {
         binding.etQueryInput.addTextChangedListener(textWatcher)
 
         binding.clearButton.setOnClickListener {
-            binding.etQueryInput.setText(TEXT_DEF)
-            adapterTracks.tracks = listOf()
             placeholderInvisible()
+            binding.etQueryInput.setText(TEXT_DEF)
+            adapterTracks.tracks.clear()
             adapterTracks.notifyDataSetChanged()
             binding.vgSearchHistory.isVisible = (adapterSearches.tracks.isNotEmpty())
         }
@@ -187,7 +188,7 @@ class SearchActivity : AppCompatActivity() {
             tvPlaceholderMessage.isVisible = false
             progressBar.isVisible = false
         }
-        adapterTracks.tracks = tracks
+        adapterTracks.tracks.addAll(tracks)
         adapterTracks.notifyDataSetChanged()
     }
 
@@ -205,17 +206,26 @@ class SearchActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    fun showSearchHistory(tracksSearchHistory: List<Track>) {
-        if (tracksSearchHistory.isNotEmpty()) {
-            adapterSearches.tracks = tracksSearchHistory
-            adapterSearches.notifyDataSetChanged()
-            binding.vgSearchHistory.isVisible = true
+    fun renderHistory(state: HistoryState) {
+        when (state) {
+            is HistoryState.GetHistory -> {
+                if (state.trackHistory.isNotEmpty()) {
+                    adapterSearches.tracks.addAll(state.trackHistory)
+                    adapterSearches.notifyDataSetChanged()
+                    binding.vgSearchHistory.isVisible = true
+                }
+            }
+            is HistoryState.AddHistory -> {
+                adapterSearches.tracks.clear()
+                adapterSearches.tracks.addAll(state.tracksHistory)
+                adapterSearches.notifyDataSetChanged()
+            }
         }
-
-
     }
 
-    fun render(state: SearchState) {
+
+
+    fun renderSearch(state: SearchState) {
         when (state) {
             is SearchState.Loading -> showLoading()
             is SearchState.Content -> showContent(state.tracks)

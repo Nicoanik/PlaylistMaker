@@ -6,7 +6,7 @@ import com.example.playlistmaker.search.domain.models.Track
 
 class TracksAdapter(private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<TracksViewHolder> () {
 
-    var tracks: List<Track> = listOf()
+    val tracks: MutableList<Track> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder = TracksViewHolder(parent)
 

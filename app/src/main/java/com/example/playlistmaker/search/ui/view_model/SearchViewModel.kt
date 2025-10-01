@@ -25,8 +25,8 @@ class SearchViewModel(private val context: Context): ViewModel() {
     private val showToast = SingleLiveEvent<String?>()
     fun observeShowToast(): LiveData<String?> = showToast
 
-    private val searchHistoryLiveData = MutableLiveData<List<Track>>()
-    fun observeSearchHistory(): LiveData<List<Track>> = searchHistoryLiveData
+    private val searchHistoryLiveData = MutableLiveData<HistoryState>()
+    fun observeSearchHistory(): LiveData<HistoryState> = searchHistoryLiveData
 
     private val tracksSearchInteractor = Creator.provideSearchTracksInteractor()
     private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
@@ -56,7 +56,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
    fun request(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             handlerMain.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-            renderState(
+            renderSearchState(
                 SearchState.Loading
             )
             tracksSearchInteractor.searchTracks(
@@ -71,7 +71,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
 
                             when {
                                 errorMessage != null -> {
-                                    renderState(
+                                    renderSearchState(
                                         SearchState.Error(
                                             context.getString(R.string.something_went_wrong)
                                         )
@@ -80,7 +80,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
                                 }
 
                                 tracks.isEmpty() -> {
-                                    renderState(
+                                    renderSearchState(
                                         SearchState.Empty(
                                             context.getString(R.string.nothing_found)
                                         )
@@ -88,7 +88,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
                                 }
 
                                 else -> {
-                                    renderState(
+                                    renderSearchState(
                                         SearchState.Content(
                                             tracks
                                         )
@@ -102,20 +102,25 @@ class SearchViewModel(private val context: Context): ViewModel() {
         }
     }
 
-    private fun renderState(state: SearchState) {
-        stateLiveData.postValue(state)
-    }
-
     fun getSearchHistory() {
-        searchHistoryLiveData.postValue(searchHistoryInteractor.getSearchHistory())
+        renderHistoryState(HistoryState.GetHistory(searchHistoryInteractor.getSearchHistory()))
     }
 
     fun addTrackToSearchHistory(track: Track) {
         searchHistoryInteractor.addTrackToSearchHistory(track)
+        renderHistoryState(HistoryState.AddHistory(searchHistoryInteractor.getSearchHistory()))
     }
 
     fun clearSearchHistory() {
         searchHistoryInteractor.clearSearchHistory()
+    }
+
+    private fun renderSearchState(state: SearchState) {
+        stateLiveData.postValue(state)
+    }
+
+    private fun renderHistoryState(state: HistoryState) {
+        searchHistoryLiveData.postValue(state)
     }
 
     companion object {
