@@ -223,8 +223,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
-
     fun renderSearch(state: SearchState) {
         when (state) {
             is SearchState.Loading -> showLoading()
