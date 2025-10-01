@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.domain
 
-import com.example.playlistmaker.search.domain.models.Resource
 import com.example.playlistmaker.search.domain.models.Track
 
 interface SearchTracksInteractor {

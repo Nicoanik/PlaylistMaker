@@ -26,6 +26,10 @@ object Creator {
         this.application = application
     }
 
+    fun provideApplication() : Application {
+        return application
+    }
+
     private fun provideSharedPreferences() : SharedPreferences {
         return  application.getSharedPreferences(App.Companion.PLAYLIST_MAKER_PREFERENCES, Context.MODE_PRIVATE)
     }

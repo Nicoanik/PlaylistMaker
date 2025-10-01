@@ -100,7 +100,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
                 }
             )
         }
-    }
+   }
 
     fun getSearchHistory() {
         renderHistoryState(HistoryState.GetHistory(searchHistoryInteractor.getSearchHistory()))

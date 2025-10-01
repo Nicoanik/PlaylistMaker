@@ -7,16 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.App
+import com.example.playlistmaker.search.ui.view_model.SearchViewModel
+import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySettingsBinding
+    private var viewModel: SettingsViewModel? = null
 
-    private val settingsAppInteractor = Creator.provideSettingsInteractor()
+    private lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +32,25 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
+        viewModel = ViewModelProvider(
+            this,
+            SettingsViewModel.getFactory()
+        )[SettingsViewModel::class.java]
+
+        viewModel?.observeState()?.observe(this) {
+            binding.themeSwitcher.isChecked = it
+        }
+
+        viewModel?.getSetSwitcher()
+
         binding.backButtonSettings.setOnClickListener{
             finish()
         }
 
-        setSwitcher()
         binding.themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             if (switcher.isPressed) {
-                (applicationContext as App).switchTheme(checked)
-                settingsAppInteractor.saveSettingsThemeMode(checked)
+                viewModel?.changeThemeMode(checked)
             }
-            setSwitcher()
         }
 
         binding.shareButtonSettings.setOnClickListener{
@@ -62,14 +73,6 @@ class SettingsActivity : AppCompatActivity() {
             val address = getString(R.string.agreement_url).toUri()
             val agreementIntent = Intent(Intent.ACTION_VIEW, address)
             startActivity(agreementIntent)
-        }
-    }
-
-    private fun setSwitcher() {
-        if ((applicationContext as App).themeModeKeyActive) {
-            binding.themeSwitcher.isChecked = (applicationContext as App).darkTheme
-        } else {
-            binding.themeSwitcher.isChecked = (applicationContext as App).checkThemeMode()
         }
     }
 }
