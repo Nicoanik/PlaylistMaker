@@ -17,6 +17,9 @@ import com.example.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.settings.domain.impl.SettingsInteractorImpl
 import com.example.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
 import com.example.playlistmaker.App
+import com.example.playlistmaker.sharing.ExternalNavigator
+import com.example.playlistmaker.sharing.domain.SharingInteractor
+import com.example.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 
 object Creator {
 
@@ -56,5 +59,9 @@ object Creator {
 
     fun provideSettingsInteractor(): SettingsInteractor {
         return SettingsInteractorImpl(getSettingsRepository())
+    }
+
+    fun provideSharingInteractor(): SharingInteractor {
+        return SharingInteractorImpl(ExternalNavigator())
     }
 }

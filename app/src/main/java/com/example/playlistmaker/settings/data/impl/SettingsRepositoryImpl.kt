@@ -11,16 +11,12 @@ class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : Setti
 
     val app = Creator.provideApplication()
 
-    override fun checkSettingsThemeMode(): Boolean {
-        return (sharedPrefs.contains(THEME_MODE_KEY))
-    }
-
     override fun saveSettingsThemeMode(set: Boolean) {
         sharedPrefs.edit { putBoolean(THEME_MODE_KEY, set) }
     }
 
     override fun getSettingThemMode(): Boolean {
-        if (checkSettingsThemeMode()) {
+        if (sharedPrefs.contains(THEME_MODE_KEY)) {
             val check = sharedPrefs.getBoolean(THEME_MODE_KEY, false)
             setTheme(check)
             return check
