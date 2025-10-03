@@ -25,6 +25,8 @@ object Creator {
 
     private lateinit var application: Application
 
+
+
     fun initApplication (application: Application) {
         this.application = application
     }
@@ -62,6 +64,6 @@ object Creator {
     }
 
     fun provideSharingInteractor(): SharingInteractor {
-        return SharingInteractorImpl(ExternalNavigator())
+        return SharingInteractorImpl(ExternalNavigator(), application)
     }
 }

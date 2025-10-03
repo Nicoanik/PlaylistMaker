@@ -11,7 +11,7 @@ class ExternalNavigator {
 
     fun shareLink(url: String) {
         val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.setType("text/plain")
+        shareIntent.type = "text/plain"
         shareIntent.putExtra(Intent.EXTRA_TEXT, url)
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         app.startActivity(shareIntent)

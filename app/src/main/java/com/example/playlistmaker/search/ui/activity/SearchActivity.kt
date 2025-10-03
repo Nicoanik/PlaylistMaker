@@ -68,12 +68,6 @@ class SearchActivity : AppCompatActivity() {
             showToast(it.toString())
         }
 
-        viewModel?.observeHistory()?.observe(this) {
-            adapterSearches.tracks.clear()
-            adapterSearches.tracks.addAll(it)
-            adapterSearches.notifyDataSetChanged()
-        }
-
         adapterTracks = TracksAdapter(onItemClickListener)
         adapterSearches = TracksAdapter(onItemClickListener)
 
@@ -89,7 +83,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.clearButtonSearchHistory.setOnClickListener {
-            adapterSearches.tracks.clear()
+//            adapterSearches.tracks.clear()
             viewModel?.clearSearchHistory()
             binding.vgSearchHistory.isVisible = false
         }
@@ -107,14 +101,11 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
-                    adapterTracks.tracks.clear()
-                    adapterTracks.notifyDataSetChanged()
-                    binding.rvTracksList.isVisible = false
                     viewModel?.getSearchHistory()
-                    placeholderInvisible()
+                } else{
+                    binding.vgSearchHistory.isVisible = false
                 }
                 binding.clearButton.isVisible = !s.isNullOrEmpty()
-                binding.vgSearchHistory.isVisible = (s.isNullOrEmpty() && adapterTracks.tracks.isEmpty() && adapterSearches.tracks.isNotEmpty())
                 viewModel?.searchDebounce(s?.toString() ?: TEXT_DEF)
             }
 
@@ -126,8 +117,7 @@ class SearchActivity : AppCompatActivity() {
         binding.clearButton.setOnClickListener {
             placeholderInvisible()
             binding.etQueryInput.setText(TEXT_DEF)
-            adapterTracks.tracks.clear()
-            adapterTracks.notifyDataSetChanged()
+            binding.rvTracksList.isVisible = false
             binding.vgSearchHistory.isVisible = (adapterSearches.tracks.isNotEmpty())
         }
 
@@ -199,10 +189,10 @@ class SearchActivity : AppCompatActivity() {
     fun showEmpty(emptyMessage: String) {
         binding.apply {
             rvTracksList.isVisible = false
+            progressBar.isVisible = false
             tvPlaceholderMessage.text = emptyMessage
             tvPlaceholderMessage.isVisible = true
             ivPlaceholderEmptyImage.isVisible = true
-            progressBar.isVisible = false
         }
     }
 
@@ -214,6 +204,8 @@ class SearchActivity : AppCompatActivity() {
             adapterSearches.tracks.clear()
             adapterSearches.tracks.addAll(tracksHistory)
             adapterSearches.notifyDataSetChanged()
+            placeholderInvisible()
+            binding.rvTracksList.isVisible = false
             binding.vgSearchHistory.isVisible = true
         }
     }

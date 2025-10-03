@@ -41,7 +41,7 @@ class PlayerActivity : AppCompatActivity() {
         )[PlayerViewModel::class.java]
 
         viewModel?.observePlayerState()?.observe(this) {
-            changeButtonImage(it == PlayerViewModel.PlayerState.PLAYING)
+            changeButtonImage(it == PlayerViewModel.MediaPlayerState.PLAYING)
         }
 
         viewModel?.observeProgressTime()?.observe(this) {
