@@ -83,6 +83,7 @@ class PlayerActivity : AppCompatActivity() {
             is PlayerState.Prepared -> binding.tvPlaybackProgress.text = state.timer
             is PlayerState.Playing -> binding.tvPlaybackProgress.text = state.timer
             is PlayerState.Paused -> binding.tvPlaybackProgress.text = state.timer
+            is PlayerState.Completion -> binding.tvPlaybackProgress.text = state.timer
         }
     }
 }

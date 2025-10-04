@@ -13,4 +13,8 @@ sealed interface PlayerState {
     data class Paused(
         val timer: String
     ) : PlayerState
+
+    data class Completion(
+        val timer: String
+    ) : PlayerState
 }
