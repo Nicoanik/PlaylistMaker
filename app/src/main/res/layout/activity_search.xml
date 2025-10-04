@@ -100,14 +100,14 @@
                 android:layout_marginTop="@dimen/dp_102">
 
                 <ImageView
-                    android:id="@+id/iv_placeholder_error_image"
+                    android:id="@+id/iv_placeholder_empty_image"
                     style="@style/error_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="invisible" />
 
                 <ImageView
-                    android:id="@+id/iv_placeholder_internet_image"
+                    android:id="@+id/iv_placeholder_error_image"
                     style="@style/internet_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
