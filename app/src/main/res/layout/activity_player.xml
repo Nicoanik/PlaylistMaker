@@ -124,7 +124,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/queue_button" />
 
             <TextView
-                android:id="@+id/playback_progress"
+                android:id="@+id/tv_playback_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
@@ -160,7 +160,7 @@
                 android:textColor="@color/text_gray"
                 app:layout_constraintTag="text_duration"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/playback_progress"
+                app:layout_constraintTop_toBottomOf="@id/tv_playback_progress"
                 android:text="@string/text_duration"
                 style="@style/track_description_media"/>
 

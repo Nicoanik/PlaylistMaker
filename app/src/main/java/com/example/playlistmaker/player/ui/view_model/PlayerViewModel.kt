@@ -14,26 +14,25 @@ import java.util.Locale
 
 
 class PlayerViewModel(private val url: String?): ViewModel() {
-
-    private val timerLiveData = MutableLiveData(PLAYBACK_DEF)
-    fun observeProgressTime(): LiveData<String> = timerLiveData
-    private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
+    private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
-    enum class PlayerState(val state: Int) {
+    enum class MediaPlayerState(val state: Int) {
         DEFAULT(0),
         PREPARED(1),
         PLAYING(2),
-        PAUSED(3)
+        PAUSED(3),
+        COMPLETION(4)
     }
 
     private var mediaPlayer = MediaPlayer()
+    private var stateMediaPlayer = MediaPlayerState.DEFAULT
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
     private val timerRunnable = Runnable {
-        if (playerStateLiveData.value == PlayerState.PLAYING) {
-            startTimerUpdate()
+        if (stateMediaPlayer == MediaPlayerState.PLAYING) {
+            startTimer()
         }
     }
 
@@ -48,9 +47,11 @@ class PlayerViewModel(private val url: String?): ViewModel() {
     }
 
     fun onPlayButtonClicked() {
-        when(playerStateLiveData.value) {
-            PlayerState.PLAYING -> pausePlayer()
-            PlayerState.PREPARED, PlayerState.PAUSED -> startPlayer()
+        when(stateMediaPlayer) {
+            MediaPlayerState.PREPARED,
+            MediaPlayerState.PAUSED,
+            MediaPlayerState.COMPLETION -> startPlayer()
+            MediaPlayerState.PLAYING -> pausePlayer()
             else -> Unit
         }
     }
@@ -59,28 +60,31 @@ class PlayerViewModel(private val url: String?): ViewModel() {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerStateLiveData.postValue(PlayerState.PREPARED)
+            playerStateLiveData.postValue(PlayerState.Prepared(PLAYBACK_DEF))
+            stateMediaPlayer = MediaPlayerState.PREPARED
         }
         mediaPlayer.setOnCompletionListener {
-            playerStateLiveData.postValue(PlayerState.PREPARED)
+            playerStateLiveData.postValue(PlayerState.Prepared(PLAYBACK_DEF))
             resetTimer()
+            stateMediaPlayer = MediaPlayerState.COMPLETION
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        playerStateLiveData.postValue(PlayerState.PLAYING)
-        startTimerUpdate()
+        stateMediaPlayer = MediaPlayerState.PLAYING
+        startTimer()
     }
 
     private fun pausePlayer() {
-        pauseTimer()
         mediaPlayer.pause()
-        playerStateLiveData.postValue(PlayerState.PAUSED)
+        stateMediaPlayer = MediaPlayerState.PAUSED
+        playerStateLiveData.postValue(PlayerState.Paused(SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)))
+        pauseTimer()
     }
 
-    private fun startTimerUpdate() {
-        timerLiveData.postValue(SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition))
+    private fun startTimer() {
+        playerStateLiveData.postValue(PlayerState.Playing(SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)))
         mainHandler.postDelayed(timerRunnable, 500)
     }
 
@@ -90,7 +94,6 @@ class PlayerViewModel(private val url: String?): ViewModel() {
 
     private fun resetTimer() {
         mainHandler.removeCallbacks(timerRunnable)
-        timerLiveData.postValue(PLAYBACK_DEF)
     }
 
     fun onPause() {

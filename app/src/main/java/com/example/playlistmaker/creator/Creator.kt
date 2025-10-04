@@ -17,15 +17,28 @@ import com.example.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.settings.domain.impl.SettingsInteractorImpl
 import com.example.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
 import com.example.playlistmaker.App
+import com.example.playlistmaker.search.data.network.ItunesApiService
 import com.example.playlistmaker.sharing.ExternalNavigator
 import com.example.playlistmaker.sharing.domain.SharingInteractor
 import com.example.playlistmaker.sharing.domain.impl.SharingInteractorImpl
+import com.google.gson.Gson
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 object Creator {
 
     private lateinit var application: Application
 
+    private const val ITUNES_BASE_URL = "https://itunes.apple.com"
 
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(ITUNES_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private fun provideRetrofit() : ItunesApiService {
+        return retrofit.create(ItunesApiService::class.java)
+    }
 
     fun initApplication (application: Application) {
         this.application = application
@@ -39,16 +52,20 @@ object Creator {
         return  application.getSharedPreferences(App.Companion.PLAYLIST_MAKER_PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    private fun getTracksRepository(context: Context): SearchTracksRepository {
-        return SearchTracksRepositoryImpl(RetrofitNetworkClient(context))
+    private fun provideGson() : Gson {
+        return Gson()
+    }
+
+    private fun getSearchTracksRepository(context: Context): SearchTracksRepository {
+        return SearchTracksRepositoryImpl(RetrofitNetworkClient(context, provideRetrofit()))
     }
 
     fun provideSearchTracksInteractor(context: Context): SearchTracksInteractor {
-        return SearchTracksInteractorImpl(getTracksRepository(context))
+        return SearchTracksInteractorImpl(getSearchTracksRepository(context))
     }
 
     private fun getSearchHistoryRepository(): SearchHistoryRepository {
-        return SearchHistoryRepositoryImpl(provideSharedPreferences())
+        return SearchHistoryRepositoryImpl(provideSharedPreferences(), provideGson())
     }
 
     fun provideSearchHistoryInteractor(): SearchHistoryInteractor {

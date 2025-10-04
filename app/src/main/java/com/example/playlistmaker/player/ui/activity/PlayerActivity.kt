@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.dpToPx
@@ -41,11 +42,7 @@ class PlayerActivity : AppCompatActivity() {
         )[PlayerViewModel::class.java]
 
         viewModel?.observePlayerState()?.observe(this) {
-            changeButtonImage(it == PlayerViewModel.MediaPlayerState.PLAYING)
-        }
-
-        viewModel?.observeProgressTime()?.observe(this) {
-            binding.playbackProgress.text = it
+            render(it)
         }
 
         Glide.with(this)
@@ -62,7 +59,6 @@ class PlayerActivity : AppCompatActivity() {
             tvReleaseDate.text = mediaTrack.releaseDate?.substring(0, 4)
             tvPrimaryGenreName.text = mediaTrack.primaryGenreName
             tvCountry.text = mediaTrack.country
-            playbackProgress.text = PlayerViewModel.PLAYBACK_DEF
         }
 
         binding.backButtonAudioPlayer.setOnClickListener {
@@ -73,16 +69,20 @@ class PlayerActivity : AppCompatActivity() {
             viewModel?.onPlayButtonClicked()
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel?.onPause()
-    }
     private fun changeButtonImage(isPlaying: Boolean) {
         if (isPlaying) {
             binding.playButton.setImageResource(R.drawable.pause_button_100)
         } else {
             binding.playButton.setImageResource(R.drawable.play_button_100)
+        }
+    }
+
+    private fun render(state: PlayerState) {
+        changeButtonImage(state is PlayerState.Playing)
+        when (state) {
+            is PlayerState.Prepared -> binding.tvPlaybackProgress.text = state.timer
+            is PlayerState.Playing -> binding.tvPlaybackProgress.text = state.timer
+            is PlayerState.Paused -> binding.tvPlaybackProgress.text = state.timer
         }
     }
 }

@@ -6,11 +6,12 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.google.gson.Gson
 
-class SearchHistoryRepositoryImpl(private val sharedPrefs: SharedPreferences) :
-    SearchHistoryRepository {
+class SearchHistoryRepositoryImpl(
+    private val sharedPrefs: SharedPreferences,
+    private val gson: Gson
+) : SearchHistoryRepository {
 
     private val tracksHistory: MutableList<Track> = mutableListOf()
-    private val gson = Gson()
 
     init {
         getSearchHistory()
