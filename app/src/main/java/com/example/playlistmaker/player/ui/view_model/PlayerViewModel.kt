@@ -96,10 +96,6 @@ class PlayerViewModel(private val url: String?): ViewModel() {
         mainHandler.removeCallbacks(timerRunnable)
     }
 
-    fun onPause() {
-        pausePlayer()
-    }
-
     companion object {
         const val PLAYBACK_DEF = "00:00"
 
