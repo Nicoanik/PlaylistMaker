@@ -60,12 +60,12 @@ class PlayerViewModel(private val url: String?): ViewModel() {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerStateLiveData.postValue(PlayerState.Prepared(PLAYBACK_DEF))
             stateMediaPlayer = MediaPlayerState.PREPARED
+            playerStateLiveData.postValue(PlayerState.Prepared(PLAYBACK_DEF))
         }
         mediaPlayer.setOnCompletionListener {
-            playerStateLiveData.postValue(PlayerState.Completion(PLAYBACK_DEF))
             stateMediaPlayer = MediaPlayerState.COMPLETION
+            playerStateLiveData.postValue(PlayerState.Completion(PLAYBACK_DEF))
             resetTimer()
         }
     }
