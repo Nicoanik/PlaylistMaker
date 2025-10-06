@@ -56,6 +56,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-    implementation(libs.androidx.lifecycle.viewmodel.ktx.v251)
-    implementation(libs.androidx.activity.ktx.v161)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.ktx)
 }

@@ -10,11 +10,11 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
@@ -24,10 +24,12 @@ import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
+import kotlin.getValue
+
 
 class SearchActivity : AppCompatActivity() {
 
-    private var viewModel: SearchViewModel? = null
+    private val viewModel: SearchViewModel by viewModels()
     private lateinit var binding: ActivitySearchBinding
 
     private var isClickAllowed = true
@@ -51,20 +53,18 @@ class SearchActivity : AppCompatActivity() {
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
                 if (clickDebounce()) {
-                    viewModel?.addTrackToSearchHistory(track)
+                    viewModel.addTrackToSearchHistory(track)
                     mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
                     startActivity(mediaIntent)
                 }
             }
         }
 
-        viewModel = ViewModelProvider(this, SearchViewModel.getFactory())[SearchViewModel::class.java]
-
-        viewModel?.observeState()?.observe(this) {
+        viewModel.observeState().observe(this) {
             renderSearch(it)
         }
 
-        viewModel?.observeShowToast()?.observe(this) {
+        viewModel.observeShowToast().observe(this) {
             showToast(it.toString())
         }
 
@@ -83,14 +83,13 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.clearButtonSearchHistory.setOnClickListener {
-//            adapterSearches.tracks.clear()
-            viewModel?.clearSearchHistory()
+            viewModel.clearSearchHistory()
             binding.vgSearchHistory.isVisible = false
         }
 
         binding.etQueryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel?.request(binding.etQueryInput.text.toString())
+                viewModel.request(binding.etQueryInput.text.toString())
                 true
             }
             false
@@ -101,12 +100,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
-                    viewModel?.getSearchHistory()
+                    viewModel.getSearchHistory()
                 } else{
                     binding.vgSearchHistory.isVisible = false
                 }
                 binding.clearButton.isVisible = !s.isNullOrEmpty()
-                viewModel?.searchDebounce(s?.toString() ?: TEXT_DEF)
+                viewModel.searchDebounce(s?.toString() ?: TEXT_DEF)
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -134,7 +133,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.refreshButtonSearch.setOnClickListener {
             placeholderInvisible()
-            viewModel?.request(binding.etQueryInput.text.toString())
+            viewModel.request(binding.etQueryInput.text.toString())
         }
     }
     private fun placeholderInvisible() {

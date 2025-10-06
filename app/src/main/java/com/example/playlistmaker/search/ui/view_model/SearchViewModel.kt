@@ -1,23 +1,19 @@
 package com.example.playlistmaker.search.ui.view_model
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 
-class SearchViewModel(private val context: Context): ViewModel() {
+class SearchViewModel: ViewModel() {
+
+    private val app = Creator.provideApplication()
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
@@ -25,7 +21,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
     private val showToast = SingleLiveEvent<String?>()
     fun observeShowToast(): LiveData<String?> = showToast
 
-    private val tracksSearchInteractor = Creator.provideSearchTracksInteractor(context)
+    private val tracksSearchInteractor = Creator.provideSearchTracksInteractor(app)
     private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
     private var latestSearchText: String? = null
@@ -74,7 +70,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
                                 errorMessage != null -> {
                                     renderSearchState(
                                         SearchState.Error(
-                                            context.getString(R.string.something_went_wrong)
+                                            app.getString(R.string.something_went_wrong)
                                         )
                                     )
                                     showToast.postValue(errorMessage)
@@ -83,7 +79,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
                                 tracks.isEmpty() -> {
                                     renderSearchState(
                                         SearchState.Empty(
-                                            context.getString(R.string.nothing_found)
+                                            app.getString(R.string.nothing_found)
                                         )
                                     )
                                 }
@@ -122,12 +118,5 @@ class SearchViewModel(private val context: Context): ViewModel() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
-
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = (this[APPLICATION_KEY] as App)
-                SearchViewModel(app)
-            }
-        }
     }
 }
