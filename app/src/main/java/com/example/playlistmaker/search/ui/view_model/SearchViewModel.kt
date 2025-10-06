@@ -105,6 +105,7 @@ class SearchViewModel: ViewModel() {
 
     fun addTrackToSearchHistory(track: Track) {
         searchHistoryInteractor.addTrackToSearchHistory(track)
+        if (stateLiveData.value is SearchState.History) getSearchHistory()
     }
 
     fun clearSearchHistory() {

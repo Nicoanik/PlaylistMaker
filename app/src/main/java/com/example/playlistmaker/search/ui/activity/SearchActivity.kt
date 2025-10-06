@@ -30,7 +30,6 @@ import kotlin.getValue
 class SearchActivity : AppCompatActivity() {
 
     private val viewModel: SearchViewModel by viewModels()
-    private lateinit var state: SearchState
     private lateinit var binding: ActivitySearchBinding
 
     private var isClickAllowed = true
@@ -55,7 +54,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onItemClick(track: Track) {
                 if (clickDebounce()) {
                     viewModel.addTrackToSearchHistory(track)
-                    if (state is SearchState.History) viewModel.getSearchHistory()
                     mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
                     startActivity(mediaIntent)
                 }
@@ -206,13 +204,15 @@ class SearchActivity : AppCompatActivity() {
             adapterSearches.tracks.addAll(tracksHistory)
             adapterSearches.notifyDataSetChanged()
             placeholderInvisible()
-            binding.rvTracksList.isVisible = false
-            binding.vgSearchHistory.isVisible = true
+            binding.apply {
+                progressBar.isVisible = false
+                rvTracksList.isVisible = false
+                vgSearchHistory.isVisible = true
+            }
         }
     }
 
     fun renderSearch(state: SearchState) {
-        this.state = state
         when (state) {
             is SearchState.Loading -> showLoading()
             is SearchState.Content -> showContent(state.tracks)
