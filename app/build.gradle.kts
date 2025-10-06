@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.playlistmaker"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.playlistmaker"
@@ -33,6 +33,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -45,9 +49,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.github.bumptech.glide:glide:5.0.5")
-    annotationProcessor("com.github.bumptech.glide:compiler:5.0.5")
+
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.ktx)
 }
