@@ -62,34 +62,33 @@ class SearchViewModel: ViewModel() {
                     override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                         handlerMain.post {
                             val tracks = mutableListOf<Track>()
+
                             if (foundTracks != null) {
                                 tracks.addAll(foundTracks)
                             }
 
-                            when {
-                                errorMessage != null -> {
-                                    renderSearchState(
-                                        SearchState.Error(
-                                            app.getString(R.string.something_went_wrong)
+                            if (stateLiveData.value is SearchState.Loading) {
+                                when {
+                                    errorMessage != null -> {
+                                        renderSearchState(
+                                            SearchState.Error(
+                                                app.getString(R.string.something_went_wrong)
+                                            )
                                         )
-                                    )
-                                    showToast.postValue(errorMessage)
-                                }
+                                        showToast.postValue(errorMessage)
+                                    }
 
-                                tracks.isEmpty() -> {
-                                    renderSearchState(
-                                        SearchState.Empty(
-                                            app.getString(R.string.nothing_found)
+                                    tracks.isEmpty() -> {
+                                        renderSearchState(
+                                            SearchState.Empty(
+                                                app.getString(R.string.nothing_found)
+                                            )
                                         )
-                                    )
-                                }
+                                    }
 
-                                else -> {
-                                    renderSearchState(
-                                        SearchState.Content(
-                                            tracks
-                                        )
-                                    )
+                                    else -> {
+                                        renderSearchState(SearchState.Content(tracks))
+                                    }
                                 }
                             }
                         }
