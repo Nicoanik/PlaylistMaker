@@ -34,8 +34,8 @@ class SearchActivity : AppCompatActivity() {
 
     private var isClickAllowed = true
 
-    lateinit var adapterTracks: TracksAdapter
-    lateinit var adapterSearches: TracksAdapter
+    lateinit var adapterSearch: TracksAdapter
+    lateinit var adapterHistory: TracksAdapter
     private val handlerMain = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,15 +68,15 @@ class SearchActivity : AppCompatActivity() {
             showToast(it.toString())
         }
 
-        adapterTracks = TracksAdapter(onItemClickListener)
-        adapterSearches = TracksAdapter(onItemClickListener)
+        adapterSearch = TracksAdapter(onItemClickListener)
+        adapterHistory = TracksAdapter(onItemClickListener)
 
         binding.rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.rvTracksList.adapter = adapterTracks
+        binding.rvTracksList.adapter = adapterSearch
 
         binding.rvSearchHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.rvSearchHistory.adapter = adapterSearches
+        binding.rvSearchHistory.adapter = adapterHistory
 
         binding.backButtonSearch.setOnClickListener {
             finish()
@@ -117,7 +117,7 @@ class SearchActivity : AppCompatActivity() {
             placeholderInvisible()
             binding.etQueryInput.setText(TEXT_DEF)
             binding.rvTracksList.isVisible = false
-            binding.vgSearchHistory.isVisible = (adapterSearches.tracks.isNotEmpty())
+            binding.vgSearchHistory.isVisible = (adapterHistory.tracks.isNotEmpty())
         }
 
         binding.rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -164,19 +164,20 @@ class SearchActivity : AppCompatActivity() {
 
     fun showError(errorMessage: String) {
         binding.apply {
+            progressBar.isVisible = false
+            rvSearchHistory.isVisible = false
             rvTracksList.isVisible = false
+            tvPlaceholderMessage.text = errorMessage
             tvPlaceholderMessage.isVisible = true
             ivPlaceholderErrorImage.isVisible = true
-            progressBar.isVisible = false
-            tvPlaceholderMessage.text = errorMessage
             refreshButtonSearch.isVisible = true
         }
     }
 
     fun showContent(tracks: List<Track>) {
-        adapterTracks.tracks.clear()
-        adapterTracks.tracks.addAll(tracks)
-        adapterTracks.notifyDataSetChanged()
+        adapterSearch.tracks.clear()
+        adapterSearch.tracks.addAll(tracks)
+        adapterSearch.notifyDataSetChanged()
         placeholderInvisible()
         binding.apply {
             progressBar.isVisible = false
@@ -187,8 +188,9 @@ class SearchActivity : AppCompatActivity() {
 
     fun showEmpty(emptyMessage: String) {
         binding.apply {
-            rvTracksList.isVisible = false
             progressBar.isVisible = false
+            rvSearchHistory.isVisible = false
+            rvTracksList.isVisible = false
             tvPlaceholderMessage.text = emptyMessage
             tvPlaceholderMessage.isVisible = true
             ivPlaceholderEmptyImage.isVisible = true
@@ -200,9 +202,9 @@ class SearchActivity : AppCompatActivity() {
     }
     fun showHistory(tracksHistory: List<Track>) {
         if (tracksHistory.isNotEmpty()) {
-            adapterSearches.tracks.clear()
-            adapterSearches.tracks.addAll(tracksHistory)
-            adapterSearches.notifyDataSetChanged()
+            adapterHistory.tracks.clear()
+            adapterHistory.tracks.addAll(tracksHistory)
+            adapterHistory.notifyDataSetChanged()
             placeholderInvisible()
             binding.apply {
                 progressBar.isVisible = false
