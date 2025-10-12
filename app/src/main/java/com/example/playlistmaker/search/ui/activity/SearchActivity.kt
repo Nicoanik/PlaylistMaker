@@ -102,6 +102,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     viewModel.getSearchHistory()
+                    showToast("GET History")
                 } else{
                     binding.vgSearchHistory.isVisible = false
                 }
@@ -155,7 +156,7 @@ class SearchActivity : AppCompatActivity() {
         return current
     }
 
-    fun showLoading() {
+    private fun showLoading() {
         binding.apply {
             rvTracksList.isVisible = false
             tvPlaceholderMessage.isVisible = false
@@ -163,19 +164,19 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun showError(errorMessage: String) {
+    private fun showError() {
         binding.apply {
             progressBar.isVisible = false
             rvSearchHistory.isVisible = false
             rvTracksList.isVisible = false
-            tvPlaceholderMessage.text = errorMessage
+            tvPlaceholderMessage.text = getString(R.string.something_went_wrong)
             tvPlaceholderMessage.isVisible = true
             ivPlaceholderErrorImage.isVisible = true
             refreshButtonSearch.isVisible = true
         }
     }
 
-    fun showContent(tracks: List<Track>) {
+    private fun showContent(tracks: List<Track>) {
         adapterSearch.tracks.clear()
         adapterSearch.tracks.addAll(tracks)
         adapterSearch.notifyDataSetChanged()
@@ -187,21 +188,21 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun showEmpty(emptyMessage: String) {
+    private fun showEmpty() {
         binding.apply {
             progressBar.isVisible = false
             rvSearchHistory.isVisible = false
             rvTracksList.isVisible = false
-            tvPlaceholderMessage.text = emptyMessage
+            tvPlaceholderMessage.text = getString(R.string.nothing_found)
             tvPlaceholderMessage.isVisible = true
             ivPlaceholderEmptyImage.isVisible = true
         }
     }
 
-    fun showToast(message: String) {
+    private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
-    fun showHistory(tracksHistory: List<Track>) {
+    private fun showHistory(tracksHistory: List<Track>) {
         if (tracksHistory.isNotEmpty()) {
             adapterHistory.tracks.clear()
             adapterHistory.tracks.addAll(tracksHistory)
@@ -212,6 +213,9 @@ class SearchActivity : AppCompatActivity() {
                 rvTracksList.isVisible = false
                 vgSearchHistory.isVisible = true
             }
+            showToast("History is Not Empty")
+        } else {
+            showToast("History is Empty")
         }
     }
 
@@ -219,8 +223,8 @@ class SearchActivity : AppCompatActivity() {
         when (state) {
             is SearchState.Loading -> showLoading()
             is SearchState.Content -> showContent(state.tracks)
-            is SearchState.Error -> showError(state.errorMessage)
-            is SearchState.Empty -> showEmpty(state.message)
+            is SearchState.Error -> showError()
+            is SearchState.Empty -> showEmpty()
             is SearchState.History -> showHistory(state.tracksHistory)
         }
     }

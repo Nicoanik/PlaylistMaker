@@ -1,33 +1,25 @@
 package com.example.playlistmaker.search.ui.view_model
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 
 class SearchViewModel(
     private val searchTracksInteractor: SearchTracksInteractor,
-    private val searchHistoryInteractor: SearchHistoryInteractor,
-    private val context: Context
+    private val searchHistoryInteractor: SearchHistoryInteractor
 ): ViewModel() {
-
-//    private val app = Creator.provideApplication()
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     private val showToast = SingleLiveEvent<String?>()
     fun observeShowToast(): LiveData<String?> = showToast
-
-//    private val tracksSearchInteractor = Creator.provideSearchTracksInteractor(app)
-//    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
     private var latestSearchText: String? = null
 
@@ -75,20 +67,12 @@ class SearchViewModel(
                             if (stateLiveData.value is SearchState.Loading) {
                                 when {
                                     errorMessage != null -> {
-                                        renderSearchState(
-                                            SearchState.Error(
-                                                context.getString(R.string.something_went_wrong)
-                                            )
-                                        )
+                                        renderSearchState(SearchState.Error)
                                         showToast.postValue(errorMessage)
                                     }
 
                                     tracks.isEmpty() -> {
-                                        renderSearchState(
-                                            SearchState.Empty(
-                                                context.getString(R.string.nothing_found)
-                                            )
-                                        )
+                                        renderSearchState(SearchState.Empty)
                                     }
 
                                     else -> {

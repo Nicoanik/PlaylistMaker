@@ -10,7 +10,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
 
     viewModel {
-        SearchViewModel(get(), get(), androidContext())
+        SearchViewModel(get(), get())
     }
 
     viewModel {

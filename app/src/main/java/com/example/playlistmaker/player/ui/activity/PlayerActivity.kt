@@ -21,10 +21,6 @@ import org.koin.core.parameter.parametersOf
 
 class PlayerActivity : AppCompatActivity() {
 
-    private val mediaTrack: Track = Gson().fromJson(intent.getStringExtra(SearchActivity.Companion.TRACK_INTENT), Track::class.java)
-
-    private val viewModel by viewModel<PlayerViewModel> { parametersOf(mediaTrack.previewUrl) }
-
     private lateinit var binding: ActivityPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +33,10 @@ class PlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val mediaTrack: Track = Gson().fromJson(intent.getStringExtra(SearchActivity.Companion.TRACK_INTENT), Track::class.java)
+
+        val viewModel by viewModel<PlayerViewModel> { parametersOf(mediaTrack.previewUrl) }
 
         viewModel.observePlayerState().observe(this) {
             render(it)
