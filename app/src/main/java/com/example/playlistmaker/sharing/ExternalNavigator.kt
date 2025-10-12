@@ -1,13 +1,13 @@
 package com.example.playlistmaker.sharing
 
+import android.app.Application
 import android.content.Intent
 import androidx.core.net.toUri
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.sharing.domain.model.EmailData
 
-class ExternalNavigator {
+class ExternalNavigator(private val app: Application) {
 
-    val app = Creator.provideApplication()
+//    val app = Creator.provideApplication()
 
     fun shareLink(url: String) {
         val shareIntent = Intent(Intent.ACTION_SEND)

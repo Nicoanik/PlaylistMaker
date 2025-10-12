@@ -1,15 +1,18 @@
 package com.example.playlistmaker.settings.data.impl
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.settings.domain.SettingsRepository
 
-class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : SettingsRepository {
+class SettingsRepositoryImpl(
+    private val sharedPrefs: SharedPreferences,
+    private val context: Context
+    ) : SettingsRepository {
 
-    val app = Creator.provideApplication()
+//    val app = Creator.provideApplication()
 
     override fun saveSettingsThemeMode(set: Boolean) {
         sharedPrefs.edit { putBoolean(THEME_MODE_KEY, set) }
@@ -37,7 +40,7 @@ class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : Setti
     }
 
     fun checkThemeMode(): Boolean {
-        return when (app.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+        return when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> true
             else -> false
         }
