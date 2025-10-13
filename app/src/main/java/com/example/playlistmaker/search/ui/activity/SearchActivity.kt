@@ -23,11 +23,14 @@ import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
 
 class SearchActivity : AppCompatActivity() {
+
+    private val gson: Gson by inject()
 
     private val viewModel by viewModel<SearchViewModel>()
     private lateinit var binding: ActivitySearchBinding
@@ -54,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onItemClick(track: Track) {
                 if (clickDebounce()) {
                     viewModel.addTrackToSearchHistory(track)
-                    mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
+                    mediaIntent.putExtra(TRACK_INTENT, gson.toJson(track))
                     startActivity(mediaIntent)
                 }
             }

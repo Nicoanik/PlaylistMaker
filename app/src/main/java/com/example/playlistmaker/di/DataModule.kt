@@ -1,6 +1,7 @@
 package com.example.playlistmaker.di
 
 import android.content.Context
+import android.media.MediaPlayer
 import com.example.playlistmaker.App.Companion.ITUNES_BASE_URL
 import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
 import com.example.playlistmaker.search.data.NetworkClient
@@ -32,5 +33,9 @@ val dataModule = module {
 
     factory {
         Gson()
+    }
+
+    factory {
+        MediaPlayer()
     }
 }

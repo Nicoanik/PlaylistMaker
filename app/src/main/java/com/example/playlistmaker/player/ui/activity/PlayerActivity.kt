@@ -16,10 +16,14 @@ import com.example.playlistmaker.search.domain.models.dpToPx
 import com.example.playlistmaker.search.domain.models.timeConversion
 import com.example.playlistmaker.search.ui.activity.SearchActivity
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.getValue
 
 class PlayerActivity : AppCompatActivity() {
+
+    private val gson: Gson by inject()
 
     private lateinit var binding: ActivityPlayerBinding
 
@@ -34,7 +38,7 @@ class PlayerActivity : AppCompatActivity() {
             insets
         }
 
-        val mediaTrack = Gson().fromJson(intent.getStringExtra(SearchActivity.Companion.TRACK_INTENT), Track::class.java)
+        val mediaTrack = gson.fromJson(intent.getStringExtra(SearchActivity.Companion.TRACK_INTENT), Track::class.java)
         val viewModel by viewModel<PlayerViewModel> { parametersOf(mediaTrack.previewUrl) }
 
         viewModel.observePlayerState().observe(this) {

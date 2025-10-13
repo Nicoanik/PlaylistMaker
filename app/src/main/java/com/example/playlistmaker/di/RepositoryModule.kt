@@ -12,19 +12,19 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    single<SearchTracksRepository> {
+    factory <SearchTracksRepository> {
         SearchTracksRepositoryImpl(get())
     }
 
-    single<SearchHistoryRepository> {
+    factory <SearchHistoryRepository> {
         SearchHistoryRepositoryImpl(get(), get())
     }
 
-    single<SettingsRepository> {
+    factory <SettingsRepository> {
         SettingsRepositoryImpl(get(), androidContext())
     }
 
-    single<ExternalNavigator> {
+    single <ExternalNavigator> {
         ExternalNavigator(get())
     }
 }

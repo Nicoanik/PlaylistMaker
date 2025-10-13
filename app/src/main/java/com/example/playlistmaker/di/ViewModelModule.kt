@@ -17,6 +17,6 @@ val viewModelModule = module {
     }
 
     viewModel { (url: String) ->
-        PlayerViewModel(url)
+        PlayerViewModel(get(), url)
     }
 }
