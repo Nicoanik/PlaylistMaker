@@ -11,9 +11,6 @@ class SettingsViewModel(
     private val sharingInteractor: SharingInteractor
 ): ViewModel() {
 
-//    private val settingsInteractor = Creator.provideSettingsInteractor()
-//    private val  sharingInteractor = Creator.provideSharingInteractor()
-
     private val stateLiveData = MutableLiveData<Boolean>()
     fun observeState(): LiveData<Boolean> = stateLiveData
 

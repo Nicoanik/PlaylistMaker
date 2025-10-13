@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -102,7 +101,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     viewModel.getSearchHistory()
-                    showToast("GET History")
                 } else{
                     binding.vgSearchHistory.isVisible = false
                 }
@@ -167,7 +165,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showError() {
         binding.apply {
             progressBar.isVisible = false
-            rvSearchHistory.isVisible = false
+            vgSearchHistory.isVisible = false
             rvTracksList.isVisible = false
             tvPlaceholderMessage.text = getString(R.string.something_went_wrong)
             tvPlaceholderMessage.isVisible = true
@@ -191,7 +189,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showEmpty() {
         binding.apply {
             progressBar.isVisible = false
-            rvSearchHistory.isVisible = false
+            vgSearchHistory.isVisible = false
             rvTracksList.isVisible = false
             tvPlaceholderMessage.text = getString(R.string.nothing_found)
             tvPlaceholderMessage.isVisible = true
@@ -213,9 +211,6 @@ class SearchActivity : AppCompatActivity() {
                 rvTracksList.isVisible = false
                 vgSearchHistory.isVisible = true
             }
-            showToast("History is Not Empty")
-        } else {
-            showToast("History is Empty")
         }
     }
 

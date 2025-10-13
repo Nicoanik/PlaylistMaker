@@ -20,10 +20,10 @@ class App: Application() {
             modules(dataModule,
                 interactorModule,
                 repositoryModule,
-                viewModelModule)
+                viewModelModule
+            )
         }
 
-//        Creator.initApplication(this)
         getKoin().get<SettingsInteractor>().getSettingThemMode()
     }
 

@@ -12,8 +12,6 @@ class SettingsRepositoryImpl(
     private val context: Context
     ) : SettingsRepository {
 
-//    val app = Creator.provideApplication()
-
     override fun saveSettingsThemeMode(set: Boolean) {
         sharedPrefs.edit { putBoolean(THEME_MODE_KEY, set) }
     }

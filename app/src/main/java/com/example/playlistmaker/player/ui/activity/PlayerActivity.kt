@@ -34,8 +34,7 @@ class PlayerActivity : AppCompatActivity() {
             insets
         }
 
-        val mediaTrack: Track = Gson().fromJson(intent.getStringExtra(SearchActivity.Companion.TRACK_INTENT), Track::class.java)
-
+        val mediaTrack = Gson().fromJson(intent.getStringExtra(SearchActivity.Companion.TRACK_INTENT), Track::class.java)
         val viewModel by viewModel<PlayerViewModel> { parametersOf(mediaTrack.previewUrl) }
 
         viewModel.observePlayerState().observe(this) {
