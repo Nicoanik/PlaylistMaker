@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -24,19 +23,22 @@ import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
 
 class SearchActivity : AppCompatActivity() {
 
-    private val viewModel: SearchViewModel by viewModels()
-    private lateinit var state: SearchState
+    private val gson: Gson by inject()
+
+    private val viewModel by viewModel<SearchViewModel>()
     private lateinit var binding: ActivitySearchBinding
 
     private var isClickAllowed = true
 
-    lateinit var adapterTracks: TracksAdapter
-    lateinit var adapterSearches: TracksAdapter
+    lateinit var adapterSearch: TracksAdapter
+    lateinit var adapterHistory: TracksAdapter
     private val handlerMain = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +57,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onItemClick(track: Track) {
                 if (clickDebounce()) {
                     viewModel.addTrackToSearchHistory(track)
-                    if (state is SearchState.History) viewModel.getSearchHistory()
-                    mediaIntent.putExtra(TRACK_INTENT, Gson().toJson(track))
+                    mediaIntent.putExtra(TRACK_INTENT, gson.toJson(track))
                     startActivity(mediaIntent)
                 }
             }
@@ -70,15 +71,15 @@ class SearchActivity : AppCompatActivity() {
             showToast(it.toString())
         }
 
-        adapterTracks = TracksAdapter(onItemClickListener)
-        adapterSearches = TracksAdapter(onItemClickListener)
+        adapterSearch = TracksAdapter(onItemClickListener)
+        adapterHistory = TracksAdapter(onItemClickListener)
 
         binding.rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.rvTracksList.adapter = adapterTracks
+        binding.rvTracksList.adapter = adapterSearch
 
         binding.rvSearchHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.rvSearchHistory.adapter = adapterSearches
+        binding.rvSearchHistory.adapter = adapterHistory
 
         binding.backButtonSearch.setOnClickListener {
             finish()
@@ -119,7 +120,7 @@ class SearchActivity : AppCompatActivity() {
             placeholderInvisible()
             binding.etQueryInput.setText(TEXT_DEF)
             binding.rvTracksList.isVisible = false
-            binding.vgSearchHistory.isVisible = (adapterSearches.tracks.isNotEmpty())
+            binding.vgSearchHistory.isVisible = (adapterHistory.tracks.isNotEmpty())
         }
 
         binding.rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -156,7 +157,7 @@ class SearchActivity : AppCompatActivity() {
         return current
     }
 
-    fun showLoading() {
+    private fun showLoading() {
         binding.apply {
             rvTracksList.isVisible = false
             tvPlaceholderMessage.isVisible = false
@@ -164,21 +165,22 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun showError(errorMessage: String) {
+    private fun showError() {
         binding.apply {
+            progressBar.isVisible = false
+            vgSearchHistory.isVisible = false
             rvTracksList.isVisible = false
+            tvPlaceholderMessage.text = getString(R.string.something_went_wrong)
             tvPlaceholderMessage.isVisible = true
             ivPlaceholderErrorImage.isVisible = true
-            progressBar.isVisible = false
-            tvPlaceholderMessage.text = errorMessage
             refreshButtonSearch.isVisible = true
         }
     }
 
-    fun showContent(tracks: List<Track>) {
-        adapterTracks.tracks.clear()
-        adapterTracks.tracks.addAll(tracks)
-        adapterTracks.notifyDataSetChanged()
+    private fun showContent(tracks: List<Track>) {
+        adapterSearch.tracks.clear()
+        adapterSearch.tracks.addAll(tracks)
+        adapterSearch.notifyDataSetChanged()
         placeholderInvisible()
         binding.apply {
             progressBar.isVisible = false
@@ -187,37 +189,40 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun showEmpty(emptyMessage: String) {
+    private fun showEmpty() {
         binding.apply {
-            rvTracksList.isVisible = false
             progressBar.isVisible = false
-            tvPlaceholderMessage.text = emptyMessage
+            vgSearchHistory.isVisible = false
+            rvTracksList.isVisible = false
+            tvPlaceholderMessage.text = getString(R.string.nothing_found)
             tvPlaceholderMessage.isVisible = true
             ivPlaceholderEmptyImage.isVisible = true
         }
     }
 
-    fun showToast(message: String) {
+    private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
-    fun showHistory(tracksHistory: List<Track>) {
+    private fun showHistory(tracksHistory: List<Track>) {
         if (tracksHistory.isNotEmpty()) {
-            adapterSearches.tracks.clear()
-            adapterSearches.tracks.addAll(tracksHistory)
-            adapterSearches.notifyDataSetChanged()
+            adapterHistory.tracks.clear()
+            adapterHistory.tracks.addAll(tracksHistory)
+            adapterHistory.notifyDataSetChanged()
             placeholderInvisible()
-            binding.rvTracksList.isVisible = false
-            binding.vgSearchHistory.isVisible = true
+            binding.apply {
+                progressBar.isVisible = false
+                rvTracksList.isVisible = false
+                vgSearchHistory.isVisible = true
+            }
         }
     }
 
     fun renderSearch(state: SearchState) {
-        this.state = state
         when (state) {
             is SearchState.Loading -> showLoading()
             is SearchState.Content -> showContent(state.tracks)
-            is SearchState.Error -> showError(state.errorMessage)
-            is SearchState.Empty -> showEmpty(state.message)
+            is SearchState.Error -> showError()
+            is SearchState.Empty -> showEmpty()
             is SearchState.History -> showHistory(state.tracksHistory)
         }
     }

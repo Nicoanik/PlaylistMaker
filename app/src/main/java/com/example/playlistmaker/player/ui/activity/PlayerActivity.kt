@@ -5,7 +5,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -17,10 +16,14 @@ import com.example.playlistmaker.search.domain.models.dpToPx
 import com.example.playlistmaker.search.domain.models.timeConversion
 import com.example.playlistmaker.search.ui.activity.SearchActivity
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+import kotlin.getValue
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var viewModel: PlayerViewModel? = null
+    private val gson: Gson by inject()
 
     private lateinit var binding: ActivityPlayerBinding
 
@@ -34,14 +37,11 @@ class PlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val mediaTrack = Gson().fromJson(intent.getStringExtra(SearchActivity.Companion.TRACK_INTENT), Track::class.java)
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getFactory(mediaTrack.previewUrl)
-        )[PlayerViewModel::class.java]
+        val mediaTrack = gson.fromJson(intent.getStringExtra(SearchActivity.Companion.TRACK_INTENT), Track::class.java)
+        val viewModel by viewModel<PlayerViewModel> { parametersOf(mediaTrack.previewUrl) }
 
-        viewModel?.observePlayerState()?.observe(this) {
+        viewModel.observePlayerState().observe(this) {
             render(it)
         }
 
@@ -66,7 +66,7 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         binding.playButton.setOnClickListener {
-            viewModel?.onPlayButtonClicked()
+            viewModel.onPlayButtonClicked()
         }
     }
     private fun changeButtonImage(isPlaying: Boolean) {

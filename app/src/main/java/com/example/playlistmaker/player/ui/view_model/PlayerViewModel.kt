@@ -6,14 +6,14 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class PlayerViewModel(private val url: String?): ViewModel() {
+class PlayerViewModel(
+    private val mediaPlayer: MediaPlayer,
+    private val url: String
+): ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
@@ -25,7 +25,7 @@ class PlayerViewModel(private val url: String?): ViewModel() {
         COMPLETION(4)
     }
 
-    private var mediaPlayer = MediaPlayer()
+//    private var mediaPlayer = MediaPlayer()
     private var stateMediaPlayer = MediaPlayerState.DEFAULT
 
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -98,11 +98,5 @@ class PlayerViewModel(private val url: String?): ViewModel() {
 
     companion object {
         const val PLAYBACK_DEF = "00:00"
-
-        fun getFactory(url: String?): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(url)
-            }
-        }
     }
 }

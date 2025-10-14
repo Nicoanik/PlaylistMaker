@@ -6,23 +6,20 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.search.domain.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 
-class SearchViewModel: ViewModel() {
-
-    private val app = Creator.provideApplication()
+class SearchViewModel(
+    private val searchTracksInteractor: SearchTracksInteractor,
+    private val searchHistoryInteractor: SearchHistoryInteractor
+): ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     private val showToast = SingleLiveEvent<String?>()
     fun observeShowToast(): LiveData<String?> = showToast
-
-    private val tracksSearchInteractor = Creator.provideSearchTracksInteractor(app)
-    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
     private var latestSearchText: String? = null
 
@@ -56,40 +53,31 @@ class SearchViewModel: ViewModel() {
             renderSearchState(
                 SearchState.Loading
             )
-            tracksSearchInteractor.searchTracks(
+            searchTracksInteractor.searchTracks(
                 newSearchText,
                 object : SearchTracksInteractor.TracksConsumer {
                     override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                         handlerMain.post {
                             val tracks = mutableListOf<Track>()
+
                             if (foundTracks != null) {
                                 tracks.addAll(foundTracks)
                             }
 
-                            when {
-                                errorMessage != null -> {
-                                    renderSearchState(
-                                        SearchState.Error(
-                                            app.getString(R.string.something_went_wrong)
-                                        )
-                                    )
-                                    showToast.postValue(errorMessage)
-                                }
+                            if (stateLiveData.value is SearchState.Loading) {
+                                when {
+                                    errorMessage != null -> {
+                                        renderSearchState(SearchState.Error)
+                                        showToast.postValue(errorMessage)
+                                    }
 
-                                tracks.isEmpty() -> {
-                                    renderSearchState(
-                                        SearchState.Empty(
-                                            app.getString(R.string.nothing_found)
-                                        )
-                                    )
-                                }
+                                    tracks.isEmpty() -> {
+                                        renderSearchState(SearchState.Empty)
+                                    }
 
-                                else -> {
-                                    renderSearchState(
-                                        SearchState.Content(
-                                            tracks
-                                        )
-                                    )
+                                    else -> {
+                                        renderSearchState(SearchState.Content(tracks))
+                                    }
                                 }
                             }
                         }
@@ -105,6 +93,7 @@ class SearchViewModel: ViewModel() {
 
     fun addTrackToSearchHistory(track: Track) {
         searchHistoryInteractor.addTrackToSearchHistory(track)
+        if (stateLiveData.value is SearchState.History) getSearchHistory()
     }
 
     fun clearSearchHistory() {
