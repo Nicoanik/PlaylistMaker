@@ -36,7 +36,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/dp_61</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/settings_text</item>
+        <item name="android:textColor">@color/black_text</item>
         <item name="android:textSize">@dimen/text_16sp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
@@ -74,7 +74,7 @@
         <item name="android:textSize">@dimen/text_11sp</item>
         <item name="android:tint">@color/text_gray</item>
     </style>
-    <style name="button_refresh_and_clear">
+    <style name="media_buttons">
         <item name="cornerRadius">@dimen/dp_54</item>
         <item name="android:backgroundTint">@color/black</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
@@ -83,6 +83,8 @@
         <item name="android:textFontWeight">500</item>
         <item name="android:textSize">@dimen/text_14sp</item>
         <item name="android:letterSpacing">0</item>
+        <item name="android:insetTop">@dimen/dp_0</item>
+        <item name="android:insetBottom">@dimen/dp_0</item>
     </style>
     <style name="error_image_view">
         <item name="android:src">@drawable/ic_errors_light_120</item>
@@ -124,5 +126,24 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textFontWeight">400</item>
+    </style>
+    <style name="media_text_placeholder">
+        <item name="android:layout_marginHorizontal">@dimen/dp_24</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black_text</item>
+        <item name="android:textSize">@dimen/text_19sp</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+    <style name="custom_tab_layout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabBackground">@color/white</item>
+        <item name="tabTextColor">@color/black</item>
+        <item name="tabIndicatorColor">@color/black</item>
+    </style>
+    <style name="TabLayoutText">
+        <item name="textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>

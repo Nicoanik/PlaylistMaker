@@ -16,11 +16,16 @@
     <string name="something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="button_refresh">Обновить</string>
     <string name="clear_button_search_history">Очистить историю</string>
-    <string name="text_search_history">Вы искали</string>
-    <string name="text_duration">Длительность</string>
-    <string name="text_album">Альбом</string>
-    <string name="text_year">Год</string>
-    <string name="text_genre">Жанр</string>
-    <string name="text_country">Страна</string>
-    <string name="text_media_activity">Я ещё не готов, меня надо сначала сверстать :)</string>
+    <string name="search_history">Вы искали</string>
+    <string name="duration">Длительность</string>
+    <string name="album">Альбом</string>
+    <string name="year">Год</string>
+    <string name="genre">Жанр</string>
+    <string name="country">Страна</string>
+    <string name="media_activity">Медиатека</string>
+    <string name="empty_media_library">Ваша медиатека пуста</string>
+    <string name="empty_playlists">Вы не создали\nни одного плейлиста</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="favorite_tracks">Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
 </resources>

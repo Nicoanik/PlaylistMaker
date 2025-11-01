@@ -6,8 +6,7 @@
     android:id="@+id/activity_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".player.ui.activity.PlayerActivity"
-    style="@style/ModeActivity">
+    tools:context=".player.ui.activity.PlayerActivity">
 
     <ImageView
         android:id="@+id/back_button_audio_player"
@@ -24,7 +23,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="56dp">
+        android:layout_marginTop="@dimen/dp_56">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -161,7 +160,7 @@
                 app:layout_constraintTag="text_duration"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_playback_progress"
-                android:text="@string/text_duration"
+                android:text="@string/duration"
                 style="@style/track_description_media"/>
 
             <TextView
@@ -183,7 +182,7 @@
                 app:layout_constraintTag="text_album"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_duration"
-                android:text="@string/text_album"
+                android:text="@string/album"
                 style="@style/track_description_media"/>
 
             <TextView
@@ -205,7 +204,7 @@
                 app:layout_constraintTag="text_year"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_album"
-                android:text="@string/text_year"
+                android:text="@string/year"
                 style="@style/track_description_media"/>
 
             <TextView
@@ -227,7 +226,7 @@
                 app:layout_constraintTag="text_genre"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_year"
-                android:text="@string/text_genre"
+                android:text="@string/genre"
                 style="@style/track_description_media"/>
 
             <TextView
@@ -249,7 +248,7 @@
                 app:layout_constraintTag="text_country"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_genre"
-                android:text="@string/text_country"
+                android:text="@string/country"
                 style="@style/track_description_media"/>
 
             <TextView

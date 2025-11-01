@@ -85,7 +85,7 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.clearButtonSearchHistory.setOnClickListener {
+        binding.clearSearchHistoryButton.setOnClickListener {
             viewModel.clearSearchHistory()
             binding.vgSearchHistory.isVisible = false
         }
