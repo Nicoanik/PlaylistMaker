@@ -20,9 +20,11 @@
     <dimen name="dp_45">45dp</dimen>
     <dimen name="dp_48">48dp</dimen>
     <dimen name="dp_54">54dp</dimen>
+    <dimen name="dp_56">56dp</dimen>
     <dimen name="dp_61">61dp</dimen>
     <dimen name="dp_66">66dp</dimen>
     <dimen name="dp_102">102dp</dimen>
+    <dimen name="dp_106">106dp</dimen>
     <dimen name="dp_120">120dp</dimen>
     <dimen name="dp_140">140dp</dimen>
     <dimen name="text_11sp">11sp</dimen>

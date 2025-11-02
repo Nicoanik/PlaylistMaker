@@ -60,4 +60,6 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
 
     implementation(libs.koin.android)
+
+    implementation(libs.material.v180)
 }

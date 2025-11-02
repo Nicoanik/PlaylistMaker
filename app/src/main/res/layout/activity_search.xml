@@ -124,7 +124,7 @@
 
             <Button
                 android:id="@+id/refresh_button_search"
-                style="@style/button_refresh_and_clear"
+                style="@style/media_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_36"
                 android:layout_gravity="center_horizontal"
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_42"
                 android:layout_marginBottom="@dimen/dp_12"
-                android:text="@string/text_search_history" />
+                android:text="@string/search_history" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_search_history"
@@ -157,14 +157,12 @@
                 android:layout_weight="1"/>
 
             <Button
-                android:id="@+id/clear_button_search_history"
-                style="@style/button_refresh_and_clear"
+                android:id="@+id/clear_search_history_button"
+                style="@style/media_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_36"
                 android:layout_marginTop="@dimen/dp_24"
                 android:layout_marginBottom="@dimen/dp_12"
-                android:insetTop="@dimen/dp_0"
-                android:insetBottom="@dimen/dp_0"
                 android:text="@string/clear_button_search_history" />
         </LinearLayout>
     </FrameLayout>
