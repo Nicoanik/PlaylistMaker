@@ -38,7 +38,7 @@
             android:name=".media.ui.activity.MediaActivity"
             android:exported="false" />
         <activity
-            android:name=".main.ui.activity.MainActivity"
+            android:name=".main.ui.activity.MainFragment"
             android:exported="false"/>
 
     </application>
