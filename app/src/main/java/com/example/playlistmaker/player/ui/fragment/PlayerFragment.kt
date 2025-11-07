@@ -24,13 +24,6 @@ import kotlin.getValue
 
 class PlayerFragment : Fragment() {
 
-    companion object {
-        private const val ARGS_TRACK = "track"
-
-        fun createArgs(trackGson: String): Bundle =
-            bundleOf(ARGS_TRACK to trackGson)
-    }
-
     private val gson: Gson by inject()
 
     private var _binding: FragmentPlayerBinding? = null
@@ -48,7 +41,6 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val mediaTrack = gson.fromJson(intent.getStringExtra(SearchFragment.Companion.TRACK_INTENT), Track::class.java)
         val mediaTrack = gson.fromJson(requireArguments().getString(ARGS_TRACK), Track::class.java)
         val viewModel by viewModel<PlayerViewModel> { parametersOf(mediaTrack.previewUrl) }
 
@@ -101,5 +93,12 @@ class PlayerFragment : Fragment() {
             is PlayerState.Paused -> binding.tvPlaybackProgress.text = state.timer
             is PlayerState.Completion -> binding.tvPlaybackProgress.text = state.timer
         }
+    }
+
+    companion object {
+        private const val ARGS_TRACK = "track"
+
+        fun createArgs(trackGson: String): Bundle =
+            bundleOf(ARGS_TRACK to trackGson)
     }
 }

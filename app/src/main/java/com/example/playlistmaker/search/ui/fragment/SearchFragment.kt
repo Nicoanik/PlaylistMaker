@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search.ui.fragment
 
 import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -56,13 +55,10 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val mediaIntent = Intent(this, PlayerFragment::class.java)
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
                 if (clickDebounce()) {
                     viewModel.addTrackToSearchHistory(track)
-//                    mediaIntent.putExtra(TRACK_INTENT, gson.toJson(track))
-//                    startActivity(mediaIntent)
                     findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
                         PlayerFragment.createArgs(gson.toJson(track)))
                 }
@@ -238,7 +234,6 @@ class SearchFragment : Fragment() {
 
     companion object {
         const val TEXT_DEF = ""
-//        const val TRACK_INTENT = "track_intent"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
