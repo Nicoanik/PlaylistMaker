@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
-import com.example.playlistmaker.search.ui.activity.SearchActivity
+import com.example.playlistmaker.search.ui.fragment.SearchFragment
 
 class MainFragment : Fragment() {
 
@@ -29,8 +29,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchButton.setOnClickListener {
-            val searchIntent = Intent(requireContext(), SearchActivity::class.java)
-            startActivity(searchIntent)
+            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
         }
 
         binding.mediaButton.setOnClickListener {

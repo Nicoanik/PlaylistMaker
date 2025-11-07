@@ -1,25 +1,27 @@
-package com.example.playlistmaker.search.ui.activity
+package com.example.playlistmaker.search.ui.fragment
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.player.ui.activity.PlayerActivity
+import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
@@ -28,12 +30,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     private val gson: Gson by inject()
 
     private val viewModel by viewModel<SearchViewModel>()
-    private lateinit var binding: ActivitySearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private var isClickAllowed = true
 
@@ -41,48 +44,52 @@ class SearchActivity : AppCompatActivity() {
     lateinit var adapterHistory: TracksAdapter
     private val handlerMain = Handler(Looper.getMainLooper())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_search)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return  binding.root
+    }
 
-        val mediaIntent = Intent(this, PlayerActivity::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        val mediaIntent = Intent(this, PlayerFragment::class.java)
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(track: Track) {
                 if (clickDebounce()) {
                     viewModel.addTrackToSearchHistory(track)
-                    mediaIntent.putExtra(TRACK_INTENT, gson.toJson(track))
-                    startActivity(mediaIntent)
+//                    mediaIntent.putExtra(TRACK_INTENT, gson.toJson(track))
+//                    startActivity(mediaIntent)
+                    findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
+                        PlayerFragment.createArgs(gson.toJson(track)))
                 }
             }
         }
 
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             renderSearch(it)
         }
 
-        viewModel.observeShowToast().observe(this) {
+        viewModel.observeShowToast().observe(viewLifecycleOwner) {
             showToast(it.toString())
         }
 
         adapterSearch = TracksAdapter(onItemClickListener)
         adapterHistory = TracksAdapter(onItemClickListener)
 
-        binding.rvTracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rvTracksList.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvTracksList.adapter = adapterSearch
 
         binding.rvSearchHistory.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvSearchHistory.adapter = adapterHistory
 
         binding.backButtonSearch.setOnClickListener {
-            finish()
+            findNavController().navigateUp()
         }
 
         binding.clearSearchHistoryButton.setOnClickListener {
@@ -139,6 +146,12 @@ class SearchActivity : AppCompatActivity() {
             viewModel.request(binding.etQueryInput.text.toString())
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun placeholderInvisible() {
         binding.apply {
             tvPlaceholderMessage.isVisible = false
@@ -201,7 +214,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
     private fun showHistory(tracksHistory: List<Track>) {
         if (tracksHistory.isNotEmpty()) {
@@ -229,7 +242,7 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val TEXT_DEF = ""
-        const val TRACK_INTENT = "track_intent"
+//        const val TRACK_INTENT = "track_intent"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
