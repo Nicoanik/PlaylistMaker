@@ -35,10 +35,6 @@ class SettingsFragment : Fragment() {
 
         viewModel.getSetSwitcher()
 
-        binding.backButtonSettings.setOnClickListener{
-            findNavController().navigateUp()
-        }
-
         binding.themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             if (switcher.isPressed) {
                 viewModel.changeThemeMode(checked)

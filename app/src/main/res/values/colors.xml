@@ -6,7 +6,7 @@
     <color name="blue_light">#9FBBF3</color>
     <color name="black_text">#000000</color>
     <color name="text_gray">#AEAFB4</color>
-    <color name="light_gray">#E6E8EB</color>
+    <color name="YP_light_gray">#E6E8EB</color>
     <color name="Light_Icon">#99A2AD</color>
     <color name="button_media">#401A1B22</color>
 </resources>

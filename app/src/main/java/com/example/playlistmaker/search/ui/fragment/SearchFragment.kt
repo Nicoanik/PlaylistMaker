@@ -88,10 +88,6 @@ class SearchFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvSearchHistory.adapter = adapterHistory
 
-        binding.backButtonSearch.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
         binding.clearSearchHistoryButton.setOnClickListener {
             viewModel.clearSearchHistory()
             binding.vgSearchHistory.isVisible = false

@@ -54,10 +54,10 @@
         <item name="tint">@color/YP_black</item>
     </style>
     <style name="edit_text">
-        <item name="android:backgroundTint">@color/light_gray</item>
+        <item name="android:backgroundTint">@color/YP_light_gray</item>
         <item name="android:textColorHint">@color/text_gray</item>
         <item name="android:textColor">@color/YP_black</item>
-        <item name="android:background">@color/light_gray</item>
+        <item name="android:background">@color/YP_light_gray</item>
         <item name="tint">@color/text_gray</item>
         <item name="android:drawableTint">@color/text_gray</item>
     </style>

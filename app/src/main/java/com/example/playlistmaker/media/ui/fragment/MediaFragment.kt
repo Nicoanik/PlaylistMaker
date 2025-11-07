@@ -40,10 +40,6 @@ class MediaFragment : Fragment() {
             }
         }
         tabMediator.attach()
-
-        binding.backButtonMedia.setOnClickListener {
-            findNavController().navigateUp()
-        }
     }
 
     override fun onDestroyView() {

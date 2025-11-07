@@ -9,31 +9,15 @@
     android:orientation="vertical"
     style="@style/ModeFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="4dp">
-
-        <ImageView
-            android:id="@+id/back_button_settings"
-            android:layout_width="@dimen/dp_48"
-            android:layout_height="@dimen/dp_48"
-            android:layout_marginEnd="@dimen/dp_12"
-            android:scaleType="center"
-            android:src="@drawable/ic_back_arrow_24"
-            tools:ignore="ContentDescription"
-            style="@style/toolbar" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/settings"
-            android:textSize="@dimen/text_22sp"
-            style="@style/toolbar" />
-
-    </LinearLayout>
+        android:layout_marginTop="@dimen/dp_14"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:text="@string/settings"
+        android:textSize="@dimen/text_22sp"
+        style="@style/toolbar" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/themeSwitcher"
