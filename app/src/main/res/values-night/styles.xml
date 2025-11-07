@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ModeActivityMain">
+    <style name="ModeFragmentMain">
         <item name="android:background">@color/black</item>
     </style>
-    <style name="ModeActivity">
+    <style name="ModeFragment">
         <item name="android:background">@color/black</item>
     </style>
     <style name="TextStyleMedium500">

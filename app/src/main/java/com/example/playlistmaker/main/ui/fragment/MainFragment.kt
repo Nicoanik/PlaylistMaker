@@ -1,4 +1,4 @@
-package com.example.playlistmaker.main.ui.activity
+package com.example.playlistmaker.main.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
-import com.example.playlistmaker.media.ui.activity.MediaActivity
 import com.example.playlistmaker.search.ui.activity.SearchActivity
-import com.example.playlistmaker.settings.ui.activity.SettingsActivity
 
 class MainFragment : Fragment() {
 
@@ -34,13 +34,11 @@ class MainFragment : Fragment() {
         }
 
         binding.mediaButton.setOnClickListener {
-            val mediaIntent = Intent(requireContext(), MediaActivity::class.java)
-            startActivity(mediaIntent)
+            findNavController().navigate(R.id.action_mainFragment_to_mediaFragment)
         }
 
         binding.settingsButton.setOnClickListener {
-            val settingsIntent = Intent(requireContext(), SettingsActivity::class.java)
-            startActivity(settingsIntent)
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
     }
 

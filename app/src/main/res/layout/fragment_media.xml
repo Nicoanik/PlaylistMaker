@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_media"
+    android:id="@+id/fragment_media"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".media.ui.activity.MediaActivity"
-    style="@style/ModeActivity">
+    style="@style/ModeFragment">
 
     <ImageView
         android:id="@+id/back_button_media"
