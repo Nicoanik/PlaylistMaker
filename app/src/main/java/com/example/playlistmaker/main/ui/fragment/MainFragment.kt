@@ -29,15 +29,15 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+//            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
         }
 
         binding.mediaButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_mediaFragment)
+//            findNavController().navigate(R.id.action_mainFragment_to_mediaFragment)
         }
 
         binding.settingsButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+//            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
     }
 

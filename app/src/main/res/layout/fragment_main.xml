@@ -35,7 +35,7 @@
             style="@style/button_activity_main"
             android:layout_marginVertical="@dimen/dp_16"
             android:id="@+id/media_button"
-            android:text="@string/media_library"
+            android:text="@string/media"
             app:icon="@drawable/ic_media_24" />
 
         <Button
