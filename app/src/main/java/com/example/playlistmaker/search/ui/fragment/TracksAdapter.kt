@@ -13,7 +13,7 @@ class TracksAdapter(private val onItemClickListener: OnItemClickListener): Recyc
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClick(tracks[holder.adapterPosition])
+            onItemClickListener.onItemClick(tracks[position])
         }
     }
 
