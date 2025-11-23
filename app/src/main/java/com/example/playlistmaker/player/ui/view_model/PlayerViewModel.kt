@@ -25,7 +25,6 @@ class PlayerViewModel(
         COMPLETION
     }
 
-//    private var mediaPlayer = MediaPlayer()
     private var stateMediaPlayer = MediaPlayerState.DEFAULT
 
     private val mainHandler = Handler(Looper.getMainLooper())
