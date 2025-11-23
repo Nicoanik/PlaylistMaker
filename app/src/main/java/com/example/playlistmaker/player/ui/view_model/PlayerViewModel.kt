@@ -17,12 +17,12 @@ class PlayerViewModel(
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
-    enum class MediaPlayerState(val state: Int) {
-        DEFAULT(0),
-        PREPARED(1),
-        PLAYING(2),
-        PAUSED(3),
-        COMPLETION(4)
+    enum class MediaPlayerState() {
+        DEFAULT,
+        PREPARED,
+        PLAYING,
+        PAUSED,
+        COMPLETION
     }
 
 //    private var mediaPlayer = MediaPlayer()
