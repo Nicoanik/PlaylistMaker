@@ -21,7 +21,7 @@ class SearchHistoryRepositoryImpl(
         getSearchHistory()
         tracksHistory.remove(track)
         tracksHistory.add(0, track)
-        if (tracksHistory.size > MAX_SEARCH_HISTORY) tracksHistory.removeAt(10)
+        if (tracksHistory.size > MAX_SEARCH_HISTORY) tracksHistory.removeAt(MAX_SEARCH_HISTORY)
         saveSearchHistory()
     }
 

@@ -41,7 +41,10 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mediaTrack = gson.fromJson(requireArguments().getString(ARGS_TRACK), Track::class.java)
+        val mediaTrack = gson.fromJson(
+            requireArguments().getString(ARGS_TRACK),
+            Track::class.java
+        )
         val viewModel by viewModel<PlayerViewModel> { parametersOf(mediaTrack.previewUrl) }
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
