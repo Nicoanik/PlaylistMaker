@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -80,21 +81,22 @@ class PlayerFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun changeButtonImage(isPlaying: Boolean) {
-        if (isPlaying) {
-            binding.playButton.setImageResource(R.drawable.pause_button_100)
-        } else {
-            binding.playButton.setImageResource(R.drawable.play_button_100)
-        }
-    }
 
     private fun render(state: PlayerState) {
-        changeButtonImage(state is PlayerState.Playing)
         when (state) {
-            is PlayerState.Prepared -> binding.tvPlaybackProgress.text = state.timer
-            is PlayerState.Playing -> binding.tvPlaybackProgress.text = state.timer
-            is PlayerState.Paused -> binding.tvPlaybackProgress.text = state.timer
-            is PlayerState.Completion -> binding.tvPlaybackProgress.text = state.timer
+            is PlayerState.Default -> binding.tvPlaybackProgress.text = state.progress
+            is PlayerState.Prepared -> {
+                binding.playButton.isVisible = true
+                binding.tvPlaybackProgress.text = state.progress
+            }
+            is PlayerState.Playing -> {
+                binding.playButton.setImageResource(R.drawable.pause_button_100)
+                binding.tvPlaybackProgress.text = state.progress
+            }
+            is PlayerState.Paused -> {
+                binding.playButton.setImageResource(R.drawable.play_button_100)
+                binding.tvPlaybackProgress.text = state.progress
+            }
         }
     }
 

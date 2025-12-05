@@ -108,6 +108,7 @@
                 app:layout_constraintStart_toEndOf="@id/queue_button"
                 app:layout_constraintTop_toTopOf="@id/queue_button"
                 app:layout_constraintBottom_toBottomOf="@id/queue_button"
+                android:visibility="gone"
                 style="@style/button_play"/>
 
             <ImageButton
@@ -138,14 +139,10 @@
                 android:textFontWeight="500"
                 style="@style/text_media"/>
 
-            <androidx.constraintlayout.widget.Barrier
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_tags="playback_progress"
-                app:barrierDirection="bottom"/>
+
 
             <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/text_barrier"
+                android:id="@+id/text_barrier_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:constraint_referenced_tags="text_duration, text_album, text_year, text_genre, text_country"
@@ -155,11 +152,11 @@
                 android:id="@+id/text_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_32"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="75dp"
                 android:textColor="@color/text_gray"
                 app:layout_constraintTag="text_duration"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_playback_progress"
+                app:layout_constraintTop_toBottomOf="@id/queue_button"
                 android:text="@string/duration"
                 style="@style/track_description_media"/>
 
@@ -169,7 +166,7 @@
                 android:layout_height="@dimen/dp_32"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@id/text_barrier"
+                app:layout_constraintStart_toEndOf="@id/text_barrier_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/text_duration"
                 style="@style/track_description_media"/>
@@ -191,7 +188,7 @@
                 android:layout_height="@dimen/dp_32"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@id/text_barrier"
+                app:layout_constraintStart_toEndOf="@id/text_barrier_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/text_album"
                 style="@style/track_description_media"/>
@@ -213,7 +210,7 @@
                 android:layout_height="@dimen/dp_32"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@id/text_barrier"
+                app:layout_constraintStart_toEndOf="@id/text_barrier_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/text_year"
                 style="@style/track_description_media"/>
@@ -235,7 +232,7 @@
                 android:layout_height="@dimen/dp_32"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@id/text_barrier"
+                app:layout_constraintStart_toEndOf="@id/text_barrier_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/text_genre"
                 style="@style/track_description_media" />
@@ -257,7 +254,7 @@
                 android:layout_height="@dimen/dp_32"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@id/text_barrier"
+                app:layout_constraintStart_toEndOf="@id/text_barrier_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/text_country"
                 style="@style/track_description_media" />
