@@ -13,19 +13,10 @@ class SearchHistoryRepositoryImpl(
 
     private val tracksHistory: MutableList<Track> = mutableListOf()
 
-    init {
-        getSearchHistory()
-    }
-
     override fun addTrackToSearchHistory(track: Track) {
-        getSearchHistory()
         tracksHistory.remove(track)
         tracksHistory.add(0, track)
         if (tracksHistory.size > MAX_SEARCH_HISTORY) tracksHistory.removeAt(MAX_SEARCH_HISTORY)
-        saveSearchHistory()
-    }
-
-    override fun saveSearchHistory() {
         sharedPrefs.edit { putString(SEARCH_HISTORY_KEY, gson.toJson(tracksHistory)) }
     }
 
