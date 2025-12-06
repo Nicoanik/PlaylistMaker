@@ -2,13 +2,14 @@ package com.example.playlistmaker.search.ui.view_model
 
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.utils.debounce
 
 class SearchViewModel(
     private val searchTracksInteractor: SearchTracksInteractor,
@@ -24,30 +25,26 @@ class SearchViewModel(
     private var latestSearchText: String? = null
 
     private val handlerMain = Handler(Looper.getMainLooper())
+    private val trackSearchDebounse = debounce<String>(
+        SEARCH_DEBOUNCE_DELAY,
+        viewModelScope,
+        true
+    ) { changedText ->
+        searchRequest(changedText)
+    }
 
     init {
         getSearchHistory()
     }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
-            return
+        if (latestSearchText != changedText) {
+            latestSearchText = changedText
+            trackSearchDebounse(changedText)
         }
-
-        this.latestSearchText = changedText
-        handlerMain.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-
-        val searchRunnable = Runnable { request(changedText) }
-
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handlerMain.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime
-        )
     }
 
-   fun request(newSearchText: String) {
+   fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             handlerMain.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
             renderSearchState(
