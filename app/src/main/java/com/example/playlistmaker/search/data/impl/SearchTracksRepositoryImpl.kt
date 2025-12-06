@@ -9,8 +9,10 @@ import com.example.playlistmaker.search.domain.SearchTracksRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class SearchTracksRepositoryImpl(private val networkClient: NetworkClient) :
-    SearchTracksRepository {
+class SearchTracksRepositoryImpl(
+    private val networkClient: NetworkClient
+): SearchTracksRepository {
+
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         when (response.resultCode) {

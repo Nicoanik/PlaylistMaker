@@ -22,8 +22,6 @@ class SearchViewModel(
     fun observeShowToast(): LiveData<String?> = showToast
 
     private var latestSearchText: String? = null
-
-//    private val handlerMain = Handler(Looper.getMainLooper())
     private val trackSearchDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,

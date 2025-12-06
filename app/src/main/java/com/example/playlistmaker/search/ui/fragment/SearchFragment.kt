@@ -66,12 +66,18 @@ class SearchFragment : Fragment() {
         adapterSearch = TracksAdapter { track -> onTrackClickDebounce(track) }
         adapterHistory = TracksAdapter { track -> onTrackClickDebounce(track) }
 
-        binding.rvTracksList.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvTracksList.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         binding.rvTracksList.adapter = adapterSearch
 
-        binding.rvSearchHistory.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvSearchHistory.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         binding.rvSearchHistory.adapter = adapterHistory
 
         viewModel.observeState().observe(viewLifecycleOwner) {
