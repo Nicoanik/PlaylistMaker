@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -10,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "com.example.playlistmaker"
         minSdk = 29
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -52,6 +53,7 @@ dependencies {
 
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
+
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -64,4 +66,6 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.fragment.ktx)
+
+    implementation(libs.kotlinx.coroutines.android)
 }

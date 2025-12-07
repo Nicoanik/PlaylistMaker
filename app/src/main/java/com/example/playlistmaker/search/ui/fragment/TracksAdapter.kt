@@ -4,7 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.search.domain.models.Track
 
-class TracksAdapter(private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<TracksViewHolder> () {
+class TracksAdapter(
+    val onItemClickListener: OnItemClickListener
+): RecyclerView.Adapter<TracksViewHolder> () {
 
     val tracks: MutableList<Track> = mutableListOf()
 
@@ -13,13 +15,13 @@ class TracksAdapter(private val onItemClickListener: OnItemClickListener): Recyc
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClick(tracks[holder.adapterPosition])
+            onItemClickListener.onItemClick(tracks[position])
         }
     }
 
     override fun getItemCount(): Int = tracks.size
 }
 
-interface OnItemClickListener {
+fun interface OnItemClickListener {
     fun onItemClick(track: Track)
 }

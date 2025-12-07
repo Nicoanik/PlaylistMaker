@@ -2,8 +2,6 @@ package com.example.playlistmaker.search.ui.fragment
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -14,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,25 +22,19 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
-import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
-
 class SearchFragment : Fragment() {
-
-    private val gson: Gson by inject()
 
     private val viewModel by viewModel<SearchViewModel>()
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
-    private var isClickAllowed = true
-
-    lateinit var adapterSearch: TracksAdapter
-    lateinit var adapterHistory: TracksAdapter
-    private val handlerMain = Handler(Looper.getMainLooper())
+    private lateinit var adapterSearch: TracksAdapter
+    private lateinit var adapterHistory: TracksAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,15 +48,32 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onItemClickListener = object : OnItemClickListener {
-            override fun onItemClick(track: Track) {
-                if (clickDebounce()) {
-                    viewModel.addTrackToSearchHistory(track)
-                    findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
-                        PlayerFragment.createArgs(gson.toJson(track)))
-                }
-            }
+        onTrackClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            viewModel.addTrackToSearchHistory(track)
+            findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
+                PlayerFragment.createArgs(track))
         }
+
+        adapterSearch = TracksAdapter { track -> onTrackClickDebounce(track) }
+        adapterHistory = TracksAdapter { track -> onTrackClickDebounce(track) }
+
+        binding.rvTracksList.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        binding.rvTracksList.adapter = adapterSearch
+
+        binding.rvSearchHistory.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        binding.rvSearchHistory.adapter = adapterHistory
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             renderSearch(it)
@@ -73,17 +83,6 @@ class SearchFragment : Fragment() {
             showToast(it.toString())
         }
 
-        adapterSearch = TracksAdapter(onItemClickListener)
-        adapterHistory = TracksAdapter(onItemClickListener)
-
-        binding.rvTracksList.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.rvTracksList.adapter = adapterSearch
-
-        binding.rvSearchHistory.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.rvSearchHistory.adapter = adapterHistory
-
         binding.clearSearchHistoryButton.setOnClickListener {
             viewModel.clearSearchHistory()
             binding.vgSearchHistory.isVisible = false
@@ -91,7 +90,7 @@ class SearchFragment : Fragment() {
 
         binding.etQueryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.request(binding.etQueryInput.text.toString())
+                viewModel.searchRequest(binding.etQueryInput.text.toString())
                 true
             }
             false
@@ -135,7 +134,7 @@ class SearchFragment : Fragment() {
 
         binding.refreshButtonSearch.setOnClickListener {
             placeholderInvisible()
-            viewModel.request(binding.etQueryInput.text.toString())
+            viewModel.searchRequest(binding.etQueryInput.text.toString())
         }
     }
 
@@ -151,15 +150,6 @@ class SearchFragment : Fragment() {
             ivPlaceholderEmptyImage.isVisible = false
             refreshButtonSearch.isVisible = false
         }
-    }
-
-    private fun clickDebounce() : Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handlerMain.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
     }
 
     private fun showLoading() {
