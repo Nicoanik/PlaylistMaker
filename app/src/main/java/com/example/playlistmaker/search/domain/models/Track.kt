@@ -1,11 +1,14 @@
 package com.example.playlistmaker.search.domain.models
 
 import android.content.Context
+import android.os.Parcelable
 import android.util.TypedValue
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@Parcelize
 data class Track(
     val trackId: String?,
     val trackName: String?,
@@ -17,7 +20,7 @@ data class Track(
     val country: String?,
     val artworkUrl100: String?,
     val previewUrl: String?
-)
+): Parcelable
 
 fun timeConversion(time: Long?) : String {
     if (time == null) return ""

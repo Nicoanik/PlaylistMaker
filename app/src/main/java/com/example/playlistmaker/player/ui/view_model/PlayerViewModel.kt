@@ -69,9 +69,10 @@ class PlayerViewModel(
     }
 
     private fun startTimer() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
-                delay(300L)
+                delay(DELAY_TIME_PROGRESS)
                 playerState.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
             }
         }
@@ -79,5 +80,9 @@ class PlayerViewModel(
 
     private fun getCurrentPlayerPosition(): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition) ?: PLAYBACK_DEF
+    }
+
+    companion object {
+        private const val DELAY_TIME_PROGRESS = 300L
     }
 }

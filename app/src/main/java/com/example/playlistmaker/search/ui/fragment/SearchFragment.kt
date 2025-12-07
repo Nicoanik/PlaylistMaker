@@ -23,15 +23,10 @@ import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.example.playlistmaker.utils.debounce
-import com.google.gson.Gson
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
-
 class SearchFragment : Fragment() {
-
-    private val gson: Gson by inject()
 
     private val viewModel by viewModel<SearchViewModel>()
     private var _binding: FragmentSearchBinding? = null
@@ -60,7 +55,7 @@ class SearchFragment : Fragment() {
         ) { track ->
             viewModel.addTrackToSearchHistory(track)
             findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
-                PlayerFragment.createArgs(gson.toJson(track)))
+                PlayerFragment.createArgs(track))
         }
 
         adapterSearch = TracksAdapter { track -> onTrackClickDebounce(track) }
