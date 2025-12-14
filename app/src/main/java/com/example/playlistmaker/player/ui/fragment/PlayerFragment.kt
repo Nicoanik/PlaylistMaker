@@ -39,10 +39,14 @@ class PlayerFragment : Fragment() {
 
         val track: Track = arguments?.getParcelable(ARGS_TRACK)!!
 
-        val viewModel by viewModel<PlayerViewModel> { parametersOf(track.previewUrl) }
+        val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
 
-        viewModel.observePlayerState().observe(viewLifecycleOwner) {
+        viewModel.playerState().observe(viewLifecycleOwner) {
             render(it)
+        }
+
+        viewModel.favouriteState().observe(viewLifecycleOwner) {
+            favoriteIcon(it)
         }
 
         Glide.with(this)
@@ -68,6 +72,10 @@ class PlayerFragment : Fragment() {
         binding.playButton.setOnClickListener {
             viewModel.onPlayButtonClicked()
         }
+
+        binding.favoriteButton.setOnClickListener {
+            viewModel.onFavoriteButton()
+        }
     }
 
     override fun onDestroyView() {
@@ -90,6 +98,14 @@ class PlayerFragment : Fragment() {
                 binding.playButton.setImageResource(R.drawable.play_button_100)
                 binding.tvPlaybackProgress.text = state.progress
             }
+        }
+    }
+
+    private fun favoriteIcon(favorite: Boolean) {
+        if (favorite) {
+            binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
+        } else {
+            binding.favoriteButton.setImageResource(R.drawable.button_favorite_false_51)
         }
     }
 
