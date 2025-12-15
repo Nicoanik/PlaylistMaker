@@ -59,8 +59,6 @@ class SearchFragment : Fragment() {
         }
 
         adapterSearch = TracksAdapter { track -> onTrackClickDebounce(track) }
-        adapterHistory = TracksAdapter { track -> onTrackClickDebounce(track) }
-
         binding.rvTracksList.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
@@ -68,6 +66,7 @@ class SearchFragment : Fragment() {
         )
         binding.rvTracksList.adapter = adapterSearch
 
+        adapterHistory = TracksAdapter { track -> onTrackClickDebounce(track) }
         binding.rvSearchHistory.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
