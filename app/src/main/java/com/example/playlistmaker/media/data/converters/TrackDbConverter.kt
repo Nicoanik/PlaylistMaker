@@ -16,7 +16,8 @@ class TrackDbConverter {
             track.primaryGenreName,
             track.country,
             track.artworkUrl100,
-            track.previewUrl
+            track.previewUrl,
+            System.currentTimeMillis()
         )
     }
 

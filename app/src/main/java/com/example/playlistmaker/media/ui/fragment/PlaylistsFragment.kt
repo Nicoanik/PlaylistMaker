@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.example.playlistmaker.media.ui.view_model.MediaState
+import com.example.playlistmaker.media.ui.view_model.PlaylistState
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -40,10 +40,10 @@ class PlaylistsFragment : Fragment() {
         _binding = null
     }
 
-    private fun renderSearch(state: MediaState) {
+    private fun renderSearch(state: PlaylistState) {
         when(state) {
-            is MediaState.Empty -> showPlaceholder()
-            is MediaState.NotEmpty -> showContent()
+            is PlaylistState.Empty -> showPlaceholder()
+            is PlaylistState.Content -> showContent()
         }
     }
 

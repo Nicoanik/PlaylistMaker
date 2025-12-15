@@ -3,7 +3,6 @@ package com.example.playlistmaker.media.ui.fragment
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.ui.fragment.TracksViewHolder
 
 class FavoriteTracksAdapter(
     val onItemClickListener: OnItemClickListener

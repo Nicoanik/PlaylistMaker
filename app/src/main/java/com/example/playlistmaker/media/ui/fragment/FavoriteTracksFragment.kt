@@ -84,9 +84,9 @@ class FavoriteTracksFragment: Fragment() {
             tvPlaceholderMessage.isVisible = true
         }
     }
-    private fun showContent(newTracks: List<Track>) {
+    private fun showContent(tracks: List<Track>) {
         adapterFavorite.tracks.clear()
-        adapterFavorite.tracks.addAll(newTracks)
+        adapterFavorite.tracks.addAll(tracks)
         adapterFavorite.notifyDataSetChanged()
         binding.apply {
             ivPlaceholderImage.isVisible = false
