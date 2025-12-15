@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_player"
+    android:id="@+id/fragment_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".player.ui.fragment.PlayerFragment">
@@ -121,7 +121,7 @@
                 app:layout_constraintStart_toEndOf="@id/play_button"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintTop_toTopOf="@id/queue_button"
-                app:layout_constraintBottom_toBottomOf="@id/queue_button" />
+                app:layout_constraintBottom_toBottomOf="@id/queue_button"/>
 
             <TextView
                 android:id="@+id/tv_playback_progress"
