@@ -4,7 +4,8 @@
     android:id="@+id/fragment_favorite_tracks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/AppBackground">
 
     <ImageView
         android:id="@+id/iv_placeholder_image"

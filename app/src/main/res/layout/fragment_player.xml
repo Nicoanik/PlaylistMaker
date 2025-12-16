@@ -6,7 +6,8 @@
     android:id="@+id/fragment_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".player.ui.fragment.PlayerFragment">
+    tools:context=".player.ui.fragment.PlayerFragment"
+    style="@style/AppBackground">
 
     <ImageView
         android:id="@+id/back_button_audio_player"

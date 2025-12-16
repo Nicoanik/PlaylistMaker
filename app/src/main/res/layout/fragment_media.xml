@@ -6,7 +6,7 @@
     android:id="@+id/fragment_media"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/ModeFragment">
+    style="@style/AppBackground">
 
     <TextView
         android:id="@+id/heading"
