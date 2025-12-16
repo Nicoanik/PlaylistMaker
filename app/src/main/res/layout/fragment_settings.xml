@@ -23,23 +23,23 @@
         android:id="@+id/themeSwitcher"
         android:layout_marginTop="24dp"
         android:text="@string/dark_theme"
-        style="@style/button_activity_settings" />
+        style="@style/button_fragment_settings" />
 
     <TextView
         android:id="@+id/share_button_settings"
         android:text="@string/share_the_app"
         app:drawableEndCompat="@drawable/ic_share_24"
-        style="@style/button_activity_settings" />
+        style="@style/button_fragment_settings" />
 
     <TextView
         android:id="@+id/support_button_settings"
         android:text="@string/write_to_support"
         app:drawableEndCompat="@drawable/ic_support_24"
-        style="@style/button_activity_settings" />
+        style="@style/button_fragment_settings" />
 
     <TextView
         android:id="@+id/agreement_button_settings"
         android:text="@string/user_agreement"
         app:drawableEndCompat="@drawable/ic_forward_arrow_24"
-        style="@style/button_activity_settings" />
+        style="@style/button_fragment_settings" />
 </LinearLayout>
