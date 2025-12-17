@@ -1,14 +1,18 @@
 package com.example.playlistmaker.player.ui.view_model
 
-sealed class PlayerState(val isPlayButtonEnabled: Boolean, val progress: String) {
+sealed class PlayerState(
+    val isFavorite: Boolean,
+    val isPlayButtonEnabled: Boolean,
+    val progress: String
+) {
 
-    class Default : PlayerState(false, PLAYBACK_DEF)
+    class Default(isFavorite: Boolean) : PlayerState(isFavorite, false, PLAYBACK_DEF)
 
-    class Prepared : PlayerState(true, PLAYBACK_DEF)
+    class Prepared(isFavorite: Boolean) : PlayerState(isFavorite,true, PLAYBACK_DEF)
 
-    class Playing(progress: String) : PlayerState(true, progress)
+    class Playing(isFavorite: Boolean, progress: String) : PlayerState(isFavorite, true, progress)
 
-    class Paused(progress: String) : PlayerState(true, progress)
+    class Paused(isFavorite: Boolean, progress: String) : PlayerState(isFavorite, true, progress)
 
     companion object {
         const val PLAYBACK_DEF = "00:00"

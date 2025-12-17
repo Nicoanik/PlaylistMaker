@@ -45,10 +45,6 @@ class PlayerFragment : Fragment() {
             render(it)
         }
 
-        viewModel.favouriteState().observe(viewLifecycleOwner) {
-            favoriteIcon(it)
-        }
-
         Glide.with(this)
             .load(track.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.album_cover_placeholder)
@@ -84,28 +80,17 @@ class PlayerFragment : Fragment() {
     }
 
     private fun render(state: PlayerState) {
+        binding.playButton.isVisible = state.isPlayButtonEnabled
+        binding.tvPlaybackProgress.text = state.progress
         when (state) {
-            is PlayerState.Default -> binding.tvPlaybackProgress.text = state.progress
-            is PlayerState.Prepared -> {
-                binding.playButton.isVisible = true
-                binding.tvPlaybackProgress.text = state.progress
-            }
-            is PlayerState.Playing -> {
-                binding.playButton.setImageResource(R.drawable.pause_button_100)
-                binding.tvPlaybackProgress.text = state.progress
-            }
-            is PlayerState.Paused -> {
-                binding.playButton.setImageResource(R.drawable.play_button_100)
-                binding.tvPlaybackProgress.text = state.progress
-            }
+            is PlayerState.Default -> {}
+            is PlayerState.Prepared -> {}
+            is PlayerState.Playing -> binding.playButton.setImageResource(R.drawable.pause_button_100)
+            is PlayerState.Paused -> binding.playButton.setImageResource(R.drawable.play_button_100)
         }
-    }
-
-    private fun favoriteIcon(favorite: Boolean) {
-        if (favorite) {
-            binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
-        } else {
-            binding.favoriteButton.setImageResource(R.drawable.button_favorite_false_51)
+        when (state.isFavorite) {
+            true -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
+            false -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_false_51)
         }
     }
 
