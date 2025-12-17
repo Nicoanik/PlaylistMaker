@@ -6,8 +6,6 @@ sealed class PlayerState(
     val progress: String
 ) {
 
-    class Default(isFavorite: Boolean) : PlayerState(isFavorite, false, PLAYBACK_DEF)
-
     class Prepared(isFavorite: Boolean) : PlayerState(isFavorite,true, PLAYBACK_DEF)
 
     class Playing(isFavorite: Boolean, progress: String) : PlayerState(isFavorite, true, progress)

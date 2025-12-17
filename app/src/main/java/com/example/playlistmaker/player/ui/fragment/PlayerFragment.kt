@@ -41,7 +41,7 @@ class PlayerFragment : Fragment() {
 
         val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
 
-        viewModel.playerState().observe(viewLifecycleOwner) {
+        viewModel.state().observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -83,10 +83,8 @@ class PlayerFragment : Fragment() {
         binding.playButton.isVisible = state.isPlayButtonEnabled
         binding.tvPlaybackProgress.text = state.progress
         when (state) {
-            is PlayerState.Default -> {}
-            is PlayerState.Prepared -> {}
             is PlayerState.Playing -> binding.playButton.setImageResource(R.drawable.pause_button_100)
-            is PlayerState.Paused -> binding.playButton.setImageResource(R.drawable.play_button_100)
+            else -> binding.playButton.setImageResource(R.drawable.play_button_100)
         }
         when (state.isFavorite) {
             true -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
