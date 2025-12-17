@@ -39,9 +39,9 @@ class PlayerFragment : Fragment() {
 
         val track: Track = arguments?.getParcelable(ARGS_TRACK)!!
 
-        val viewModel by viewModel<PlayerViewModel> { parametersOf(track.previewUrl) }
+        val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
 
-        viewModel.observePlayerState().observe(viewLifecycleOwner) {
+        viewModel.state().observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -68,6 +68,10 @@ class PlayerFragment : Fragment() {
         binding.playButton.setOnClickListener {
             viewModel.onPlayButtonClicked()
         }
+
+        binding.favoriteButton.setOnClickListener {
+            viewModel.onFavoriteButton()
+        }
     }
 
     override fun onDestroyView() {
@@ -76,20 +80,15 @@ class PlayerFragment : Fragment() {
     }
 
     private fun render(state: PlayerState) {
+        binding.playButton.isVisible = state.isPlayButtonEnabled
+        binding.tvPlaybackProgress.text = state.progress
         when (state) {
-            is PlayerState.Default -> binding.tvPlaybackProgress.text = state.progress
-            is PlayerState.Prepared -> {
-                binding.playButton.isVisible = true
-                binding.tvPlaybackProgress.text = state.progress
-            }
-            is PlayerState.Playing -> {
-                binding.playButton.setImageResource(R.drawable.pause_button_100)
-                binding.tvPlaybackProgress.text = state.progress
-            }
-            is PlayerState.Paused -> {
-                binding.playButton.setImageResource(R.drawable.play_button_100)
-                binding.tvPlaybackProgress.text = state.progress
-            }
+            is PlayerState.Playing -> binding.playButton.setImageResource(R.drawable.pause_button_100)
+            else -> binding.playButton.setImageResource(R.drawable.play_button_100)
+        }
+        when (state.isFavorite) {
+            true -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
+            false -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_false_51)
         }
     }
 

@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.media.domain.db.FavoritesInteractor
 import com.example.playlistmaker.player.ui.view_model.PlayerState.Companion.PLAYBACK_DEF
+import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -14,16 +16,22 @@ import java.util.Locale
 
 
 class PlayerViewModel(
+    private val track: Track,
     private val mediaPlayer: MediaPlayer,
-    private val url: String
+    private val favoritesInteractor: FavoritesInteractor
 ): ViewModel() {
-    private val playerState = MutableLiveData<PlayerState>()
-    fun observePlayerState(): LiveData<PlayerState> = playerState
+
+    private var isFavorite = false
+    private val _state = MutableLiveData<PlayerState>()
+    fun state(): LiveData<PlayerState> = _state
 
     private var timerJob: Job? = null
 
     init {
-        preparePlayer()
+        viewModelScope.launch {
+            isFavorite()
+            preparePlayer()
+        }
     }
 
     override fun onCleared() {
@@ -32,40 +40,61 @@ class PlayerViewModel(
     }
 
     fun onPlayButtonClicked() {
-        when(playerState.value) {
+        when(_state.value) {
             is PlayerState.Playing -> pausePlayer()
             is PlayerState.Prepared, is PlayerState.Paused -> startPlayer()
             else -> {}
         }
     }
 
+    fun onFavoriteButton() {
+        viewModelScope.launch {
+            when (isFavorite) {
+                true -> favoritesInteractor.deleteFromFavorites(track.trackId)
+                false -> favoritesInteractor.addToFavorites(track)
+            }
+            isFavorite()
+            when (_state.value) {
+                is PlayerState.Prepared -> _state.postValue(PlayerState.Prepared(isFavorite))
+                is PlayerState.Playing -> _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
+                is PlayerState.Paused -> _state.postValue(PlayerState.Paused(isFavorite, getCurrentPlayerPosition()))
+                else -> {}
+            }
+        }
+    }
+
+    private suspend fun isFavorite() {
+        isFavorite = favoritesInteractor.isTrackFavorite(track.trackId)
+    }
+
     private fun preparePlayer() {
-        mediaPlayer.setDataSource(url)
+        mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState.postValue(PlayerState.Prepared())
+            _state.postValue(PlayerState.Prepared(isFavorite))
         }
         mediaPlayer.setOnCompletionListener {
-            playerState.postValue(PlayerState.Prepared())
+            timerJob?.cancel()
+            _state.postValue(PlayerState.Prepared(isFavorite))
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        playerState.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
+        _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
         startTimer()
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
         timerJob?.cancel()
-        playerState.postValue(PlayerState.Paused(getCurrentPlayerPosition()))
+        mediaPlayer.pause()
+        _state.postValue(PlayerState.Paused(isFavorite, getCurrentPlayerPosition()))
     }
 
     private fun releasePlayer() {
+        timerJob?.cancel()
         mediaPlayer.stop()
         mediaPlayer.release()
-        playerState.value = PlayerState.Default()
     }
 
     private fun startTimer() {
@@ -73,7 +102,7 @@ class PlayerViewModel(
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
                 delay(DELAY_TIME_PROGRESS)
-                playerState.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
+                _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
             }
         }
     }
@@ -81,6 +110,7 @@ class PlayerViewModel(
     private fun getCurrentPlayerPosition(): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition) ?: PLAYBACK_DEF
     }
+
 
     companion object {
         private const val DELAY_TIME_PROGRESS = 300L

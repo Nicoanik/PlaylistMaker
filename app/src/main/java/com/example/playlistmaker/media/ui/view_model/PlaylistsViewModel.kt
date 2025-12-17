@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 
 class PlaylistsViewModel: ViewModel() {
 
-    private val stateLiveData = MutableLiveData<MediaState>()
-    fun observeState(): LiveData<MediaState> = stateLiveData
+    private val _state = MutableLiveData<PlaylistState>()
+    fun state(): LiveData<PlaylistState> = _state
 
     init {
-        stateLiveData.postValue(MediaState.Empty)
+        _state.postValue(PlaylistState.Empty)
     }
 }

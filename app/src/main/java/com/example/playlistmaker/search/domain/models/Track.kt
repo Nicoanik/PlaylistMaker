@@ -10,7 +10,7 @@ import java.util.Locale
 
 @Parcelize
 data class Track(
-    val trackId: String?,
+    val trackId: Int?,
     val trackName: String?,
     val artistName: String?,
     @SerializedName("trackTimeMillis") val trackTime: Long?,
