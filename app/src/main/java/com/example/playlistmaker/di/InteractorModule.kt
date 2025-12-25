@@ -15,23 +15,23 @@ import org.koin.dsl.module
 
 val interactorModule = module {
 
-    factory <SearchTracksInteractor> {
+    factory<SearchTracksInteractor> {
         SearchTracksInteractorImpl(get())
     }
 
-    factory <SearchHistoryInteractor> {
+    factory<SearchHistoryInteractor> {
         SearchHistoryInteractorImpl(get())
     }
 
-    factory <SettingsInteractor> {
+    factory<SettingsInteractor> {
         SettingsInteractorImpl(get())
     }
 
-    factory <SharingInteractor> {
-        SharingInteractorImpl(get(),androidContext())
+    factory<SharingInteractor> {
+        SharingInteractorImpl(get(), androidContext())
     }
 
-    factory <FavoritesInteractor> {
+    factory<FavoritesInteractor> {
         FavoritesInteractorImpl(get())
     }
 }

@@ -12,9 +12,10 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.dpToPx
 import com.example.playlistmaker.search.domain.models.timeConversion
 
-class TracksViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
+class TracksViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
-        .inflate(R.layout.track_view, parent, false)) {
+        .inflate(R.layout.track_view, parent, false)
+) {
 
     private val trackNameView: TextView = itemView.findViewById(R.id.track_name)
     private val artistNameView: TextView = itemView.findViewById(R.id.artist_name)

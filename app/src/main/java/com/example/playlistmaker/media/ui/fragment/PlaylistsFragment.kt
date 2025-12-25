@@ -16,7 +16,7 @@ class PlaylistsFragment : Fragment() {
     private val playlistViewModel: PlaylistsViewModel by viewModel()
 
     private var _binding: FragmentPlaylistsBinding? = null
-    private  val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +41,7 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun renderSearch(state: PlaylistState) {
-        when(state) {
+        when (state) {
             is PlaylistState.Empty -> showPlaceholder()
             is PlaylistState.Content -> showContent()
         }
@@ -53,6 +53,7 @@ class PlaylistsFragment : Fragment() {
             tvPlaceholderMessage.isVisible = true
         }
     }
+
     private fun showContent() {
         binding.apply {
             ivPlaceholderImage.isVisible = false

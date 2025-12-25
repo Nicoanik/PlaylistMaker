@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 
 class SearchTracksInteractorImpl(
     private val repository: SearchTracksRepository
-): SearchTracksInteractor {
+) : SearchTracksInteractor {
 
     override fun searchTracks(expression: String): Flow<Pair<List<Track>?, String?>> {
         return repository.searchTracks(expression).map { result ->

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 
 class SearchTracksRepositoryImpl(
     private val networkClient: NetworkClient
-): SearchTracksRepository {
+) : SearchTracksRepository {
 
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
@@ -37,6 +37,7 @@ class SearchTracksRepositoryImpl(
                     )
                 )
             }
+
             else -> emit(Resource.Error(response.resultCode.toString()))
         }
     }

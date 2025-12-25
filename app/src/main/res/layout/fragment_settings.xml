@@ -3,43 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_settings"
-    tools:context=".settings.ui.fragment.SettingsFragment"
+    style="@style/AppBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    style="@style/AppBackground">
+    tools:context=".settings.ui.fragment.SettingsFragment">
 
     <TextView
+        style="@style/toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_14"
         android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_14"
         android:layout_marginBottom="@dimen/dp_16"
         android:text="@string/settings"
-        android:textSize="@dimen/text_22sp"
-        style="@style/toolbar" />
+        android:textSize="@dimen/text_22sp" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/themeSwitcher"
+        style="@style/button_fragment_settings"
         android:layout_marginTop="24dp"
-        android:text="@string/dark_theme"
-        style="@style/button_fragment_settings" />
+        android:text="@string/dark_theme" />
 
     <TextView
         android:id="@+id/share_button_settings"
+        style="@style/button_fragment_settings"
         android:text="@string/share_the_app"
-        app:drawableEndCompat="@drawable/ic_share_24"
-        style="@style/button_fragment_settings" />
+        app:drawableEndCompat="@drawable/ic_share_24" />
 
     <TextView
         android:id="@+id/support_button_settings"
+        style="@style/button_fragment_settings"
         android:text="@string/write_to_support"
-        app:drawableEndCompat="@drawable/ic_support_24"
-        style="@style/button_fragment_settings" />
+        app:drawableEndCompat="@drawable/ic_support_24" />
 
     <TextView
         android:id="@+id/agreement_button_settings"
+        style="@style/button_fragment_settings"
         android:text="@string/user_agreement"
-        app:drawableEndCompat="@drawable/ic_forward_arrow_24"
-        style="@style/button_fragment_settings" />
+        app:drawableEndCompat="@drawable/ic_forward_arrow_24" />
 </LinearLayout>

@@ -18,7 +18,7 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoriteTracksFragment: Fragment() {
+class FavoriteTracksFragment : Fragment() {
 
     private val favoriteViewModel: FavoriteTracksViewModel by viewModel()
 
@@ -34,7 +34,7 @@ class FavoriteTracksFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFavoriteTracksBinding.inflate(inflater,container,false)
+        _binding = FragmentFavoriteTracksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,11 +48,13 @@ class FavoriteTracksFragment: Fragment() {
             viewLifecycleOwner.lifecycleScope,
             false
         ) { track ->
-            findNavController().navigate(R.id.action_mediaFragment_to_playerFragment,
-                PlayerFragment.createArgs(track))
+            findNavController().navigate(
+                R.id.action_mediaFragment_to_playerFragment,
+                PlayerFragment.createArgs(track)
+            )
         }
 
-        adapterFavorite = FavoriteTracksAdapter { track -> onTrackClickDebounce(track)}
+        adapterFavorite = FavoriteTracksAdapter { track -> onTrackClickDebounce(track) }
         binding.rvTracksList.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
@@ -71,7 +73,7 @@ class FavoriteTracksFragment: Fragment() {
     }
 
     private fun render(state: FavoriteState) {
-        when(state) {
+        when (state) {
             is FavoriteState.Empty -> showPlaceholder()
             is FavoriteState.Content -> showContent(state.tracks)
         }
@@ -84,6 +86,7 @@ class FavoriteTracksFragment: Fragment() {
             tvPlaceholderMessage.isVisible = true
         }
     }
+
     private fun showContent(tracks: List<Track>) {
         adapterFavorite.tracks.clear()
         adapterFavorite.tracks.addAll(tracks)

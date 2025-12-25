@@ -42,7 +42,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return  binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,8 +54,10 @@ class SearchFragment : Fragment() {
             false
         ) { track ->
             viewModel.addTrackToSearchHistory(track)
-            findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
-                PlayerFragment.createArgs(track))
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerFragment,
+                PlayerFragment.createArgs(track)
+            )
         }
 
         adapterSearch = TracksAdapter { track -> onTrackClickDebounce(track) }
@@ -101,7 +103,7 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     viewModel.getSearchHistory()
-                } else{
+                } else {
                     binding.vgSearchHistory.isVisible = false
                 }
                 binding.clearButton.isVisible = !s.isNullOrEmpty()
@@ -125,7 +127,8 @@ class SearchFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     binding.etQueryInput.clearFocus()
-                    val imm = binding.etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        binding.etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(binding.etQueryInput.windowToken, 0)
                 }
             }
@@ -197,6 +200,7 @@ class SearchFragment : Fragment() {
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
+
     private fun showHistory(tracksHistory: List<Track>) {
         if (tracksHistory.isNotEmpty()) {
             adapterHistory.tracks.clear()

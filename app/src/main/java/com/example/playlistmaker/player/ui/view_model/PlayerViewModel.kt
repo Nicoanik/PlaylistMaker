@@ -19,7 +19,7 @@ class PlayerViewModel(
     private val track: Track,
     private val mediaPlayer: MediaPlayer,
     private val favoritesInteractor: FavoritesInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private var isFavorite = false
     private val _state = MutableLiveData<PlayerState>()
@@ -40,7 +40,7 @@ class PlayerViewModel(
     }
 
     fun onPlayButtonClicked() {
-        when(_state.value) {
+        when (_state.value) {
             is PlayerState.Playing -> pausePlayer()
             is PlayerState.Prepared, is PlayerState.Paused -> startPlayer()
             else -> {}
@@ -56,8 +56,20 @@ class PlayerViewModel(
             isFavorite()
             when (_state.value) {
                 is PlayerState.Prepared -> _state.postValue(PlayerState.Prepared(isFavorite))
-                is PlayerState.Playing -> _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
-                is PlayerState.Paused -> _state.postValue(PlayerState.Paused(isFavorite, getCurrentPlayerPosition()))
+                is PlayerState.Playing -> _state.postValue(
+                    PlayerState.Playing(
+                        isFavorite,
+                        getCurrentPlayerPosition()
+                    )
+                )
+
+                is PlayerState.Paused -> _state.postValue(
+                    PlayerState.Paused(
+                        isFavorite,
+                        getCurrentPlayerPosition()
+                    )
+                )
+
                 else -> {}
             }
         }
@@ -108,7 +120,8 @@ class PlayerViewModel(
     }
 
     private fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition) ?: PLAYBACK_DEF
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            ?: PLAYBACK_DEF
     }
 
 

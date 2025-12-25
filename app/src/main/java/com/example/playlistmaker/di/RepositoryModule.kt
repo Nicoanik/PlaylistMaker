@@ -15,25 +15,25 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    factory <SearchTracksRepository> {
+    factory<SearchTracksRepository> {
         SearchTracksRepositoryImpl(get())
     }
 
-    factory <SearchHistoryRepository> {
+    factory<SearchHistoryRepository> {
         SearchHistoryRepositoryImpl(get(), get())
     }
 
-    factory <SettingsRepository> {
+    factory<SettingsRepository> {
         SettingsRepositoryImpl(get(), androidContext())
     }
 
-    single <ExternalNavigator> {
+    single<ExternalNavigator> {
         ExternalNavigator(get())
     }
 
     factory { TrackDbConverter() }
 
-    factory <FavoritesRepository> {
+    factory<FavoritesRepository> {
         FavoritesRepositoryImpl(get(), get())
     }
 }

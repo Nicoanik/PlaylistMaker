@@ -4,7 +4,7 @@ import com.example.playlistmaker.search.domain.models.Track
 
 sealed interface FavoriteState {
 
-    object Empty: FavoriteState
+    object Empty : FavoriteState
 
-    class Content(val tracks: List<Track>): FavoriteState
+    class Content(val tracks: List<Track>) : FavoriteState
 }

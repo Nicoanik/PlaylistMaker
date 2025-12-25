@@ -6,7 +6,7 @@ import com.example.playlistmaker.search.domain.models.Track
 
 class FavoriteTracksAdapter(
     val onItemClickListener: OnItemClickListener
-): RecyclerView.Adapter<FavoriteTracksViewHolder> () {
+) : RecyclerView.Adapter<FavoriteTracksViewHolder>() {
 
     val tracks: MutableList<Track> = mutableListOf()
 

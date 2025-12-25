@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class SearchViewModel(
     private val searchTracksInteractor: SearchTracksInteractor,
     private val searchHistoryInteractor: SearchHistoryInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
@@ -41,7 +41,7 @@ class SearchViewModel(
         }
     }
 
-   fun searchRequest(newSearchText: String) {
+    fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderSearchState(SearchState.Loading)
             viewModelScope.launch {
@@ -52,7 +52,7 @@ class SearchViewModel(
                     }
             }
         }
-   }
+    }
 
     private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
         val tracks = mutableListOf<Track>()
@@ -67,8 +67,14 @@ class SearchViewModel(
                     renderSearchState(SearchState.Error)
                     showToast.postValue(errorMessage)
                 }
-                tracks.isEmpty() -> { renderSearchState(SearchState.Empty) }
-                else -> { renderSearchState(SearchState.Content(tracks)) }
+
+                tracks.isEmpty() -> {
+                    renderSearchState(SearchState.Empty)
+                }
+
+                else -> {
+                    renderSearchState(SearchState.Content(tracks))
+                }
             }
         }
     }

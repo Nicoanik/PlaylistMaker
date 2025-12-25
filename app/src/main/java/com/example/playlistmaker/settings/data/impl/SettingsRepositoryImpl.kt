@@ -10,7 +10,7 @@ import com.example.playlistmaker.settings.domain.SettingsRepository
 class SettingsRepositoryImpl(
     private val sharedPrefs: SharedPreferences,
     private val context: Context
-    ) : SettingsRepository {
+) : SettingsRepository {
 
     override fun saveSettingsThemeMode(set: Boolean) {
         sharedPrefs.edit { putBoolean(THEME_MODE_KEY, set) }

@@ -10,7 +10,7 @@ sealed interface SearchState {
         val tracks: List<Track>
     ) : SearchState
 
-    object Error: SearchState
+    object Error : SearchState
 
     object Empty : SearchState
 

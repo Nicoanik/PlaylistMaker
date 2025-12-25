@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class FavoriteTracksViewModel(
     private val favoritesInteractor: FavoritesInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableLiveData<FavoriteState>()
     fun state(): LiveData<FavoriteState> = _state
@@ -26,7 +26,7 @@ class FavoriteTracksViewModel(
     }
 
     private fun postState(tracks: List<Track>) {
-        if(tracks.isEmpty()) {
+        if (tracks.isEmpty()) {
             _state.postValue(FavoriteState.Empty)
         } else {
             _state.postValue(FavoriteState.Content(tracks))

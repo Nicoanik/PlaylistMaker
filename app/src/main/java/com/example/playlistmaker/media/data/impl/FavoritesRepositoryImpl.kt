@@ -20,9 +20,10 @@ class FavoritesRepositoryImpl(
         appDatabase.trackDao().deleteTrack(trackId)
     }
 
-    override fun getFavorites(): Flow<List<Track>> = appDatabase.trackDao().getTracks().map { tracks ->
-        convertFromTrackEntity(tracks)
-    }
+    override fun getFavorites(): Flow<List<Track>> =
+        appDatabase.trackDao().getTracks().map { tracks ->
+            convertFromTrackEntity(tracks)
+        }
 
     override suspend fun getFavoritesId(): List<Int> {
         return appDatabase.trackDao().getTracksId()
