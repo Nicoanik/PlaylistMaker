@@ -150,4 +150,23 @@
         <item name="itemIconTint">@color/color_selector_navigation</item>
         <item name="itemTextColor">@color/color_selector_navigation</item>
     </style>
+
+    <style name="edit_text_create_playlist">
+        <item name="android:background">@drawable/edit_text_create_playlist</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/text_16sp</item>
+        <item name="android:textColorHint">@color/YP_black</item>
+        <item name="android:paddingStart">@dimen/dp_16</item>
+    </style>
+
+    <style name="create_playlist_button">
+        <item name="android:insetTop">@dimen/dp_0</item>
+        <item name="android:insetBottom">@dimen/dp_0</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">@dimen/text_16sp</item>
+        <item name="android:textColor">@color/YP_white</item>
+    </style>
 </resources>

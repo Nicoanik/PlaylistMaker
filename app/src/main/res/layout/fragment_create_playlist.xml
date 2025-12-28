@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewPlaylist"
-    style="@style/AppBackground">
+    tools:context=".media.ui.fragment.CreatePlaylistFragment">
 
     <ImageView
         android:id="@+id/back_button"
@@ -54,40 +54,51 @@
         android:layout_height="@dimen/dp_0"
         android:layout_marginHorizontal="@dimen/dp_8"
         android:layout_marginTop="82dp"
+        android:background="@drawable/rounded_playlist_photo"
+        android:clickable="true"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_add_photo_100"
+        android:src="@drawable/ic_add_cover_100"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/startBorder"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/rounded_playlist_photo"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/et_title"
+        style="@style/edit_text_create_playlist"
         android:layout_width="@dimen/dp_0"
         android:layout_height="@dimen/dp_56"
         android:layout_marginTop="@dimen/dp_32"
+        android:hint="@string/title"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintStart_toStartOf="@id/startBorder"
         app:layout_constraintTop_toBottomOf="@id/iv_playlist_cover" />
 
     <EditText
         android:id="@+id/et_description"
+        style="@style/edit_text_create_playlist"
         android:layout_width="@dimen/dp_0"
         android:layout_height="@dimen/dp_56"
         android:layout_marginTop="@dimen/dp_16"
+        android:hint="@string/description"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintStart_toStartOf="@id/startBorder"
         app:layout_constraintTop_toBottomOf="@id/et_title" />
 
     <Button
         android:id="@+id/button_create"
+        style="@style/create_playlist_button"
         android:layout_width="@dimen/dp_0"
         android:layout_height="@dimen/dp_44"
+        android:layout_marginHorizontal="1dp"
         android:layout_marginBottom="@dimen/dp_32"
+        android:background="@drawable/create_playlist_button"
+        android:text="@string/create"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/startBorder" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
