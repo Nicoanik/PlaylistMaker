@@ -151,13 +151,26 @@
         <item name="itemTextColor">@color/color_selector_navigation</item>
     </style>
 
+    <style name="custom_text_input_layout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">@dimen/dp_0</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="hintTextColor">@color/text_gray</item>
+        <item name="boxStrokeColor">@color/create_playlist_input_frame</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="hintEnabled">true</item>
+        <item name="cursorColor">@color/YP_black</item>
+    </style>
+
     <style name="edit_text_create_playlist">
-        <item name="android:background">@drawable/edit_text_create_playlist</item>
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">@dimen/text_16sp</item>
         <item name="android:textColorHint">@color/YP_black</item>
         <item name="android:paddingStart">@dimen/dp_16</item>
+        <item name="maxLines">1</item>
+        <item name="android:inputType">text</item>
+        <item name="android:imeOptions">actionDone</item>
     </style>
 
     <style name="create_playlist_button">

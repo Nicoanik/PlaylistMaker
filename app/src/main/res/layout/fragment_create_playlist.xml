@@ -64,27 +64,36 @@
         app:layout_constraintStart_toStartOf="@id/startBorder"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/et_title"
-        style="@style/edit_text_create_playlist"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="@dimen/dp_56"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_title"
+        style="@style/custom_text_input_layout"
         android:layout_marginTop="@dimen/dp_32"
-        android:hint="@string/title"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintStart_toStartOf="@id/startBorder"
-        app:layout_constraintTop_toBottomOf="@id/iv_playlist_cover" />
+        app:layout_constraintTop_toBottomOf="@id/iv_playlist_cover">
 
-    <EditText
-        android:id="@+id/et_description"
-        style="@style/edit_text_create_playlist"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="@dimen/dp_56"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_title"
+            style="@style/edit_text_create_playlist"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:hint="@string/title"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_description"
+        style="@style/custom_text_input_layout"
         android:layout_marginTop="@dimen/dp_16"
-        android:hint="@string/description"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintStart_toStartOf="@id/startBorder"
-        app:layout_constraintTop_toBottomOf="@id/et_title" />
+        app:layout_constraintTop_toBottomOf="@id/input_layout_title">
+
+        <EditText
+            android:id="@+id/et_description"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56"
+            android:hint="@string/description"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/button_create"
@@ -99,6 +108,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/startBorder" />
+        app:layout_constraintStart_toStartOf="@id/startBorder"
+        android:enabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
