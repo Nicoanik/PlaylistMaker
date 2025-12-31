@@ -53,14 +53,11 @@
         android:layout_width="@dimen/dp_0"
         android:layout_height="@dimen/dp_0"
         android:layout_marginHorizontal="@dimen/dp_8"
-        android:layout_marginTop="82dp"
-        android:background="@drawable/rounded_playlist_photo"
+        android:layout_marginTop="@dimen/dp_82"
         android:clickable="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_add_cover_100"
+        android:src="@drawable/create_playlist_cover"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/startBorder"
         app:layout_constraintTop_toTopOf="parent" />
 

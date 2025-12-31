@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
@@ -47,8 +48,10 @@ class CreatePlaylistFragment : Fragment() {
                 if (uri != null) {
                     Glide.with(requireContext())
                         .load(uri)
-                        .centerCrop()
-                        .transform(RoundedCorners(dpToPx(8, requireContext())))
+                        .transform(
+                            CenterCrop(),
+                            RoundedCorners(dpToPx(8, requireContext()))
+                        )
                         .into(binding.ivPlaylistCover)
                 }
             }
