@@ -121,9 +121,7 @@ class CreatePlaylistFragment : Fragment() {
 
     private fun saveImageToPrivateStorage(uri: Uri) {
         val filePath = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myplaylists")
-        if (!filePath.exists()){
-            filePath.mkdirs()
-        }
+        if (!filePath.exists()) filePath.mkdirs()
         val file = File(filePath, "first_cover.jpg")
         val inputStream = requireContext().contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
