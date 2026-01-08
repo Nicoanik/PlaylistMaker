@@ -5,11 +5,12 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
@@ -21,6 +22,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewModel
 import com.example.playlistmaker.search.domain.models.dpToPx
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -31,6 +33,22 @@ class CreatePlaylistFragment : Fragment() {
 
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
+
+    private var coverUri: Uri? = null
+
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                Glide.with(requireContext())
+                    .load(uri)
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(dpToPx(8, requireContext()))
+                    )
+                    .into(binding.ivPlaylistCover)
+                coverUri = uri
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,21 +61,8 @@ class CreatePlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pickMedia =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                if (uri != null) {
-                    Glide.with(requireContext())
-                        .load(uri)
-                        .transform(
-                            CenterCrop(),
-                            RoundedCorners(dpToPx(8, requireContext()))
-                        )
-                        .into(binding.ivPlaylistCover)
-                }
-            }
-
         binding.backButton.setOnClickListener {
-            findNavController().navigateUp()
+            backNavigate()
         }
 
         binding.ivPlaylistCover.setOnClickListener {
@@ -67,6 +72,23 @@ class CreatePlaylistFragment : Fragment() {
         binding.etTitle.addTextChangedListener { text ->
             binding.buttonCreate.isEnabled = !text.isNullOrEmpty()
         }
+
+        binding.buttonCreate.setOnClickListener {
+            coverUri?.let { saveImageToPrivateStorage(it) }
+            viewModel.createPlaylist(
+                binding.etTitle.text?.toString()?.trim(),
+                binding.etDescription.text?.toString()?.trim(),
+                coverUri
+            )
+            Toast.makeText(requireContext(), "Плейлист ${binding.etTitle.text} создан", Toast.LENGTH_LONG).show()
+            findNavController().navigateUp()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                backNavigate()
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -74,22 +96,39 @@ class CreatePlaylistFragment : Fragment() {
         _binding = null
     }
 
-//    private fun saveImageToPrivateStorage(uri: Uri) {
-//        //создаём экземпляр класса File, который указывает на нужный каталог
-//        val filePath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myplaylists")
-//        //создаем каталог, если он не создан
-//        if (!filePath.exists()){
-//            filePath.mkdirs()
-//        }
-//        //создаём экземпляр класса File, который указывает на файл внутри каталога
-//        val file = File(filePath, "first_cover.jpg")
-//        // создаём входящий поток байтов из выбранной картинки
-//        val inputStream = contentResolver.openInputStream(uri)
-//        // создаём исходящий поток байтов в созданный выше файл
-//        val outputStream = FileOutputStream(file)
-//        // записываем картинку с помощью BitmapFactory
-//        BitmapFactory
-//            .decodeStream(inputStream)
-//            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
-//    }
+    private fun render() {
+
+    }
+
+    private fun backNavigate() {
+        if ((coverUri != null) or !binding.etTitle.text.isNullOrEmpty() or !binding.etDescription.text.isNullOrEmpty()) {
+            showDialog()
+        } else {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun showDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.finish_create_playlist)
+            .setMessage(R.string.data_will_be_to_lost)
+            .setNeutralButton(R.string.cancel) { dialog, which -> }
+            .setPositiveButton(R.string.complete) { dialog, which ->
+                findNavController().navigateUp()
+            }
+            .show()
+    }
+
+    private fun saveImageToPrivateStorage(uri: Uri) {
+        val filePath = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myplaylists")
+        if (!filePath.exists()){
+            filePath.mkdirs()
+        }
+        val file = File(filePath, "first_cover.jpg")
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val outputStream = FileOutputStream(file)
+        BitmapFactory
+            .decodeStream(inputStream)
+            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+    }
 }
