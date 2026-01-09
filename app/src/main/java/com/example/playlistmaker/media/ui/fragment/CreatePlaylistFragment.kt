@@ -21,7 +21,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewModel
-import com.example.playlistmaker.search.domain.models.dpToPx
+import com.example.playlistmaker.media.domain.models.dpToPx
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
@@ -76,7 +76,7 @@ class CreatePlaylistFragment : Fragment() {
         binding.buttonCreate.setOnClickListener {
             coverUri?.let { saveImageToPrivateStorage(it) }
             viewModel.createPlaylist(
-                binding.etTitle.text?.toString()?.trim(),
+                binding.etTitle.text.toString().trim(),
                 binding.etDescription.text?.toString()?.trim(),
                 coverUri
             )

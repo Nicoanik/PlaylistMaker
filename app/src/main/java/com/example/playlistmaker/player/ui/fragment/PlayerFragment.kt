@@ -13,9 +13,9 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
-import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.domain.models.dpToPx
-import com.example.playlistmaker.search.domain.models.timeConversion
+import com.example.playlistmaker.media.domain.models.Track
+import com.example.playlistmaker.media.domain.models.dpToPx
+import com.example.playlistmaker.media.domain.models.timeConversion
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue

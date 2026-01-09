@@ -2,7 +2,7 @@ package com.example.playlistmaker.search.ui.fragment
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.domain.models.Track
 
 class TracksAdapter(
     val onItemClickListener: OnItemClickListener
