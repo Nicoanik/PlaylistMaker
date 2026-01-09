@@ -11,6 +11,6 @@ data class PlaylistEntity(
     val description: String?,
     val coverUri: String?,
     val trackIdsJson: String,
-    val playlistSize: Long,
+    val playlistSize: Int,
     val timestamp: Long
 )

@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.ui.view_model.PlaylistState
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -19,6 +23,10 @@ class PlaylistsFragment : Fragment() {
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
+
+    private lateinit var adapter: PlaylistAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +39,20 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        playlistViewModel.getPlaylists()
+
+        onPlaylistClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { playlist ->
+            //Будущее открытие плейлиста
+        }
+
+        adapter = PlaylistAdapter { playlist -> onPlaylistClickDebounce(playlist)}
+        binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvPlaylists.adapter = adapter
 
         playlistViewModel.state().observe(viewLifecycleOwner) {
             renderSearch(it)
@@ -51,25 +73,32 @@ class PlaylistsFragment : Fragment() {
     private fun renderSearch(state: PlaylistState) {
         when (state) {
             is PlaylistState.Empty -> showPlaceholder()
-            is PlaylistState.Content -> showContent()
+            is PlaylistState.Content -> showContent(state.playlists)
         }
     }
 
     private fun showPlaceholder() {
         binding.apply {
+            rvPlaylists.isVisible = false
             ivPlaceholderImage.isVisible = true
             tvPlaceholderMessage.isVisible = true
         }
     }
 
-    private fun showContent() {
+    private fun showContent(playlists: List<Playlist>) {
+        adapter.playlists.clear()
+        adapter.playlists.addAll(playlists)
+        adapter.notifyDataSetChanged()
         binding.apply {
             ivPlaceholderImage.isVisible = false
             tvPlaceholderMessage.isVisible = false
+            rvPlaylists.isVisible = true
         }
     }
 
     companion object {
         fun newInstance() = PlaylistsFragment()
+
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
