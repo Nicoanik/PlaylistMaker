@@ -3,7 +3,7 @@ package com.example.playlistmaker.media.ui.view_model
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.media.domain.db.PlaylistInteractor
+import com.example.playlistmaker.media.domain.PlaylistInteractor
 import com.example.playlistmaker.media.domain.models.Playlist
 import kotlinx.coroutines.launch
 

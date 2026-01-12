@@ -80,19 +80,25 @@ class CreatePlaylistFragment : Fragment() {
                 binding.etDescription.text?.toString()?.trim(),
                 coverUri
             )
-            Toast.makeText(requireContext(), "Плейлист ${binding.etTitle.text} создан", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Плейлист ${binding.etTitle.text} создан",
+                Toast.LENGTH_LONG
+            ).show()
             findNavController().navigateUp()
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                backNavigate()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    backNavigate()
+                }
+            })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
@@ -116,7 +122,10 @@ class CreatePlaylistFragment : Fragment() {
     }
 
     private fun saveImageToPrivateStorage(uri: Uri) {
-        val filePath = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myplaylists")
+        val filePath = File(
+            requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            "myplaylists"
+        )
         if (!filePath.exists()) filePath.mkdirs()
         val file = File(filePath, "first_cover.jpg")
         val inputStream = requireContext().contentResolver.openInputStream(uri)

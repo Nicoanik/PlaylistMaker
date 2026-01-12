@@ -9,5 +9,5 @@
     <color name="YP_light_gray">#E6E8EB</color>
     <color name="Light_Icon">#99A2AD</color>
     <color name="button_media">#401A1B22</color>
-    <color name="overlay">#99000000</color>
+    <color name="overlay">#FF000000</color>
 </resources>

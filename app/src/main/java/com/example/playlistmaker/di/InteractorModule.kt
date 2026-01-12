@@ -1,7 +1,7 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.media.domain.db.FavoritesInteractor
-import com.example.playlistmaker.media.domain.db.PlaylistInteractor
+import com.example.playlistmaker.media.domain.FavoritesInteractor
+import com.example.playlistmaker.media.domain.PlaylistInteractor
 import com.example.playlistmaker.media.domain.impl.FavoritesInteractorImpl
 import com.example.playlistmaker.media.domain.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.search.domain.SearchHistoryInteractor

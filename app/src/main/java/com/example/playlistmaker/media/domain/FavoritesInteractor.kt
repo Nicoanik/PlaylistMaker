@@ -1,9 +1,9 @@
-package com.example.playlistmaker.media.domain.db
+package com.example.playlistmaker.media.domain
 
 import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
-interface FavoritesRepository {
+interface FavoritesInteractor {
 
     suspend fun addToFavorites(track: Track)
 
@@ -11,5 +11,5 @@ interface FavoritesRepository {
 
     fun getFavorites(): Flow<List<Track>>
 
-    suspend fun getFavoritesId(): List<Int>
+    suspend fun isTrackFavorite(trackId: Int?): Boolean
 }

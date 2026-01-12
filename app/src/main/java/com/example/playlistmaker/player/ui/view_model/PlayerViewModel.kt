@@ -5,8 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.media.domain.db.FavoritesInteractor
-import com.example.playlistmaker.media.domain.db.PlaylistInteractor
+import com.example.playlistmaker.media.domain.FavoritesInteractor
+import com.example.playlistmaker.media.domain.PlaylistInteractor
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.player.ui.view_model.PlayerState.Companion.PLAYBACK_DEF
 import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.Job
@@ -50,6 +51,17 @@ class PlayerViewModel(
                     )
                 }
         }
+    }
+
+    fun addTrackToPlaylist(playlist: Playlist) {
+        if (track.trackId!!.toLong() in playlist.trackIds) {
+
+        } else {
+            viewModelScope.launch {
+                playlistInteractor.addTrackToPlaylist(track, playlist)
+            }
+        }
+
     }
 
     override fun onCleared() {

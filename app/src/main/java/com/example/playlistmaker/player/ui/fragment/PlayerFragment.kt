@@ -1,6 +1,7 @@
 package com.example.playlistmaker.player.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -114,7 +115,9 @@ class PlayerFragment : Fragment() {
                 }
             }
 
-            override fun onSlide(p0: View, p1: Float) {}
+            override fun onSlide(p0: View, p1: Float) {
+                binding.overlay.alpha = (p1 + 1f) / 2f
+            }
         })
 
         binding.playButton.setOnClickListener {
