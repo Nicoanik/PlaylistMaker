@@ -96,10 +96,6 @@ class CreatePlaylistFragment : Fragment() {
         _binding = null
     }
 
-    private fun render() {
-
-    }
-
     private fun backNavigate() {
         if ((coverUri != null) or !binding.etTitle.text.isNullOrEmpty() or !binding.etDescription.text.isNullOrEmpty()) {
             showDialog()
