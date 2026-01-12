@@ -16,6 +16,7 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue
@@ -41,6 +42,11 @@ class PlayerFragment : Fragment() {
 
         val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
 
+        val bottomSheetContainer = binding.bottomSheet
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
         viewModel.state().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -64,6 +70,22 @@ class PlayerFragment : Fragment() {
         binding.backButtonAudioPlayer.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.queueButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(p0: View, p1: Int) {
+                when (p1) {
+                    BottomSheetBehavior.STATE_HIDDEN -> binding.overlay.isVisible = false
+                    else -> binding.overlay.isVisible = true
+                }
+            }
+
+            override fun onSlide(p0: View, p1: Float) {}
+        })
 
         binding.playButton.setOnClickListener {
             viewModel.onPlayButtonClicked()
