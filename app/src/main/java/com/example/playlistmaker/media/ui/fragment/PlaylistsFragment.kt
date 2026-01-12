@@ -50,7 +50,7 @@ class PlaylistsFragment : Fragment() {
             //Будущее открытие плейлиста
         }
 
-        adapter = PlaylistAdapter { playlist -> onPlaylistClickDebounce(playlist)}
+        adapter = PlaylistAdapter { playlist -> onPlaylistClickDebounce(playlist) }
         binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvPlaylists.adapter = adapter
 

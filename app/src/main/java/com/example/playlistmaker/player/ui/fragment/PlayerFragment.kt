@@ -6,16 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
+import com.example.playlistmaker.search.ui.fragment.TracksAdapter
+import com.example.playlistmaker.utils.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -25,6 +30,10 @@ class PlayerFragment : Fragment() {
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
+
+    private lateinit var adapter: PlayerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +50,22 @@ class PlayerFragment : Fragment() {
         val track: Track = arguments?.getParcelable(ARGS_TRACK)!!
 
         val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
+
+        onPlaylistClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { playlist ->
+
+        }
+
+        adapter = PlayerAdapter { playlist -> onPlaylistClickDebounce(playlist) }
+        binding.rvAddToPlaylist.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        binding.rvAddToPlaylist.adapter = adapter
 
         val bottomSheetContainer = binding.bottomSheet
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
@@ -73,6 +98,11 @@ class PlayerFragment : Fragment() {
 
         binding.queueButton.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            viewModel.getPlaylists()
+        }
+
+        binding.addToPlaylistButton.setOnClickListener {
+            findNavController().navigate(R.id.action_playerFragment_to_createPlaylist)
         }
 
         bottomSheetBehavior.addBottomSheetCallback(object :
@@ -106,6 +136,13 @@ class PlayerFragment : Fragment() {
         binding.tvPlaybackProgress.text = state.progress
         when (state) {
             is PlayerState.Playing -> binding.playButton.setImageResource(R.drawable.pause_button_100)
+            is PlayerState.BottomSheetContent -> {
+                if (state.playlists.isNotEmpty()) {
+                    adapter.playlists.clear()
+                    adapter.playlists.addAll(state.playlists)
+                    adapter.notifyDataSetChanged()
+                }
+            }
             else -> binding.playButton.setImageResource(R.drawable.play_button_100)
         }
         when (state.isFavorite) {
@@ -116,6 +153,7 @@ class PlayerFragment : Fragment() {
 
     companion object {
         private const val ARGS_TRACK = "track"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
         fun createArgs(track: Track) = Bundle().apply { putParcelable(ARGS_TRACK, track) }
     }
 }
