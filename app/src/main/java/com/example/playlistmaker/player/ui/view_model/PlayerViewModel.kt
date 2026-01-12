@@ -42,23 +42,18 @@ class PlayerViewModel(
             playlistInteractor
                 .getPlaylists()
                 .collect { playlists ->
-                    _state.postValue(
-                        PlayerState.BottomSheetContent(
-                            isFavorite,
-                            getCurrentPlayerPosition(),
-                            playlists
-                        )
-                    )
+                    _state.postValue(PlayerState.BottomSheetContent(playlists))
                 }
         }
     }
 
     fun addTrackToPlaylist(playlist: Playlist) {
         if (track.trackId!!.toLong() in playlist.trackIds) {
-
+            _state.postValue(PlayerState.InPlaylist(false))
         } else {
             viewModelScope.launch {
                 playlistInteractor.addTrackToPlaylist(track, playlist)
+                _state.postValue(PlayerState.InPlaylist(true))
             }
         }
 
@@ -70,10 +65,9 @@ class PlayerViewModel(
     }
 
     fun onPlayButtonClicked() {
-        when (_state.value) {
-            is PlayerState.Playing -> pausePlayer()
-            is PlayerState.Prepared, is PlayerState.Paused -> startPlayer()
-            else -> {}
+        when (mediaPlayer.isPlaying) {
+            true -> pausePlayer()
+            false -> startPlayer()
         }
     }
 
@@ -84,53 +78,36 @@ class PlayerViewModel(
                 false -> favoritesInteractor.addToFavorites(track)
             }
             isFavorite()
-            when (_state.value) {
-                is PlayerState.Prepared -> _state.postValue(PlayerState.Prepared(isFavorite))
-                is PlayerState.Playing -> _state.postValue(
-                    PlayerState.Playing(
-                        isFavorite,
-                        getCurrentPlayerPosition()
-                    )
-                )
-
-                is PlayerState.Paused -> _state.postValue(
-                    PlayerState.Paused(
-                        isFavorite,
-                        getCurrentPlayerPosition()
-                    )
-                )
-
-                else -> {}
-            }
         }
     }
 
     private suspend fun isFavorite() {
         isFavorite = favoritesInteractor.isTrackFavorite(track.trackId)
+        if (isFavorite) _state.postValue(PlayerState.Favorite(isFavorite))
     }
 
     private fun preparePlayer() {
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            _state.postValue(PlayerState.Prepared(isFavorite))
+            _state.postValue(PlayerState.Prepared(true))
         }
         mediaPlayer.setOnCompletionListener {
             timerJob?.cancel()
-            _state.postValue(PlayerState.Prepared(isFavorite))
+            _state.postValue(PlayerState.Prepared(true))
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
+        _state.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
         startTimer()
     }
 
     private fun pausePlayer() {
         timerJob?.cancel()
         mediaPlayer.pause()
-        _state.postValue(PlayerState.Paused(isFavorite, getCurrentPlayerPosition()))
+        _state.postValue(PlayerState.Paused(getCurrentPlayerPosition()))
     }
 
     private fun releasePlayer() {
@@ -144,7 +121,7 @@ class PlayerViewModel(
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
                 delay(DELAY_TIME_PROGRESS)
-                _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
+                _state.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
             }
         }
     }

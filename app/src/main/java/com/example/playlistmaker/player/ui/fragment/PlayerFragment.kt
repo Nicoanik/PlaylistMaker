@@ -1,10 +1,10 @@
 package com.example.playlistmaker.player.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -20,7 +20,6 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
-import com.example.playlistmaker.search.ui.fragment.TracksAdapter
 import com.example.playlistmaker.utils.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -57,7 +56,7 @@ class PlayerFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope,
             false
         ) { playlist ->
-
+            viewModel.addTrackToPlaylist(playlist)
         }
 
         adapter = PlayerAdapter { playlist -> onPlaylistClickDebounce(playlist) }
@@ -135,10 +134,32 @@ class PlayerFragment : Fragment() {
     }
 
     private fun render(state: PlayerState) {
-        binding.playButton.isVisible = state.isPlayButtonEnabled
-        binding.tvPlaybackProgress.text = state.progress
         when (state) {
-            is PlayerState.Playing -> binding.playButton.setImageResource(R.drawable.pause_button_100)
+            is PlayerState.Prepared -> {
+                binding.playButton.setImageResource(R.drawable.play_button_100)
+                binding.playButton.isVisible = state.isPlayButtonEnabled
+                binding.tvPlaybackProgress.text = PLAYBACK_DEF
+            }
+            is PlayerState.Playing -> {
+                binding.playButton.setImageResource(R.drawable.pause_button_100)
+                binding.tvPlaybackProgress.text = state.progress
+            }
+            is PlayerState.Paused -> {
+                binding.playButton.setImageResource(R.drawable.play_button_100)
+                binding.tvPlaybackProgress.text = state.progress
+            }
+            is PlayerState.Favorite -> {
+                when (state.isFavorite) {
+                    true -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
+                    false -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_false_51)
+                }
+            }
+            is PlayerState.InPlaylist -> {
+                when (state.inPlaylist) {
+                    false -> Toast.makeText(requireContext(), "Трек уже добавлен в плейлист [название плейлиста]", Toast.LENGTH_LONG).show()
+                    true -> Toast.makeText(requireContext(), "Добавлено в плейлист [название плейлиста]", Toast.LENGTH_LONG).show()
+                }
+            }
             is PlayerState.BottomSheetContent -> {
                 if (state.playlists.isNotEmpty()) {
                     adapter.playlists.clear()
@@ -146,15 +167,12 @@ class PlayerFragment : Fragment() {
                     adapter.notifyDataSetChanged()
                 }
             }
-            else -> binding.playButton.setImageResource(R.drawable.play_button_100)
-        }
-        when (state.isFavorite) {
-            true -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
-            false -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_false_51)
         }
     }
 
     companion object {
+
+        const val PLAYBACK_DEF = "00:00"
         private const val ARGS_TRACK = "track"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         fun createArgs(track: Track) = Bundle().apply { putParcelable(ARGS_TRACK, track) }
