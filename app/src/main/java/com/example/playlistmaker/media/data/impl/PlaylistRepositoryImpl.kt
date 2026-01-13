@@ -28,11 +28,9 @@ class PlaylistRepositoryImpl(
             convertFromPlaylistEntity(playlists)
         }
 
-
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         withContext(Dispatchers.IO) {
             appDatabase.playlistTrackDao().insertTrack(playlistTrackDbConverter.map(track))
-
             appDatabase.playlistDao().addPlaylist(
                 playlistBdConverter.map(
                     playlist.copy(

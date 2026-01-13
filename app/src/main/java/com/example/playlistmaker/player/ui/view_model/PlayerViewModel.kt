@@ -49,11 +49,11 @@ class PlayerViewModel(
 
     fun addTrackToPlaylist(playlist: Playlist) {
         if (track.trackId!!.toLong() in playlist.trackIds) {
-            _state.postValue(PlayerState.InPlaylist(false))
+            _state.postValue(PlayerState.InPlaylist(false, playlist.title))
         } else {
             viewModelScope.launch {
                 playlistInteractor.addTrackToPlaylist(track, playlist)
-                _state.postValue(PlayerState.InPlaylist(true))
+                _state.postValue(PlayerState.InPlaylist(true, playlist.title))
             }
         }
 
@@ -83,18 +83,18 @@ class PlayerViewModel(
 
     private suspend fun isFavorite() {
         isFavorite = favoritesInteractor.isTrackFavorite(track.trackId)
-        if (isFavorite) _state.postValue(PlayerState.Favorite(isFavorite))
+        _state.postValue(PlayerState.IsFavorite(isFavorite))
     }
 
     private fun preparePlayer() {
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            _state.postValue(PlayerState.Prepared(true))
+            _state.postValue(PlayerState.Prepared(true, PLAYBACK_DEF))
         }
         mediaPlayer.setOnCompletionListener {
             timerJob?.cancel()
-            _state.postValue(PlayerState.Prepared(true))
+            _state.postValue(PlayerState.Prepared(true, PLAYBACK_DEF))
         }
     }
 

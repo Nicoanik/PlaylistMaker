@@ -17,11 +17,13 @@ class CreatePlaylistViewModel(
         cover: Uri?
     ) {
         viewModelScope.launch {
-            playlistInteractor.addPlaylist(Playlist(
-                title = title,
-                description = description,
-                coverUri = cover.toString()
-            ))
+            playlistInteractor.addPlaylist(
+                Playlist(
+                    title = title,
+                    description = description,
+                    coverUri = cover.toString()
+                )
+            )
         }
     }
 }

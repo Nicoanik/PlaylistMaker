@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.media.domain.models.Track
@@ -29,8 +30,10 @@ class FavoriteTracksViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.album_cover_placeholder)
-            .centerCrop()
-            .transform(RoundedCorners(dpToPx(2, itemView.context)))
+            .transform(
+                CenterCrop(),
+                RoundedCorners(dpToPx(8, itemView.context))
+            )
             .into(artworkUrl100View)
     }
 }

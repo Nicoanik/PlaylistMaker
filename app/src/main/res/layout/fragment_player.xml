@@ -294,7 +294,7 @@
             android:text="@string/add_to_playlist" />
 
         <Button
-            android:id="@+id/add_to_playlist_button"
+            android:id="@+id/add_playlist_button"
             style="@style/media_buttons"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_36"

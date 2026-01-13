@@ -8,7 +8,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.PlaylistViewBinding
 import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.domain.models.dpToPx
-import java.io.File
 
 class PlaylistViewHolder(
     private val binding: PlaylistViewBinding
