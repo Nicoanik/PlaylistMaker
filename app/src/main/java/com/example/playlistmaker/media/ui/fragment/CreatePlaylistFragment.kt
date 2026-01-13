@@ -74,7 +74,7 @@ class CreatePlaylistFragment : Fragment() {
         }
 
         binding.buttonCreate.setOnClickListener {
-            coverUri?.let { saveImageToPrivateStorage(it) }
+            coverUri?.let { viewModel.saveImageToPrivateStorage(it) }
             viewModel.createPlaylist(
                 binding.etTitle.text.toString().trim(),
                 binding.etDescription.text?.toString()?.trim(),
@@ -119,19 +119,5 @@ class CreatePlaylistFragment : Fragment() {
                 findNavController().navigateUp()
             }
             .show()
-    }
-
-    private fun saveImageToPrivateStorage(uri: Uri) {
-        val filePath = File(
-            requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-            "myplaylists"
-        )
-        if (!filePath.exists()) filePath.mkdirs()
-        val file = File(filePath, "first_cover.jpg")
-        val inputStream = requireContext().contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 }

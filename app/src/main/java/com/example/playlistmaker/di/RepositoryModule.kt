@@ -1,8 +1,5 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.media.data.converters.PlaylistDbConverter
-import com.example.playlistmaker.media.data.converters.PlaylistTrackDbConvertor
-import com.example.playlistmaker.media.data.converters.TrackDbConverter
 import com.example.playlistmaker.media.data.impl.FavoritesRepositoryImpl
 import com.example.playlistmaker.media.data.impl.PlaylistRepositoryImpl
 import com.example.playlistmaker.media.domain.FavoritesRepository
@@ -13,7 +10,6 @@ import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.example.playlistmaker.search.domain.SearchTracksRepository
 import com.example.playlistmaker.settings.data.impl.SettingsRepositoryImpl
 import com.example.playlistmaker.settings.domain.SettingsRepository
-import com.example.playlistmaker.sharing.ExternalNavigator
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -31,21 +27,17 @@ val repositoryModule = module {
         SettingsRepositoryImpl(get(), androidContext())
     }
 
-    single<ExternalNavigator> {
-        ExternalNavigator(get())
-    }
-
-    factory { TrackDbConverter() }
-
     factory<FavoritesRepository> {
         FavoritesRepositoryImpl(get(), get())
     }
 
-    factory { PlaylistDbConverter(get()) }
-
-    factory { PlaylistTrackDbConvertor() }
-
     factory<PlaylistRepository> {
-        PlaylistRepositoryImpl(get(), get(), get())
+        PlaylistRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
     }
 }

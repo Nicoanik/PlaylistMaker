@@ -25,6 +25,11 @@ class PlayerViewHolder(
             )
             .into(binding.ivPlaylistCover)
         binding.tvPlaylistTitle.text = playlist.title
-        binding.tvPlaylistSize.text = playlist.playlistSize.toString()
+        binding.tvPlaylistSize.text = itemView.resources.getQuantityString(
+            R.plurals.playlist_size,
+            playlist.playlistSize,
+            playlist.playlistSize
+        )
+
     }
 }

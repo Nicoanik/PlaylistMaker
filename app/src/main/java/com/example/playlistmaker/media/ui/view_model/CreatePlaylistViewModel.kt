@@ -11,6 +11,10 @@ class CreatePlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
+    fun saveImageToPrivateStorage(uri: Uri) {
+        playlistInteractor.saveImageToPrivateStorage(uri)
+    }
+
     fun createPlaylist(
         title: String,
         description: String?,
