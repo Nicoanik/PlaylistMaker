@@ -9,7 +9,7 @@ import com.example.playlistmaker.sharing.domain.SharingInteractor
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
     private val sharingInteractor: SharingInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<Boolean>()
     fun observeState(): LiveData<Boolean> = stateLiveData

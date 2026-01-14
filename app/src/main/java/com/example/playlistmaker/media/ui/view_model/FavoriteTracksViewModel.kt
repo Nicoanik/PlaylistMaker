@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.media.domain.db.FavoritesInteractor
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.domain.FavoritesInteractor
+import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.launch
 
 class FavoriteTracksViewModel(
     private val favoritesInteractor: FavoritesInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableLiveData<FavoriteState>()
     fun state(): LiveData<FavoriteState> = _state
@@ -26,7 +26,7 @@ class FavoriteTracksViewModel(
     }
 
     private fun postState(tracks: List<Track>) {
-        if(tracks.isEmpty()) {
+        if (tracks.isEmpty()) {
             _state.postValue(FavoriteState.Empty)
         } else {
             _state.postValue(FavoriteState.Content(tracks))

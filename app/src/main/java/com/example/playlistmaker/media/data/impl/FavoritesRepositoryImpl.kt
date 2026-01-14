@@ -1,34 +1,36 @@
 package com.example.playlistmaker.media.data.impl
 
 import com.example.playlistmaker.media.data.converters.TrackDbConverter
-import com.example.playlistmaker.media.data.db.AppDatabase
-import com.example.playlistmaker.media.data.db.entity.TrackEntity
-import com.example.playlistmaker.media.domain.db.FavoritesRepository
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.data.db.dao.FavoriteTrackDao
+import com.example.playlistmaker.media.data.db.entity.FavoriteTrackEntity
+import com.example.playlistmaker.media.domain.FavoritesRepository
+import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class FavoritesRepositoryImpl(
-    private val appDatabase: AppDatabase,
+    private val favoriteTrackDao: FavoriteTrackDao,
     private val trackDbConverter: TrackDbConverter
 ) : FavoritesRepository {
     override suspend fun addToFavorites(track: Track) {
-        appDatabase.trackDao().insertTrack(trackDbConverter.map(track))
+        favoriteTrackDao.insertTrack(trackDbConverter.map(track))
     }
 
     override suspend fun deleteFromFavorites(trackId: Int?) {
-        appDatabase.trackDao().deleteTrack(trackId)
+        favoriteTrackDao.deleteTrack(trackId)
     }
 
-    override fun getFavorites(): Flow<List<Track>> = appDatabase.trackDao().getTracks().map { tracks ->
-        convertFromTrackEntity(tracks)
-    }
+    override fun getFavorites(): Flow<List<Track>> =
+        favoriteTrackDao.getTracks()
+            .map { tracks -> convertFromTrackEntity(tracks) }
+            .distinctUntilChanged()
 
     override suspend fun getFavoritesId(): List<Int> {
-        return appDatabase.trackDao().getTracksId()
+        return favoriteTrackDao.getTracksId()
     }
 
-    private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {
+    private fun convertFromTrackEntity(tracks: List<FavoriteTrackEntity>): List<Track> {
         return tracks.map { track -> trackDbConverter.map(track) }
     }
 }

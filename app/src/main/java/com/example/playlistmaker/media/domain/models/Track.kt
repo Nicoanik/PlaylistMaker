@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.domain.models
+package com.example.playlistmaker.media.domain.models
 
 import android.content.Context
 import android.os.Parcelable
@@ -20,9 +20,9 @@ data class Track(
     val country: String?,
     val artworkUrl100: String?,
     val previewUrl: String?
-): Parcelable
+) : Parcelable
 
-fun timeConversion(time: Long?) : String {
+fun timeConversion(time: Long?): String {
     if (time == null) return ""
     return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
 }

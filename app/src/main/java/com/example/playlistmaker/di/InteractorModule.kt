@@ -1,7 +1,9 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.media.domain.FavoritesInteractor
+import com.example.playlistmaker.media.domain.PlaylistInteractor
 import com.example.playlistmaker.media.domain.impl.FavoritesInteractorImpl
+import com.example.playlistmaker.media.domain.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.search.domain.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
@@ -15,23 +17,27 @@ import org.koin.dsl.module
 
 val interactorModule = module {
 
-    factory <SearchTracksInteractor> {
+    factory<SearchTracksInteractor> {
         SearchTracksInteractorImpl(get())
     }
 
-    factory <SearchHistoryInteractor> {
+    factory<SearchHistoryInteractor> {
         SearchHistoryInteractorImpl(get())
     }
 
-    factory <SettingsInteractor> {
+    factory<SettingsInteractor> {
         SettingsInteractorImpl(get())
     }
 
-    factory <SharingInteractor> {
-        SharingInteractorImpl(get(),androidContext())
+    factory<SharingInteractor> {
+        SharingInteractorImpl(get(), androidContext())
     }
 
-    factory <FavoritesInteractor> {
+    factory<FavoritesInteractor> {
         FavoritesInteractorImpl(get())
+    }
+
+    factory<PlaylistInteractor> {
+        PlaylistInteractorImpl(get())
     }
 }

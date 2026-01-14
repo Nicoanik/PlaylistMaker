@@ -2,11 +2,11 @@ package com.example.playlistmaker.media.ui.fragment
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.domain.models.Track
 
 class FavoriteTracksAdapter(
     val onItemClickListener: OnItemClickListener
-): RecyclerView.Adapter<FavoriteTracksViewHolder> () {
+) : RecyclerView.Adapter<FavoriteTracksViewHolder>() {
 
     val tracks: MutableList<Track> = mutableListOf()
 

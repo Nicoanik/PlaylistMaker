@@ -6,20 +6,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.domain.models.dpToPx
-import com.example.playlistmaker.search.domain.models.timeConversion
+import com.example.playlistmaker.media.domain.models.Track
+import com.example.playlistmaker.media.domain.models.dpToPx
+import com.example.playlistmaker.media.domain.models.timeConversion
 
-class FavoriteTracksViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
+class FavoriteTracksViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
-        .inflate(R.layout.track_view, parent, false)) {
+        .inflate(R.layout.track_view, parent, false)
+) {
 
-    private val trackNameView: TextView = itemView.findViewById(R.id.track_name)
-    private val artistNameView: TextView = itemView.findViewById(R.id.artist_name)
+    private val trackNameView: TextView = itemView.findViewById(R.id.tv_track_name)
+    private val artistNameView: TextView = itemView.findViewById(R.id.tv_artist_name)
     private val trackTimeView: TextView = itemView.findViewById(R.id.tv_track_time)
-    private val artworkUrl100View: ImageView = itemView.findViewById(R.id.album_cover)
+    private val artworkUrl100View: ImageView = itemView.findViewById(R.id.iv_album_cover)
 
     fun bind(track: Track) {
         trackNameView.text = track.trackName
@@ -28,8 +30,10 @@ class FavoriteTracksViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.album_cover_placeholder)
-            .centerCrop()
-            .transform(RoundedCorners(dpToPx(2, itemView.context)))
+            .transform(
+                CenterCrop(),
+                RoundedCorners(dpToPx(8, itemView.context))
+            )
             .into(artworkUrl100View)
     }
 }

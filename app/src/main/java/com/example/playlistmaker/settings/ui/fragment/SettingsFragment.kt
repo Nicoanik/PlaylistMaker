@@ -22,7 +22,7 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return  binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,15 +40,15 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        binding.shareButtonSettings.setOnClickListener{
+        binding.shareButtonSettings.setOnClickListener {
             viewModel.shareApp()
         }
 
-        binding.supportButtonSettings.setOnClickListener{
+        binding.supportButtonSettings.setOnClickListener {
             viewModel.openSupport()
         }
 
-        binding.agreementButtonSettings.setOnClickListener{
+        binding.agreementButtonSettings.setOnClickListener {
             viewModel.openTerms()
         }
     }

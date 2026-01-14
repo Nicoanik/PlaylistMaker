@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="312dp"
+        android:height="312dp"
+        android:gravity="center">
+        <shape android:shape="rectangle">
+            <stroke
+                android:color="@color/text_gray"
+                android:width="@dimen/dp_1"
+                android:dashWidth="@dimen/dp_30"
+                android:dashGap="@dimen/dp_30"/>
+            <corners android:radius="@dimen/dp_8"/>
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/ic_add_cover_100"
+        android:gravity="center"
+        android:width="100dp"
+        android:height="100dp">
+    </item>
+</layer-list>

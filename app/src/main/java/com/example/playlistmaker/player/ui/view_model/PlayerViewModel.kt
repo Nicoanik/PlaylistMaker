@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.media.domain.FavoritesInteractor
+import com.example.playlistmaker.media.domain.PlaylistInteractor
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.player.ui.view_model.PlayerState.Companion.PLAYBACK_DEF
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,8 +20,9 @@ import java.util.Locale
 class PlayerViewModel(
     private val track: Track,
     private val mediaPlayer: MediaPlayer,
-    private val favoritesInteractor: FavoritesInteractor
-): ViewModel() {
+    private val favoritesInteractor: FavoritesInteractor,
+    private val playlistInteractor: PlaylistInteractor
+) : ViewModel() {
 
     private var isFavorite = false
     private val _state = MutableLiveData<PlayerState>()
@@ -34,16 +37,37 @@ class PlayerViewModel(
         }
     }
 
+    fun getPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor
+                .getPlaylists()
+                .collect { playlists ->
+                    _state.postValue(PlayerState.BottomSheetContent(playlists))
+                }
+        }
+    }
+
+    fun addTrackToPlaylist(playlist: Playlist) {
+        if (track.trackId!!.toLong() in playlist.trackIds) {
+            _state.postValue(PlayerState.InPlaylist(false, playlist.title))
+        } else {
+            viewModelScope.launch {
+                playlistInteractor.addTrackToPlaylist(track, playlist)
+                _state.postValue(PlayerState.InPlaylist(true, playlist.title))
+            }
+        }
+
+    }
+
     override fun onCleared() {
         super.onCleared()
         releasePlayer()
     }
 
     fun onPlayButtonClicked() {
-        when(_state.value) {
-            is PlayerState.Playing -> pausePlayer()
-            is PlayerState.Prepared, is PlayerState.Paused -> startPlayer()
-            else -> {}
+        when (mediaPlayer.isPlaying) {
+            true -> pausePlayer()
+            false -> startPlayer()
         }
     }
 
@@ -54,41 +78,36 @@ class PlayerViewModel(
                 false -> favoritesInteractor.addToFavorites(track)
             }
             isFavorite()
-            when (_state.value) {
-                is PlayerState.Prepared -> _state.postValue(PlayerState.Prepared(isFavorite))
-                is PlayerState.Playing -> _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
-                is PlayerState.Paused -> _state.postValue(PlayerState.Paused(isFavorite, getCurrentPlayerPosition()))
-                else -> {}
-            }
         }
     }
 
     private suspend fun isFavorite() {
         isFavorite = favoritesInteractor.isTrackFavorite(track.trackId)
+        _state.postValue(PlayerState.IsFavorite(isFavorite))
     }
 
     private fun preparePlayer() {
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            _state.postValue(PlayerState.Prepared(isFavorite))
+            _state.postValue(PlayerState.Prepared(true, PLAYBACK_DEF))
         }
         mediaPlayer.setOnCompletionListener {
             timerJob?.cancel()
-            _state.postValue(PlayerState.Prepared(isFavorite))
+            _state.postValue(PlayerState.Prepared(true, PLAYBACK_DEF))
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
+        _state.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
         startTimer()
     }
 
     private fun pausePlayer() {
         timerJob?.cancel()
         mediaPlayer.pause()
-        _state.postValue(PlayerState.Paused(isFavorite, getCurrentPlayerPosition()))
+        _state.postValue(PlayerState.Paused(getCurrentPlayerPosition()))
     }
 
     private fun releasePlayer() {
@@ -102,13 +121,14 @@ class PlayerViewModel(
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
                 delay(DELAY_TIME_PROGRESS)
-                _state.postValue(PlayerState.Playing(isFavorite, getCurrentPlayerPosition()))
+                _state.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
             }
         }
     }
 
     private fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition) ?: PLAYBACK_DEF
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            ?: PLAYBACK_DEF
     }
 
 
