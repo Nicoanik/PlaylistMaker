@@ -1,6 +1,6 @@
 [versions]
 activityKtx = "1.12.2"
-agp = "8.13.2"
+agp = "9.0.0"
 fragmentKtx = "1.8.9"
 glide = "5.0.5"
 gson = "2.13.2"
