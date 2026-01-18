@@ -36,6 +36,12 @@ class PlaylistRepositoryImpl(
             convertFromPlaylistEntity(playlists)
         }
 
+    override fun getPlaylistById(playlistId: Long): Flow<Playlist> {
+        return playlistDao.getPlaylistById(playlistId).map {playlist ->
+            playlistBdConverter.map(playlist)
+        }
+    }
+
     override fun saveImageToPrivateStorage(uri: Uri) {
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myplaylists")
         if (!filePath.exists()) filePath.mkdirs()
@@ -57,6 +63,14 @@ class PlaylistRepositoryImpl(
                 )
             )
         )
+    }
+
+    override fun getTracksByIds(trackIds: List<Long>): Flow<List<Track>> {
+        return playlistTrackDao.getTracksByIds(trackIds).map { entities ->
+            entities.map { entity ->
+                playlistTrackDbConverter.map(entity)
+            }
+        }
     }
 
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {

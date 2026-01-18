@@ -12,14 +12,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.domain.models.Playlist
-import com.example.playlistmaker.media.ui.view_model.PlaylistState
+import com.example.playlistmaker.media.ui.view_model.PlaylistsState
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
+import com.example.playlistmaker.playlist.ui.fragment.PlaylistFragment
 import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
 
-    private val playlistViewModel: PlaylistsViewModel by viewModel()
+    private val viewModel: PlaylistsViewModel by viewModel()
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
@@ -40,21 +41,24 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playlistViewModel.getPlaylists()
+        viewModel.getPlaylists()
 
         onPlaylistClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
             false
         ) { playlist ->
-            //Будущее открытие плейлиста
+            findNavController().navigate(
+                R.id.action_mediaFragment_to_playlistFragment,
+                PlaylistFragment.createArgs(playlist.id)
+            )
         }
 
         adapter = PlaylistAdapter { playlist -> onPlaylistClickDebounce(playlist) }
         binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvPlaylists.adapter = adapter
 
-        playlistViewModel.state().observe(viewLifecycleOwner) {
+        viewModel.state.observe(viewLifecycleOwner) {
             renderSearch(it)
         }
 
@@ -70,10 +74,10 @@ class PlaylistsFragment : Fragment() {
         _binding = null
     }
 
-    private fun renderSearch(state: PlaylistState) {
+    private fun renderSearch(state: PlaylistsState) {
         when (state) {
-            is PlaylistState.Empty -> showPlaceholder()
-            is PlaylistState.Content -> showContent(state.playlists)
+            is PlaylistsState.Empty -> showPlaceholder()
+            is PlaylistsState.Content -> showContent(state.playlists)
         }
     }
 

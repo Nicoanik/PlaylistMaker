@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlaylistDetailsFragment">
+    tools:context=".playlist.ui.fragment.PlaylistFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/YP_light_gray">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/startBorder"
@@ -17,6 +18,14 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/back_button"
@@ -30,58 +39,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_cover"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/tv_title"
-            style="@style/text_playlist_title"
+            style="@style/text_playlist_details_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_24"
-            android:text="Best songs 2021"
             app:layout_constraintStart_toStartOf="@id/startBorder"
             app:layout_constraintTop_toBottomOf="@id/iv_cover" />
 
         <TextView
             android:id="@+id/tv_description"
+            style="@style/text_playlist_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
-            android:text="2022"
+            android:ellipsize="end"
             app:layout_constraintStart_toStartOf="@id/startBorder"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
         <TextView
             android:id="@+id/tv_duration"
+            style="@style/text_playlist_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
-            android:text="300 минут"
             app:layout_constraintStart_toStartOf="@id/startBorder"
             app:layout_constraintTop_toBottomOf="@id/tv_description" />
 
         <ImageView
             android:id="@+id/iv_dash"
-            style="@style/artist_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
             android:src="@drawable/ic_dot_dash_13"
             app:layout_constraintBottom_toBottomOf="@id/tv_duration"
             app:layout_constraintStart_toEndOf="@id/tv_duration"
-            app:layout_constraintTop_toTopOf="@id/tv_duration" />
+            app:layout_constraintTop_toTopOf="@id/tv_duration"
+            app:tint="@color/YP_black" />
 
         <TextView
             android:id="@+id/tv_playlist_size"
+            style="@style/text_playlist_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="98 треков"
             app:layout_constraintStart_toEndOf="@id/iv_dash"
             app:layout_constraintTop_toTopOf="@id/tv_duration" />
 
@@ -92,7 +93,8 @@
             android:layout_marginTop="@dimen/dp_16"
             android:src="@drawable/ic_share_24"
             app:layout_constraintStart_toStartOf="@id/startBorder"
-            app:layout_constraintTop_toBottomOf="@id/tv_duration" />
+            app:layout_constraintTop_toBottomOf="@id/tv_duration"
+            app:tint="@color/YP_black" />
 
         <ImageView
             android:id="@+id/iv_more"
@@ -101,6 +103,31 @@
             android:layout_marginStart="@dimen/dp_16"
             android:src="@drawable/ic_more_24"
             app:layout_constraintStart_toEndOf="@id/iv_share"
-            app:layout_constraintTop_toTopOf="@id/iv_share" />
+            app:layout_constraintTop_toTopOf="@id/iv_share"
+            app:tint="@color/YP_black" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet_background"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="266dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_4"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@drawable/rounder_view_bottom_sheet" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_tracks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_24" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,11 +3,17 @@ package com.example.playlistmaker.media.data.db.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.playlistmaker.media.data.db.entity.PlaylistTrackEntity
+import com.example.playlistmaker.media.domain.models.Track
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlaylistTrackDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(playlistTrackEntity: PlaylistTrackEntity)
+
+    @Query("SELECT * FROM playlist_tracks WHERE trackId IN (:trackIds)")
+    fun getTracksByIds(trackIds: List<Long>): Flow<List<PlaylistTrackEntity>>
 }

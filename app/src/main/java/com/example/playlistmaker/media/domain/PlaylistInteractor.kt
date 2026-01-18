@@ -11,7 +11,11 @@ interface PlaylistInteractor {
 
     fun getPlaylists(): Flow<List<Playlist>>
 
+    fun getPlaylistById(playlistId: Long): Flow<Playlist>
+
     fun saveImageToPrivateStorage(uri: Uri)
 
     suspend fun addTrackToPlaylist(track: Track, playlist: Playlist)
+
+    fun getTracksByIds(trackIds: List<Long>): Flow<List<Track>>
 }
