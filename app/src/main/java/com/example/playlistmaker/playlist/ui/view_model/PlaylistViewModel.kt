@@ -21,13 +21,25 @@ class PlaylistViewModel(
                     playlistInteractor.getTracksByIds(playlist.trackIds)
                         .collect { tracks ->
                             _state.postValue(
-                                PlaylistState.Content(
+                                PlaylistState(
                                     playlist,
-                                    ((tracks.sumOf { it.trackTime ?: 0 }) / 60000).toInt()
+                                    ((tracks.sumOf { it.trackTime ?: 0 }) / 60000).toInt(),
+                                    tracks
                                 )
                             )
                         }
                 }
+        }
+    }
+
+    fun deleteTrackById(trackId: Long?) {
+        val playlist = _state.value?.playlist ?: return
+        viewModelScope.launch {
+            playlistInteractor.deleteTrackFromPlaylist(
+                trackId,
+                playlist
+            )
+            getPlaylistById(playlist.id)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.ui.fragment
+package com.example.playlistmaker.playlist.ui.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,7 +13,7 @@ import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
 
-class FavoriteTracksViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.track_view, parent, false)
 ) {

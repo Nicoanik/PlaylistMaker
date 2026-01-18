@@ -17,7 +17,7 @@ class FavoritesRepositoryImpl(
         favoriteTrackDao.insertTrack(trackDbConverter.map(track))
     }
 
-    override suspend fun deleteFromFavorites(trackId: Int?) {
+    override suspend fun deleteFromFavorites(trackId: Long?) {
         favoriteTrackDao.deleteTrack(trackId)
     }
 
@@ -26,7 +26,7 @@ class FavoritesRepositoryImpl(
             .map { tracks -> convertFromTrackEntity(tracks) }
             .distinctUntilChanged()
 
-    override suspend fun getFavoritesId(): List<Int> {
+    override suspend fun getFavoritesId(): List<Long> {
         return favoriteTrackDao.getTracksId()
     }
 

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import com.example.playlistmaker.media.data.converters.PlaylistDbConverter
 import com.example.playlistmaker.media.data.converters.PlaylistTrackDbConvertor
 import com.example.playlistmaker.media.data.db.dao.PlaylistDao
@@ -14,6 +15,8 @@ import com.example.playlistmaker.media.domain.PlaylistRepository
 import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.any
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.File
 import java.io.FileOutputStream
@@ -28,7 +31,7 @@ class PlaylistRepositoryImpl(
 ) : PlaylistRepository {
 
     override suspend fun addPlaylist(playlist: Playlist) {
-        playlistDao.addPlaylist(playlistBdConverter.map(playlist))
+        playlistDao.insertPlaylist(playlistBdConverter.map(playlist))
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> =
@@ -37,13 +40,14 @@ class PlaylistRepositoryImpl(
         }
 
     override fun getPlaylistById(playlistId: Long): Flow<Playlist> {
-        return playlistDao.getPlaylistById(playlistId).map {playlist ->
+        return playlistDao.getPlaylistById(playlistId).map { playlist ->
             playlistBdConverter.map(playlist)
         }
     }
 
     override fun saveImageToPrivateStorage(uri: Uri) {
-        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myplaylists")
+        val filePath =
+            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myplaylists")
         if (!filePath.exists()) filePath.mkdirs()
         val file = File(filePath, "first_cover.jpg")
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -55,7 +59,7 @@ class PlaylistRepositoryImpl(
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         playlistTrackDao.insertTrack(playlistTrackDbConverter.map(track))
-        playlistDao.addPlaylist(
+        playlistDao.insertPlaylist(
             playlistBdConverter.map(
                 playlist.copy(
                     trackIds = playlist.trackIds + track.trackId!!.toLong(),
@@ -71,6 +75,22 @@ class PlaylistRepositoryImpl(
                 playlistTrackDbConverter.map(entity)
             }
         }
+    }
+
+    override suspend fun deleteTrackFromPlaylist(trackId: Long?, playlist: Playlist) {
+        playlistDao.insertPlaylist(
+            playlistBdConverter.map(
+                playlist.copy(
+                    trackIds = playlist.trackIds.filter { it != trackId },
+                    playlistSize = playlist.playlistSize - 1
+                )
+            )
+        )
+        val playlists = playlistDao.getPlaylists().first().map { playlistBdConverter.map(it) }
+        val isPresent = playlists.any { playlist ->
+            playlist.trackIds.contains(trackId)
+        }
+        if (!isPresent) playlistTrackDao.deleteTrackById(trackId)
     }
 
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {

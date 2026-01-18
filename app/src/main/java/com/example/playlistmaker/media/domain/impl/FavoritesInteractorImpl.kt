@@ -12,7 +12,7 @@ class FavoritesInteractorImpl(
         favoritesRepository.addToFavorites(track)
     }
 
-    override suspend fun deleteFromFavorites(trackId: Int?) {
+    override suspend fun deleteFromFavorites(trackId: Long?) {
         favoritesRepository.deleteFromFavorites(trackId)
     }
 
@@ -20,7 +20,7 @@ class FavoritesInteractorImpl(
         return favoritesRepository.getFavorites()
     }
 
-    override suspend fun isTrackFavorite(trackId: Int?): Boolean {
+    override suspend fun isTrackFavorite(trackId: Long?): Boolean {
         return trackId in favoritesRepository.getFavoritesId()
     }
 }
