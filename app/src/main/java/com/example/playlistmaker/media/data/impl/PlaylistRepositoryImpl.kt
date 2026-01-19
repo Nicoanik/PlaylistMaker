@@ -85,9 +85,7 @@ class PlaylistRepositoryImpl(
             )
         )
         val playlists = playlistDao.getPlaylists().first().map { playlistBdConverter.map(it) }
-        val isPresent = playlists.any { playlist ->
-            playlist.trackIds.contains(trackId)
-        }
+        val isPresent = playlists.any { it.trackIds.contains(trackId) }
         if (!isPresent) playlistTrackDao.deleteTrackById(trackId)
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.media.domain.PlaylistInteractor
 import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(
@@ -13,6 +14,7 @@ class PlaylistViewModel(
 ) : ViewModel() {
 
     private lateinit var playlist: Playlist
+    private lateinit var tracks: List<Track>
 
     private val _state = MutableLiveData<PlaylistState>()
     val state: LiveData<PlaylistState> = _state
@@ -24,6 +26,7 @@ class PlaylistViewModel(
                     this@PlaylistViewModel.playlist = playlist
                     playlistInteractor.getTracksByIds(playlist.trackIds)
                         .collect { tracks ->
+                            this@PlaylistViewModel.tracks = tracks
                             _state.postValue(
                                 PlaylistState.Content(
                                     playlist,
@@ -49,7 +52,7 @@ class PlaylistViewModel(
     fun sharePlaylist() {
         if (playlist.playlistSize > 0) {
             viewModelScope.launch {
-                playlistInteractor.sharePlaylist(playlist)
+                playlistInteractor.sharePlaylist(playlist, tracks)
             }
         } else {
             _state.postValue(PlaylistState.Share(false))

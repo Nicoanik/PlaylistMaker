@@ -21,5 +21,5 @@ interface PlaylistInteractor {
 
     suspend fun deleteTrackFromPlaylist(trackId: Long?, playlist: Playlist)
 
-    suspend fun sharePlaylist(playlist: Playlist)
+    suspend fun sharePlaylist(playlist: Playlist, tracks: List<Track>)
 }
