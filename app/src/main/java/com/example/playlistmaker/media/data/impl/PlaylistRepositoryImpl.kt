@@ -13,9 +13,12 @@ import com.example.playlistmaker.media.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.media.domain.PlaylistRepository
 import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.domain.models.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.any
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.collections.map
@@ -87,6 +90,22 @@ class PlaylistRepositoryImpl(
         val playlists = playlistDao.getPlaylists().first().map { playlistBdConverter.map(it) }
         val isPresent = playlists.any { it.trackIds.contains(trackId) }
         if (!isPresent) playlistTrackDao.deleteTrackById(trackId)
+    }
+
+    override suspend fun deletePlaylistById(playlistId: Long) {
+        withContext(Dispatchers.IO) {
+            val playlist = playlistDao.getPlaylistById(playlistId).first().let { playlist ->
+                playlistBdConverter.map(playlist)
+            }
+            playlistDao.deletePlaylistById(playlistId)
+            val playlists = playlistDao.getPlaylists().first().map { playlistBdConverter.map(it) }
+            playlist.trackIds.forEach { trackId ->
+                val isPresent = playlists.any { playlist -> playlist.trackIds.contains(trackId) }
+                if (!isPresent) {
+                    playlistTrackDao.deleteTrackById(trackId)
+                }
+            }
+        }
     }
 
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {

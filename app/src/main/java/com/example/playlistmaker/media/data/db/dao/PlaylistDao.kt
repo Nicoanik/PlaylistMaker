@@ -18,4 +18,7 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM playlists WHERE id = :playlistId")
     fun getPlaylistById(playlistId: Long): Flow<PlaylistEntity>
+
+    @Query("DELETE FROM playlists WHERE id = :playlistId")
+    fun deletePlaylistById(playlistId: Long)
 }

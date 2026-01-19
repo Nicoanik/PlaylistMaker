@@ -50,6 +50,10 @@ class PlaylistInteractorImpl(
         externalNavigator.shareMessage(textMessage)
     }
 
+    override suspend fun deletePlaylistById(playlistId: Long) {
+        playlistRepository.deletePlaylistById(playlistId)
+    }
+
     private fun buildTextMessage(playlist: Playlist, tracks: List<Track>): String {
         val builder = StringBuilder()
         builder.append(playlist.title).append("\n")

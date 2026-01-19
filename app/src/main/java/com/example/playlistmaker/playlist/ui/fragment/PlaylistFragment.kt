@@ -89,7 +89,7 @@ class PlaylistFragment : Fragment() {
 
         adapter = PlaylistAdapter(
             { track -> onTrackClickDebounce(track) },
-            { track -> showDialog(track.trackId) }
+            { track -> deleteTrackDialog(track.trackId) }
         )
         binding.rvTracks.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -102,16 +102,21 @@ class PlaylistFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.ivShare.setOnClickListener {
+        binding.sharePlaylist.setOnClickListener {
             viewModel.sharePlaylist()
         }
 
-        binding.ivMore.setOnClickListener {
+        binding.more.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        binding.shareBottomSheet.setOnClickListener {
+        binding.sharePlaylistBottomSheet.setOnClickListener {
             viewModel.sharePlaylist()
+        }
+
+        binding.deletePlaylistBottomSheet.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            deletePlaylistDialog()
         }
     }
 
@@ -176,13 +181,24 @@ class PlaylistFragment : Fragment() {
         )
     }
 
-    private fun showDialog(trackId: Long?) {
+    private fun deleteTrackDialog(trackId: Long?) {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(R.string.delete_track_dialog)
-            .setNegativeButton(R.string.yes) { _, _ ->
+            .setPositiveButton(R.string.yes) { _, _ ->
                 viewModel.deleteTrackById(trackId)
             }
-            .setNeutralButton(R.string.no) { _, _ -> }
+            .setNegativeButton(R.string.no) { _, _ -> }
+            .show()
+    }
+
+    private fun deletePlaylistDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage("${getString(R.string.delete_playlist_dialog)} «${binding.tvTitle.text}»?")
+            .setPositiveButton(R.string.yes) { _, _ ->
+                viewModel.deletePlaylist()
+                findNavController().navigateUp()
+            }
+            .setNegativeButton(R.string.no) { _, _ -> }
             .show()
     }
 

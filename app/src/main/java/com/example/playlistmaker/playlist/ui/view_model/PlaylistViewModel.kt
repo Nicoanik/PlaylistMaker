@@ -58,4 +58,10 @@ class PlaylistViewModel(
             _state.postValue(PlaylistState.Share(false))
         }
     }
+
+    fun deletePlaylist() {
+        viewModelScope.launch {
+            playlistInteractor.deletePlaylistById(playlist.id)
+        }
+    }
 }

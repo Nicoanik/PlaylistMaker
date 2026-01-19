@@ -87,7 +87,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_duration" />
 
         <ImageView
-            android:id="@+id/iv_share"
+            android:id="@+id/share_playlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_16"
@@ -97,13 +97,13 @@
             app:tint="@color/YP_black" />
 
         <ImageView
-            android:id="@+id/iv_more"
+            android:id="@+id/more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_16"
             android:src="@drawable/ic_more_24"
-            app:layout_constraintStart_toEndOf="@id/iv_share"
-            app:layout_constraintTop_toTopOf="@id/iv_share"
+            app:layout_constraintStart_toEndOf="@id/share_playlist"
+            app:layout_constraintTop_toTopOf="@id/share_playlist"
             app:tint="@color/YP_black" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -194,7 +194,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/share_bottom_sheet"
+            android:id="@+id/share_playlist_bottom_sheet"
             style="@style/button_playlist_bottom_sheet"
             android:layout_marginTop="@dimen/dp_8"
             android:text="@string/to_share" />
@@ -205,7 +205,7 @@
             android:text="@string/edit_information" />
 
         <TextView
-            android:id="@+id/delete_bottom_sheet"
+            android:id="@+id/delete_playlist_bottom_sheet"
             style="@style/button_playlist_bottom_sheet"
             android:text="@string/delete_playlist" />
     </LinearLayout>
