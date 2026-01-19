@@ -130,4 +130,83 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_24" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_more"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet_background"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="383dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_4"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@drawable/rounder_view_bottom_sheet" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_61"
+            android:layout_marginTop="12dp"
+            android:paddingVertical="@dimen/dp_8">
+
+            <ImageView
+                android:id="@+id/iv_playlist_cover_bottom_sheet"
+                android:layout_width="@dimen/dp_45"
+                android:layout_height="@dimen/dp_45"
+                android:layout_marginStart="13dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_playlist_title_bottom_sheet"
+                style="@style/track_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_8"
+                app:layout_constraintBottom_toTopOf="@id/tv_playlist_size_bottom_sheet"
+                app:layout_constraintStart_toEndOf="@id/iv_playlist_cover_bottom_sheet"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_playlist_size_bottom_sheet"
+                style="@style/artist_text"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_playlist_cover_bottom_sheet"
+                app:layout_constraintTop_toBottomOf="@id/tv_playlist_title_bottom_sheet" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/share_bottom_sheet"
+            style="@style/button_playlist_bottom_sheet"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="@string/to_share" />
+
+        <TextView
+            android:id="@+id/edit_bottom_sheet"
+            style="@style/button_playlist_bottom_sheet"
+            android:text="@string/edit_information" />
+
+        <TextView
+            android:id="@+id/delete_bottom_sheet"
+            style="@style/button_playlist_bottom_sheet"
+            android:text="@string/delete_playlist" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

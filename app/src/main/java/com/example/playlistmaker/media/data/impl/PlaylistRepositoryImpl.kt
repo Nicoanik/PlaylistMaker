@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
 import com.example.playlistmaker.media.data.converters.PlaylistDbConverter
 import com.example.playlistmaker.media.data.converters.PlaylistTrackDbConvertor
 import com.example.playlistmaker.media.data.db.dao.PlaylistDao
@@ -15,7 +14,6 @@ import com.example.playlistmaker.media.domain.PlaylistRepository
 import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.any
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.File
@@ -30,7 +28,7 @@ class PlaylistRepositoryImpl(
     private val playlistTrackDbConverter: PlaylistTrackDbConvertor
 ) : PlaylistRepository {
 
-    override suspend fun addPlaylist(playlist: Playlist) {
+    override suspend fun insertPlaylist(playlist: Playlist) {
         playlistDao.insertPlaylist(playlistBdConverter.map(playlist))
     }
 

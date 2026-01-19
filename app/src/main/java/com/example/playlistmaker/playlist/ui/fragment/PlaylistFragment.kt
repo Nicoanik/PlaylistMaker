@@ -4,19 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.domain.models.Track
+import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.playlist.ui.view_model.PlaylistState
 import com.example.playlistmaker.playlist.ui.view_model.PlaylistViewModel
 import com.example.playlistmaker.utils.debounce
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,6 +34,8 @@ class PlaylistFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: PlaylistAdapter
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
@@ -40,6 +49,24 @@ class PlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetMore).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(p0: View, p1: Int) {
+                when (p1) {
+                    BottomSheetBehavior.STATE_HIDDEN -> binding.overlay.isVisible = false
+                    else -> binding.overlay.isVisible = true
+                }
+            }
+
+            override fun onSlide(p0: View, p1: Float) {
+                binding.overlay.alpha = (p1 + 1f) / 2f
+            }
+        })
 
         viewModel.state.observe(viewLifecycleOwner) {
             renderState(it)
@@ -74,6 +101,18 @@ class PlaylistFragment : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.ivShare.setOnClickListener {
+            viewModel.sharePlaylist()
+        }
+
+        binding.ivMore.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        binding.shareBottomSheet.setOnClickListener {
+            viewModel.sharePlaylist()
+        }
     }
 
     override fun onDestroyView() {
@@ -83,7 +122,14 @@ class PlaylistFragment : Fragment() {
 
     private fun renderState(state: PlaylistState) {
         when (state) {
-            is PlaylistState -> showContent(state.playlist, state.duration, state.tracks)
+            is PlaylistState.Content -> showContent(state.playlist, state.duration, state.tracks)
+            is PlaylistState.Share -> {
+                if (!state.isSharing) Toast.makeText(
+                    requireContext(),
+                    R.string.nothing_share,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -108,9 +154,26 @@ class PlaylistFragment : Fragment() {
                 playlist.playlistSize
             )
         }
+
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
+
+        Glide.with(this)
+            .load(playlist.coverUri)
+            .placeholder(R.drawable.album_cover_placeholder)
+            .error(R.drawable.album_cover_placeholder)
+            .transform(
+                CenterCrop(),
+                RoundedCorners(dpToPx(2, requireContext()))
+            )
+            .into(binding.ivPlaylistCoverBottomSheet)
+        binding.tvPlaylistTitleBottomSheet.text = playlist.title
+        binding.tvPlaylistSizeBottomSheet.text = resources.getQuantityString(
+            R.plurals.playlist_size,
+            playlist.playlistSize,
+            playlist.playlistSize
+        )
     }
 
     private fun showDialog(trackId: Long?) {

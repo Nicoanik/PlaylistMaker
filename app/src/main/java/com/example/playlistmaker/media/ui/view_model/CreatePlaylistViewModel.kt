@@ -21,7 +21,7 @@ class CreatePlaylistViewModel(
         cover: Uri?
     ) {
         viewModelScope.launch {
-            playlistInteractor.addPlaylist(
+            playlistInteractor.insertPlaylist(
                 Playlist(
                     title = title,
                     description = description,

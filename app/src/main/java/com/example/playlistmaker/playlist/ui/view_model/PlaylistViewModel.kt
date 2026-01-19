@@ -5,11 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.media.domain.PlaylistInteractor
+import com.example.playlistmaker.media.domain.models.Playlist
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
+
+    private lateinit var playlist: Playlist
 
     private val _state = MutableLiveData<PlaylistState>()
     val state: LiveData<PlaylistState> = _state
@@ -18,10 +21,11 @@ class PlaylistViewModel(
         viewModelScope.launch {
             playlistInteractor.getPlaylistById(playlistId)
                 .collect { playlist ->
+                    this@PlaylistViewModel.playlist = playlist
                     playlistInteractor.getTracksByIds(playlist.trackIds)
                         .collect { tracks ->
                             _state.postValue(
-                                PlaylistState(
+                                PlaylistState.Content(
                                     playlist,
                                     ((tracks.sumOf { it.trackTime ?: 0 }) / 60000).toInt(),
                                     tracks
@@ -33,13 +37,22 @@ class PlaylistViewModel(
     }
 
     fun deleteTrackById(trackId: Long?) {
-        val playlist = _state.value?.playlist ?: return
         viewModelScope.launch {
             playlistInteractor.deleteTrackFromPlaylist(
                 trackId,
                 playlist
             )
             getPlaylistById(playlist.id)
+        }
+    }
+
+    fun sharePlaylist() {
+        if (playlist.playlistSize > 0) {
+            viewModelScope.launch {
+                playlistInteractor.sharePlaylist(playlist)
+            }
+        } else {
+            _state.postValue(PlaylistState.Share(false))
         }
     }
 }

@@ -40,6 +40,10 @@
     <string name="delete_track_dialog">Хотите удалить трек?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="to_share">Поделиться</string>
+    <string name="edit_information">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="nothing_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
 
     <plurals name="playlist_size" translatable="false">
         <item quantity="one">%d трек</item>
