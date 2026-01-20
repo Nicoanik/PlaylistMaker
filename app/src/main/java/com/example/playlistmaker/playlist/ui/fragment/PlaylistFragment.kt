@@ -105,12 +105,17 @@ class PlaylistFragment : Fragment() {
             viewModel.sharePlaylist()
         }
 
-        binding.more.setOnClickListener {
+        binding.menu.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         binding.sharePlaylistBottomSheet.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             viewModel.sharePlaylist()
+        }
+
+        binding.editBottomSheet.setOnClickListener {
+
         }
 
         binding.deletePlaylistBottomSheet.setOnClickListener {
