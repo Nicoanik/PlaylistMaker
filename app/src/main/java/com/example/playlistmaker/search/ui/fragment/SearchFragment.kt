@@ -22,7 +22,7 @@ import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
-import com.example.playlistmaker.utils.debounce
+import com.example.playlistmaker.utils.clickDebounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
@@ -48,10 +48,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        onTrackClickDebounce = debounce(
+        onTrackClickDebounce = clickDebounce(
             CLICK_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
+            viewLifecycleOwner.lifecycleScope
         ) { track ->
             viewModel.addTrackToSearchHistory(track)
             findNavController().navigate(

@@ -15,7 +15,7 @@ import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.ui.view_model.PlaylistsState
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
 import com.example.playlistmaker.playlist.ui.fragment.PlaylistFragment
-import com.example.playlistmaker.utils.debounce
+import com.example.playlistmaker.utils.clickDebounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -43,10 +43,9 @@ class PlaylistsFragment : Fragment() {
 
         viewModel.getPlaylists()
 
-        onPlaylistClickDebounce = debounce(
+        onPlaylistClickDebounce = clickDebounce(
             CLICK_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
+            viewLifecycleOwner.lifecycleScope
         ) { playlist ->
             findNavController().navigate(
                 R.id.action_mediaFragment_to_playlistFragment,

@@ -15,7 +15,7 @@ import com.example.playlistmaker.media.ui.view_model.FavoriteState
 import com.example.playlistmaker.media.ui.view_model.FavoriteTracksViewModel
 import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.media.domain.models.Track
-import com.example.playlistmaker.utils.debounce
+import com.example.playlistmaker.utils.clickDebounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteTracksFragment : Fragment() {
@@ -43,10 +43,9 @@ class FavoriteTracksFragment : Fragment() {
 
         favoriteViewModel.getFavorites()
 
-        onTrackClickDebounce = debounce(
+        onTrackClickDebounce = clickDebounce(
             CLICK_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
+            viewLifecycleOwner.lifecycleScope
         ) { track ->
             findNavController().navigate(
                 R.id.action_mediaFragment_to_playerFragment,

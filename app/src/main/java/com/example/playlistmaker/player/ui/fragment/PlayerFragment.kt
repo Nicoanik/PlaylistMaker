@@ -22,7 +22,7 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
-import com.example.playlistmaker.utils.debounce
+import com.example.playlistmaker.utils.clickDebounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -73,10 +73,9 @@ class PlayerFragment : Fragment() {
             }
         })
 
-        onPlaylistClickDebounce = debounce(
+        onPlaylistClickDebounce = clickDebounce(
             CLICK_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
+            viewLifecycleOwner.lifecycleScope
         ) { playlist ->
             viewModel.addTrackToPlaylist(playlist)
         }
@@ -116,8 +115,8 @@ class PlayerFragment : Fragment() {
         }
 
         binding.queueButton.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             viewModel.getPlaylists()
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         binding.addPlaylistButton.setOnClickListener {

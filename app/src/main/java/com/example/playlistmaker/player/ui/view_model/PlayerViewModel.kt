@@ -25,6 +25,7 @@ class PlayerViewModel(
 ) : ViewModel() {
 
     private var isFavorite = false
+
     private val _state = MutableLiveData<PlayerState>()
     fun state(): LiveData<PlayerState> = _state
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="@dimen/dp_4"
-    android:paddingTop="@dimen/dp_16">
+    android:paddingBottom="@dimen/dp_16">
 
     <ImageView
         android:id="@+id/iv_playlist_cover"
@@ -23,7 +23,6 @@
         android:layout_marginTop="@dimen/dp_4"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="BeSt SongS EvER"
         app:layout_constraintTop_toBottomOf="@id/iv_playlist_cover" />
 
     <TextView
@@ -33,7 +32,6 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="150"
         app:layout_constraintTop_toBottomOf="@id/tv_playlist_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
