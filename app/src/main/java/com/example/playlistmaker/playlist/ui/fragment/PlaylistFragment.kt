@@ -119,7 +119,10 @@ class PlaylistFragment : Fragment() {
         }
 
         binding.editBottomSheet.setOnClickListener {
-
+            findNavController().navigate(
+                R.id.action_playlistFragment_to_editPlaylistFragment,
+                EditPlaylistFragment.createArgs(playlistId)
+            )
         }
 
         binding.deletePlaylistBottomSheet.setOnClickListener {

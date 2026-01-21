@@ -27,9 +27,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 
-class CreatePlaylistFragment : Fragment() {
+open class CreatePlaylistFragment : Fragment() {
 
-    private val viewModel: CreatePlaylistViewModel by viewModel()
+    open val viewModel: CreatePlaylistViewModel by viewModel()
 
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
