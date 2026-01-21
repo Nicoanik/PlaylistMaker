@@ -23,7 +23,7 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
-import com.example.playlistmaker.player.ui.view_model.PlayerState.Companion.PLAYBACK_DEF
+import com.example.playlistmaker.player.ui.view_model.PlayerViewModel.Companion.PLAYBACK_DEF
 import com.example.playlistmaker.utils.clickDebounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -146,6 +146,7 @@ class PlayerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.onResume()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 

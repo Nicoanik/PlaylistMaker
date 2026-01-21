@@ -15,8 +15,4 @@ sealed interface PlayerState {
     class BottomSheetContent(val playlists: List<Playlist>) : PlayerState
 
     class InPlaylist(val inPlaylist: Boolean, val title: String) : PlayerState
-
-    companion object {
-        const val PLAYBACK_DEF = "00:00"
-    }
 }
