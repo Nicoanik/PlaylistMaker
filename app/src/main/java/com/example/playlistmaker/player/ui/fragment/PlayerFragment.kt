@@ -1,6 +1,7 @@
 package com.example.playlistmaker.player.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,14 +23,15 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
+import com.example.playlistmaker.player.ui.view_model.PlayerState.Companion.PLAYBACK_DEF
 import com.example.playlistmaker.utils.clickDebounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.serialization.builtins.BooleanArraySerializer
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.getValue
 
 class PlayerFragment : Fragment() {
+
+    private lateinit var viewModel: PlayerViewModel
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
@@ -54,7 +56,7 @@ class PlayerFragment : Fragment() {
 
         val track: Track = arguments?.getParcelable(ARGS_TRACK)!!
 
-        val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
+        viewModel = getViewModel { parametersOf(track) }
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
@@ -147,25 +149,29 @@ class PlayerFragment : Fragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
-    private fun render(state: PlayerState) {
+    private fun render(state: PlayerState?) {
+        Log.d("Nico", "Render state = $state")
         when (state) {
             is PlayerState.Prepared -> {
                 binding.playButton.setImageResource(R.drawable.play_button_100)
-                binding.playButton.isVisible = state.isPlayButtonEnabled
-                binding.tvPlaybackProgress.text = state.progress
+                binding.playButton.isVisible = true
+                binding.tvPlaybackProgress.text = PLAYBACK_DEF
             }
 
             is PlayerState.Playing -> {
                 binding.playButton.setImageResource(R.drawable.pause_button_100)
+                binding.playButton.isVisible = true
                 binding.tvPlaybackProgress.text = state.progress
             }
 
             is PlayerState.Paused -> {
                 binding.playButton.setImageResource(R.drawable.play_button_100)
+                binding.playButton.isVisible = true
                 binding.tvPlaybackProgress.text = state.progress
             }
 
             is PlayerState.IsFavorite -> {
+                Log.d("Nico", "Render IsFavorite = ${state.isFavorite}")
                 when (state.isFavorite) {
                     true -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
                     false -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_false_51)
@@ -199,6 +205,8 @@ class PlayerFragment : Fragment() {
                     adapter.notifyDataSetChanged()
                 }
             }
+
+            else -> {}
         }
     }
 

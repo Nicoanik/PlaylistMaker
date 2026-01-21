@@ -4,7 +4,7 @@ import com.example.playlistmaker.media.domain.models.Playlist
 
 sealed interface PlayerState {
 
-    class Prepared(val isPlayButtonEnabled: Boolean, val progress: String) : PlayerState
+    class Prepared() : PlayerState
 
     class Playing(val progress: String) : PlayerState
 

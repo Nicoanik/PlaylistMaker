@@ -1,6 +1,7 @@
 package com.example.playlistmaker.player.ui.view_model
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,12 +27,19 @@ class PlayerViewModel(
 
     private var isFavorite = false
 
-    private val _state = MutableLiveData<PlayerState>()
-    fun state(): LiveData<PlayerState> = _state
+    private val _state = MutableLiveData<PlayerState?>()
+    fun state(): LiveData<PlayerState?> = _state
 
     private var timerJob: Job? = null
 
+    private fun resumePlayer() {
+        if (mediaPlayer.isPlaying) {
+            _state.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
+        }
+    }
+
     init {
+        Log.d("Nico", "Start Init{}")
         viewModelScope.launch {
             isFavorite()
             preparePlayer()
@@ -83,6 +91,7 @@ class PlayerViewModel(
     }
 
     private suspend fun isFavorite() {
+        Log.d("Nico", "Start isFavorite()")
         isFavorite = favoritesInteractor.isTrackFavorite(track.trackId)
         _state.postValue(PlayerState.IsFavorite(isFavorite))
     }
@@ -91,11 +100,11 @@ class PlayerViewModel(
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            _state.postValue(PlayerState.Prepared(true, PLAYBACK_DEF))
+            _state.postValue(PlayerState.Prepared())
         }
         mediaPlayer.setOnCompletionListener {
             timerJob?.cancel()
-            _state.postValue(PlayerState.Prepared(true, PLAYBACK_DEF))
+            _state.postValue(PlayerState.Prepared())
         }
     }
 
