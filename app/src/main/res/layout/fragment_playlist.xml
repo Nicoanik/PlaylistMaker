@@ -99,12 +99,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_24"
                 android:src="@drawable/ic_more_24"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/share_playlist"
                 app:layout_constraintTop_toTopOf="@id/share_playlist"
-                app:tint="@color/YP_black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/dp_24"/>
+                app:tint="@color/YP_black" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
@@ -116,9 +116,7 @@
         android:layout_marginStart="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_4"
         android:scaleType="center"
-        android:src="@drawable/ic_back_arrow_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/ic_back_arrow_24" />
 
     <LinearLayout
         android:id="@+id/bottom_sheet"
@@ -142,6 +140,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_24" />
+
+        <TextView
+            android:id="@+id/tv_no_tracks"
+            style="@style/toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_tracks_in_playlist" />
     </LinearLayout>
 
     <View

@@ -171,6 +171,7 @@ class PlaylistFragment : Fragment() {
             )
         }
 
+        binding.tvNoTracks.isVisible = tracks.isEmpty()
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
@@ -204,12 +205,12 @@ class PlaylistFragment : Fragment() {
 
     private fun deletePlaylistDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage("${getString(R.string.delete_playlist_dialog)} «${binding.tvTitle.text}»?")
-            .setPositiveButton(R.string.yes) { _, _ ->
+            .setMessage(getString(R.string.delete_playlist_dialog))
+            .setPositiveButton(R.string.delete) { _, _ ->
                 viewModel.deletePlaylist()
                 findNavController().navigateUp()
             }
-            .setNegativeButton(R.string.no) { _, _ -> }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
             .show()
     }
 
