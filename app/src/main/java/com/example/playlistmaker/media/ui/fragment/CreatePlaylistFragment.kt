@@ -1,10 +1,7 @@
 package com.example.playlistmaker.media.ui.fragment
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,17 +21,15 @@ import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewModel
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
 
 open class CreatePlaylistFragment : Fragment() {
 
     open val viewModel: CreatePlaylistViewModel by viewModel()
 
     private var _binding: FragmentCreatePlaylistBinding? = null
-    private val binding get() = _binding!!
+    open val binding get() = _binding!!
 
-    private var coverUri: Uri? = null
+    var coverUri: Uri? = null
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -76,6 +71,7 @@ open class CreatePlaylistFragment : Fragment() {
         binding.buttonCreate.setOnClickListener {
             coverUri?.let { viewModel.saveImageToPrivateStorage(it) }
             viewModel.createPlaylist(
+                0,
                 binding.etTitle.text.toString().trim(),
                 binding.etDescription.text?.toString()?.trim(),
                 coverUri

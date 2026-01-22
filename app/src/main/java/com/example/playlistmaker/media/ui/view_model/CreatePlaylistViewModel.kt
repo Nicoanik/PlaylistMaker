@@ -16,6 +16,7 @@ open class CreatePlaylistViewModel(
     }
 
     fun createPlaylist(
+        id: Long,
         title: String,
         description: String?,
         cover: Uri?
@@ -23,6 +24,7 @@ open class CreatePlaylistViewModel(
         viewModelScope.launch {
             playlistInteractor.insertPlaylist(
                 Playlist(
+                    id = id,
                     title = title,
                     description = description,
                     coverUri = cover.toString()
