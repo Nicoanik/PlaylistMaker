@@ -25,11 +25,12 @@ import com.example.playlistmaker.playlist.ui.view_model.PlaylistViewModel
 import com.example.playlistmaker.utils.clickDebounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 
 class PlaylistFragment : Fragment() {
 
-    private val viewModel: PlaylistViewModel by viewModel()
+    private lateinit var viewModel: PlaylistViewModel
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
 
@@ -49,6 +50,12 @@ class PlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val playlistId = arguments?.getLong(ARGS_PLAYLIST_ID)
+
+        viewModel = getViewModel { parametersOf(playlistId) }
+
+        viewModel.loadContent()
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetMore).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
@@ -71,10 +78,6 @@ class PlaylistFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             renderState(it)
         }
-
-        val playlistId = arguments?.getLong(ARGS_PLAYLIST_ID)!!
-
-        viewModel.getPlaylistById(playlistId)
 
         onTrackClickDebounce = clickDebounce(
             CLICK_DEBOUNCE_DELAY,
@@ -121,7 +124,7 @@ class PlaylistFragment : Fragment() {
         binding.editBottomSheet.setOnClickListener {
             findNavController().navigate(
                 R.id.action_playlistFragment_to_editPlaylistFragment,
-                EditPlaylistFragment.createArgs(playlistId)
+                EditPlaylistFragment.createArgs(playlistId ?: return@setOnClickListener)
             )
         }
 
@@ -197,7 +200,7 @@ class PlaylistFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(R.string.delete_track_dialog)
             .setPositiveButton(R.string.yes) { _, _ ->
-                viewModel.deleteTrackById(trackId)
+                viewModel.deleteTrackById(trackId ?: return@setPositiveButton)
             }
             .setNegativeButton(R.string.no) { _, _ -> }
             .show()

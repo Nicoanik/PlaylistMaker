@@ -17,7 +17,7 @@ import com.example.playlistmaker.playlist.ui.view_model.EditPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class EditPlaylistFragment: CreatePlaylistFragment() {
+class EditPlaylistFragment : CreatePlaylistFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -39,7 +39,7 @@ class EditPlaylistFragment: CreatePlaylistFragment() {
         binding.buttonCreate.setOnClickListener {
             coverUri?.let { viewModel.saveImageToPrivateStorage(it) }
             viewModel.createPlaylist(
-                playlistId!!,
+                playlistId ?: return@setOnClickListener,
                 binding.etTitle.text.toString(),
                 binding.etDescription.text.toString(),
                 coverUri

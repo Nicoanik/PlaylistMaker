@@ -19,7 +19,7 @@ interface PlaylistInteractor {
 
     fun getTracksByIds(trackIds: List<Long>): Flow<List<Track>>
 
-    suspend fun deleteTrackFromPlaylist(trackId: Long?, playlist: Playlist)
+    suspend fun deleteTrackFromPlaylist(trackId: Long, playlist: Playlist)
 
     suspend fun sharePlaylist(playlist: Playlist, tracks: List<Track>)
 

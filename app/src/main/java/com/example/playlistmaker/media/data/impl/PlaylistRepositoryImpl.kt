@@ -78,7 +78,7 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    override suspend fun deleteTrackFromPlaylist(trackId: Long?, playlist: Playlist) {
+    override suspend fun deleteTrackFromPlaylist(trackId: Long, playlist: Playlist) {
         playlistDao.insertPlaylist(
             playlistBdConverter.map(
                 playlist.copy(
