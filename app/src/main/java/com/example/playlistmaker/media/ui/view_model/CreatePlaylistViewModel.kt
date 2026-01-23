@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.media.domain.PlaylistInteractor
 import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.launch
 
 open class CreatePlaylistViewModel(
@@ -19,7 +20,8 @@ open class CreatePlaylistViewModel(
         id: Long,
         title: String,
         description: String?,
-        cover: Uri?
+        cover: Uri?,
+        trackIds: List<Long>
     ) {
         viewModelScope.launch {
             playlistInteractor.insertPlaylist(
@@ -27,7 +29,8 @@ open class CreatePlaylistViewModel(
                     id = id,
                     title = title,
                     description = description,
-                    coverUri = cover.toString()
+                    coverUri = cover.toString(),
+                    trackIds = trackIds
                 )
             )
         }

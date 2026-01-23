@@ -74,7 +74,8 @@ open class CreatePlaylistFragment : Fragment() {
                 0,
                 binding.etTitle.text.toString().trim(),
                 binding.etDescription.text?.toString()?.trim(),
-                coverUri
+                coverUri,
+                emptyList()
             )
             Toast.makeText(
                 requireContext(),

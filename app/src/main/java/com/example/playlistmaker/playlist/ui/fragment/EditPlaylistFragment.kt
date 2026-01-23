@@ -18,6 +18,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class EditPlaylistFragment : CreatePlaylistFragment() {
+
+    private lateinit var trackIds: List<Long>
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,8 +45,9 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
                 playlistId ?: return@setOnClickListener,
                 binding.etTitle.text.toString(),
                 binding.etDescription.text.toString(),
-                coverUri
-            )
+                coverUri,
+                trackIds
+                )
             findNavController().navigateUp()
         }
 
@@ -63,6 +67,7 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
     }
 
     private fun showContent(playlist: Playlist) {
+        trackIds = playlist.trackIds
         coverUri = playlist.coverUri?.toUri()
         Glide.with(requireContext())
             .load(coverUri)
