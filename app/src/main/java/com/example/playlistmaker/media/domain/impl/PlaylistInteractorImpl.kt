@@ -2,6 +2,7 @@ package com.example.playlistmaker.media.domain.impl
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.example.playlistmaker.R
 import com.example.playlistmaker.media.domain.PlaylistInteractor
 import com.example.playlistmaker.media.domain.PlaylistRepository
@@ -18,7 +19,9 @@ class PlaylistInteractorImpl(
 ) : PlaylistInteractor {
 
     override suspend fun insertPlaylist(playlist: Playlist) {
+        Log.d("Nico", "New Playlist = $playlist")
         playlistRepository.insertPlaylist(playlist)
+        Log.d("Nico", "Finished inserting playlist: $playlist")
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {
@@ -26,6 +29,7 @@ class PlaylistInteractorImpl(
     }
 
     override fun getPlaylistById(playlistId: Long): Flow<Playlist> {
+        Log.d("Nico", "getPlaylistById playlistId = $playlistId")
         return playlistRepository.getPlaylistById(playlistId)
     }
 

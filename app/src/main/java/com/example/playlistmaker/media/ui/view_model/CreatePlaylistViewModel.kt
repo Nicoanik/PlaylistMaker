@@ -1,6 +1,7 @@
 package com.example.playlistmaker.media.ui.view_model
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.media.domain.PlaylistInteractor
@@ -17,20 +18,16 @@ open class CreatePlaylistViewModel(
     }
 
     fun createPlaylist(
-        id: Long,
         title: String,
         description: String?,
-        cover: Uri?,
-        trackIds: List<Long>
+        cover: Uri?
     ) {
         viewModelScope.launch {
             playlistInteractor.insertPlaylist(
                 Playlist(
-                    id = id,
                     title = title,
                     description = description,
-                    coverUri = cover.toString(),
-                    trackIds = trackIds
+                    coverUri = cover.toString()
                 )
             )
         }

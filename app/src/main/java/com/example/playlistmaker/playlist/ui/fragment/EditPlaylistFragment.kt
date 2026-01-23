@@ -19,8 +19,6 @@ import org.koin.core.parameter.parametersOf
 
 class EditPlaylistFragment : CreatePlaylistFragment() {
 
-    private lateinit var trackIds: List<Long>
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,14 +39,12 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
 
         binding.buttonCreate.setOnClickListener {
             coverUri?.let { viewModel.saveImageToPrivateStorage(it) }
-            viewModel.createPlaylist(
-                playlistId ?: return@setOnClickListener,
-                binding.etTitle.text.toString(),
-                binding.etDescription.text.toString(),
-                coverUri,
-                trackIds
+            viewModel.updatePlaylist(
+                binding.etTitle.text.toString().trim(),
+                binding.etDescription.text.toString().trim(),
+                coverUri
                 )
-            findNavController().navigateUp()
+//            findNavController().navigateUp()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -63,11 +59,11 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
     private fun renderState(state: EditPlaylistState) {
         when (state) {
             is EditPlaylistState.Content -> showContent(state.playlist)
+            is EditPlaylistState.Done -> findNavController().navigateUp()
         }
     }
 
     private fun showContent(playlist: Playlist) {
-        trackIds = playlist.trackIds
         coverUri = playlist.coverUri?.toUri()
         Glide.with(requireContext())
             .load(coverUri)

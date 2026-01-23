@@ -48,9 +48,9 @@ class PlaylistRepositoryImpl(
 
     override fun saveImageToPrivateStorage(uri: Uri) {
         val filePath =
-            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myplaylists")
+            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlists")
         if (!filePath.exists()) filePath.mkdirs()
-        val file = File(filePath, "first_cover.jpg")
+        val file = File(filePath, "cover.jpg")
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory

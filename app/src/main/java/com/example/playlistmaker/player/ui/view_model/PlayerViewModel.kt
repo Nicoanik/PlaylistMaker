@@ -34,7 +34,6 @@ class PlayerViewModel(
     private var timerJob: Job? = null
 
     init {
-        Log.d("Nico", "Start Init{}")
         viewModelScope.launch {
             preparePlayer()
         }
