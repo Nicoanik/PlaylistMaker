@@ -3,7 +3,6 @@ package com.example.playlistmaker.playlist.ui.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -42,7 +41,7 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
                 binding.etTitle.text.toString().trim(),
                 binding.etDescription.text.toString().trim(),
                 coverUri
-                )
+            )
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(

@@ -13,28 +13,17 @@ open class CreatePlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
-    fun saveImageToPrivateStorage(uri: Uri) {
-        playlistInteractor.saveImageToPrivateStorage(uri)
-    }
-
     fun createPlaylist(
         title: String,
         description: String?,
         coverUri: Uri?
     ) {
-        Log.d("Nico", "createPlaylist")
-        Log.d(
-            "Nico", "Title = $title\n" +
-                    "Description = $description\n" +
-                    "Uri = ${coverUri.toString()}"
-        )
-        val cover = coverUri.toString()
         viewModelScope.launch {
             playlistInteractor.insertPlaylist(
                 Playlist(
                     title = title,
                     description = description,
-                    coverPath = cover.toUri().let { playlistInteractor.saveImageToPrivateStorage(it) }
+                    coverPath = coverUri?.let { playlistInteractor.saveImageToPrivateStorage(it) }
                 )
             )
         }

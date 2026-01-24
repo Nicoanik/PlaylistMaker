@@ -2,6 +2,7 @@ package com.example.playlistmaker.media.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,30 +57,35 @@ open class CreatePlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.backButton.setOnClickListener {
-            backNavigate()
-        }
+        binding.apply {
+            backButton.setOnClickListener {
+                backNavigate()
+            }
 
-        binding.ivPlaylistCover.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
+            ivPlaylistCover.setOnClickListener {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
 
-        binding.etTitle.addTextChangedListener { text ->
-            binding.buttonCreate.isEnabled = !text.isNullOrEmpty()
-        }
+            etTitle.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            etTitle.addTextChangedListener { text ->
+                binding.buttonCreate.isEnabled = !text.isNullOrEmpty()
+            }
 
-        binding.buttonCreate.setOnClickListener {
-            viewModel.createPlaylist(
-                binding.etTitle.text.toString().trim(),
-                binding.etDescription.text?.toString()?.trim(),
-                coverUri
-            )
-            Toast.makeText(
-                requireContext(),
-                "Плейлист ${binding.etTitle.text} создан",
-                Toast.LENGTH_LONG
-            ).show()
-            findNavController().navigateUp()
+            etDescription.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+
+            buttonCreate.setOnClickListener {
+                viewModel.createPlaylist(
+                    binding.etTitle.text.toString().trim(),
+                    binding.etDescription.text?.toString()?.trim(),
+                    coverUri
+                )
+                Toast.makeText(
+                    requireContext(),
+                    "Плейлист ${binding.etTitle.text} создан",
+                    Toast.LENGTH_LONG
+                ).show()
+                findNavController().navigateUp()
+            }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
