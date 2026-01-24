@@ -196,4 +196,29 @@
         <item name="android:textColor">@color/YP_black</item>
         <item name="android:textSize">@dimen/text_19sp</item>
     </style>
+
+    <style name="text_playlist_details_title">
+        <item name="fontFamily">@font/ys_display_bold</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textSize">@dimen/text_24sp</item>
+        <item name="android:textColor">@color/YP_black</item>
+    </style>
+
+    <style name="text_playlist_details">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/text_18sp</item>
+        <item name="android:textColor">@color/YP_black</item>
+    </style>
+    
+    <style name="button_playlist_bottom_sheet">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_61</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/YP_black</item>
+        <item name="android:textSize">@dimen/text_16sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:paddingStart">@dimen/dp_16</item>
+    </style>
 </resources>

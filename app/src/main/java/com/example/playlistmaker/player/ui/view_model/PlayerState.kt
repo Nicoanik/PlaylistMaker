@@ -4,7 +4,7 @@ import com.example.playlistmaker.media.domain.models.Playlist
 
 sealed interface PlayerState {
 
-    class Prepared(val isPlayButtonEnabled: Boolean, val progress: String) : PlayerState
+    class Prepared() : PlayerState
 
     class Playing(val progress: String) : PlayerState
 
@@ -15,8 +15,4 @@ sealed interface PlayerState {
     class BottomSheetContent(val playlists: List<Playlist>) : PlayerState
 
     class InPlaylist(val inPlaylist: Boolean, val title: String) : PlayerState
-
-    companion object {
-        const val PLAYBACK_DEF = "00:00"
-    }
 }

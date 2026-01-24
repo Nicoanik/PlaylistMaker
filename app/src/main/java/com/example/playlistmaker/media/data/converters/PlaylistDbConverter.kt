@@ -12,7 +12,7 @@ class PlaylistDbConverter(private val gson: Gson) {
             playlist.id,
             playlist.title,
             playlist.description,
-            playlist.coverUri,
+            playlist.coverPath,
             gson.toJson(playlist.trackIds),
             playlist.playlistSize,
             System.currentTimeMillis()

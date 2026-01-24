@@ -1,10 +1,8 @@
 package com.example.playlistmaker.media.ui.fragment
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,17 +22,15 @@ import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewModel
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
 
-class CreatePlaylistFragment : Fragment() {
+open class CreatePlaylistFragment : Fragment() {
 
-    private val viewModel: CreatePlaylistViewModel by viewModel()
+    open val viewModel: CreatePlaylistViewModel by viewModel()
 
     private var _binding: FragmentCreatePlaylistBinding? = null
-    private val binding get() = _binding!!
+    open val binding get() = _binding!!
 
-    private var coverUri: Uri? = null
+    var coverUri: Uri? = null
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -61,31 +57,35 @@ class CreatePlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.backButton.setOnClickListener {
-            backNavigate()
-        }
+        binding.apply {
+            backButton.setOnClickListener {
+                backNavigate()
+            }
 
-        binding.ivPlaylistCover.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
+            ivPlaylistCover.setOnClickListener {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
 
-        binding.etTitle.addTextChangedListener { text ->
-            binding.buttonCreate.isEnabled = !text.isNullOrEmpty()
-        }
+            etTitle.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            etTitle.addTextChangedListener { text ->
+                binding.buttonCreate.isEnabled = !text.isNullOrEmpty()
+            }
 
-        binding.buttonCreate.setOnClickListener {
-            coverUri?.let { viewModel.saveImageToPrivateStorage(it) }
-            viewModel.createPlaylist(
-                binding.etTitle.text.toString().trim(),
-                binding.etDescription.text?.toString()?.trim(),
-                coverUri
-            )
-            Toast.makeText(
-                requireContext(),
-                "Плейлист ${binding.etTitle.text} создан",
-                Toast.LENGTH_LONG
-            ).show()
-            findNavController().navigateUp()
+            etDescription.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+
+            buttonCreate.setOnClickListener {
+                viewModel.createPlaylist(
+                    binding.etTitle.text.toString().trim(),
+                    binding.etDescription.text?.toString()?.trim(),
+                    coverUri
+                )
+                Toast.makeText(
+                    requireContext(),
+                    "Плейлист ${binding.etTitle.text} создан",
+                    Toast.LENGTH_LONG
+                ).show()
+                findNavController().navigateUp()
+            }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(

@@ -32,7 +32,7 @@ class FavoriteTracksViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .placeholder(R.drawable.album_cover_placeholder)
             .transform(
                 CenterCrop(),
-                RoundedCorners(dpToPx(8, itemView.context))
+                RoundedCorners(dpToPx(2, itemView.context))
             )
             .into(artworkUrl100View)
     }

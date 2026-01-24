@@ -16,7 +16,7 @@ class PlayerViewHolder(
     fun bind(playlist: Playlist) {
 
         Glide.with(itemView)
-            .load(playlist.coverUri)
+            .load(playlist.coverPath)
             .placeholder(R.drawable.album_cover_placeholder)
             .error(R.drawable.album_cover_placeholder)
             .transform(

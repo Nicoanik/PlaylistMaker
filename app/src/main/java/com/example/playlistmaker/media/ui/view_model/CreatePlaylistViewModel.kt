@@ -1,31 +1,29 @@
 package com.example.playlistmaker.media.ui.view_model
 
 import android.net.Uri
+import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.media.domain.PlaylistInteractor
 import com.example.playlistmaker.media.domain.models.Playlist
 import kotlinx.coroutines.launch
 
-class CreatePlaylistViewModel(
+open class CreatePlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
-
-    fun saveImageToPrivateStorage(uri: Uri) {
-        playlistInteractor.saveImageToPrivateStorage(uri)
-    }
 
     fun createPlaylist(
         title: String,
         description: String?,
-        cover: Uri?
+        coverUri: Uri?
     ) {
         viewModelScope.launch {
-            playlistInteractor.addPlaylist(
+            playlistInteractor.insertPlaylist(
                 Playlist(
                     title = title,
                     description = description,
-                    coverUri = cover.toString()
+                    coverPath = coverUri?.let { playlistInteractor.saveImageToPrivateStorage(it) }
                 )
             )
         }

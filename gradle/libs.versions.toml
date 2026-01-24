@@ -1,6 +1,6 @@
 [versions]
 activityKtx = "1.12.2"
-agp = "8.13.2"
+agp = "9.0.0"
 fragmentKtx = "1.8.9"
 glide = "5.0.5"
 gson = "2.13.2"
@@ -20,6 +20,8 @@ materialVersion = "1.13.0"
 navigationFragmentKtx = "2.9.6"
 retrofit = "3.0.0"
 roomRuntime = "2.8.4"
+legacySupportV4 = "1.0.0"
+lifecycleLivedataKtxVersion = "2.10.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -44,8 +46,9 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-material-v110 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtxVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

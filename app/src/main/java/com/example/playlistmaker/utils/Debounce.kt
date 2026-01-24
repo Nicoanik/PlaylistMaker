@@ -24,3 +24,19 @@ fun <T> debounce(
         }
     }
 }
+
+fun <T> clickDebounce(
+    delayMillis: Long,
+    coroutineScope: CoroutineScope,
+    action: (T) -> Unit
+): (T) -> Unit {
+    var debounceJob: Job? = null
+    return { param: T ->
+        if (debounceJob?.isCompleted != false) {
+            debounceJob = coroutineScope.launch {
+                action(param)
+                delay(delayMillis)
+            }
+        }
+    }
+}
