@@ -154,7 +154,7 @@ class PlaylistFragment : Fragment() {
 
     private fun showContent(playlist: Playlist, duration: Int, tracks: List<Track>) {
         Glide.with(this)
-            .load(playlist.coverUri)
+            .load(playlist.coverPath)
             .placeholder(R.drawable.album_cover_placeholder)
             .error(R.drawable.album_cover_placeholder)
             .centerCrop()
@@ -180,7 +180,7 @@ class PlaylistFragment : Fragment() {
         adapter.notifyDataSetChanged()
 
         Glide.with(this)
-            .load(playlist.coverUri)
+            .load(playlist.coverPath)
             .placeholder(R.drawable.album_cover_placeholder)
             .error(R.drawable.album_cover_placeholder)
             .transform(

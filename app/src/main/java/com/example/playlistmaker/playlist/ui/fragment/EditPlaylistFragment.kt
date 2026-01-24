@@ -38,13 +38,11 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
         }
 
         binding.buttonCreate.setOnClickListener {
-            coverUri?.let { viewModel.saveImageToPrivateStorage(it) }
             viewModel.updatePlaylist(
                 binding.etTitle.text.toString().trim(),
                 binding.etDescription.text.toString().trim(),
                 coverUri
                 )
-//            findNavController().navigateUp()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -64,9 +62,8 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
     }
 
     private fun showContent(playlist: Playlist) {
-        coverUri = playlist.coverUri?.toUri()
         Glide.with(requireContext())
-            .load(coverUri)
+            .load(playlist.coverPath)
             .placeholder(R.drawable.album_cover_placeholder)
             .transform(
                 CenterCrop(),

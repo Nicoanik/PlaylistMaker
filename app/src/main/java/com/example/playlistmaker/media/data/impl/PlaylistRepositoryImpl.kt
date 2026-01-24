@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import com.example.playlistmaker.media.data.converters.PlaylistDbConverter
 import com.example.playlistmaker.media.data.converters.PlaylistTrackDbConvertor
 import com.example.playlistmaker.media.data.db.dao.PlaylistDao
@@ -46,16 +47,18 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    override fun saveImageToPrivateStorage(uri: Uri) {
+    override fun saveImageToPrivateStorage(uri: Uri): String {
         val filePath =
             File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlists")
         if (!filePath.exists()) filePath.mkdirs()
-        val file = File(filePath, "cover.jpg")
+        val file = File(filePath, "cover-${System.currentTimeMillis()}")
+        Log.d("Nico", "Cover name = cover-${System.currentTimeMillis()}")
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        return  file.absolutePath
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {

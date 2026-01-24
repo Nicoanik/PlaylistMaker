@@ -31,14 +31,8 @@ class EditPlaylistViewModel(
     fun updatePlaylist(
         title: String,
         description: String?,
-        cover: Uri?,
+        coverUri: Uri?,
     ) {
-        Log.d("Nico", "updatePlaylist")
-        Log.d(
-            "Nico", "Title = $title\n" +
-                    "Description = $description\n" +
-                    "Uri = ${cover.toString()}"
-        )
         viewModelScope.launch {
             val playlist = getPlaylist(playlistId)
             insertPlaylist(
@@ -46,7 +40,11 @@ class EditPlaylistViewModel(
                     id = playlistId,
                     title = title,
                     description = description,
-                    coverUri = cover.toString(),
+                    coverPath = coverUri?.let {
+                        playlistInteractor.saveImageToPrivateStorage(
+                            coverUri
+                        )
+                    } ?: playlist.coverPath,
                     trackIds = playlist.trackIds,
                     playlistSize = playlist.playlistSize
                 )

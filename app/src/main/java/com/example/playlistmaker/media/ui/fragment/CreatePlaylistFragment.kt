@@ -69,7 +69,6 @@ open class CreatePlaylistFragment : Fragment() {
         }
 
         binding.buttonCreate.setOnClickListener {
-            coverUri?.let { viewModel.saveImageToPrivateStorage(it) }
             viewModel.createPlaylist(
                 binding.etTitle.text.toString().trim(),
                 binding.etDescription.text?.toString()?.trim(),
