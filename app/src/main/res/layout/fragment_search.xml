@@ -1,155 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_search"
-    style="@style/AppBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".search.ui.fragment.SearchFragment">
 
-    <TextView
-        style="@style/toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_16"
-        android:layout_marginTop="@dimen/dp_14"
-        android:layout_marginBottom="@dimen/dp_16"
-        android:text="@string/search" />
-
-    <com.google.android.material.card.MaterialCardView
-        style="@style/edit_text"
+    <LinearLayout
+        style="@style/AppBackground"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginHorizontal="@dimen/dp_16"
-        android:layout_marginVertical="@dimen/dp_8"
-        app:cardCornerRadius="@dimen/dp_8">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_queryInput"
-            style="@style/edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/dp_12"
-            android:drawableStart="@drawable/ic_search_16"
-            android:drawablePadding="@dimen/dp_8"
-            android:hint="@string/search"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:maxLength="30"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textCursorDrawable="@drawable/color_cursor_blue"
-            android:textSize="@dimen/text_16sp" />
-
-        <ImageView
-            android:id="@+id/clear_button"
-            style="@style/edit_text"
+        <TextView
+            style="@style/toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="@dimen/dp_12"
-            android:src="@drawable/ic_x_16"
-            android:visibility="invisible" />
-    </com.google.android.material.card.MaterialCardView>
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_14"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:text="@string/search" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="@dimen/dp_44"
-            android:layout_height="@dimen/dp_44"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_140"
-            android:indeterminateTint="@color/YP_blue"
-            android:visibility="gone" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_tracks_list"
+        <com.google.android.material.card.MaterialCardView
+            style="@style/edit_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_16" />
+            android:layout_height="36dp"
+            android:layout_marginHorizontal="@dimen/dp_16"
+            android:layout_marginVertical="@dimen/dp_8"
+            app:cardCornerRadius="@dimen/dp_8">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity=""
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="@dimen/dp_120"
-                android:layout_height="@dimen/dp_120"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_102">
-
-                <ImageView
-                    android:id="@+id/iv_placeholder_empty_image"
-                    style="@style/error_image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible" />
-
-                <ImageView
-                    android:id="@+id/iv_placeholder_error_image"
-                    style="@style/internet_image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible" />
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/tv_placeholder_message"
-                style="@style/text_placeholder"
+            <EditText
+                android:id="@+id/et_queryInput"
+                style="@style/edit_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_16"
-                android:visibility="invisible" />
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_12"
+                android:drawableStart="@drawable/ic_search_16"
+                android:drawablePadding="@dimen/dp_8"
+                android:hint="@string/search"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="30"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textCursorDrawable="@drawable/color_cursor_blue"
+                android:textSize="@dimen/text_16sp" />
 
-            <Button
-                android:id="@+id/refresh_button_search"
-                style="@style/media_buttons"
+            <ImageView
+                android:id="@+id/clear_button"
+                style="@style/edit_text"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_36"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_24"
-                android:insetTop="@dimen/dp_0"
-                android:insetBottom="@dimen/dp_0"
-                android:text="@string/button_refresh"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:src="@drawable/ic_x_16"
                 android:visibility="invisible" />
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
-            android:id="@+id/vg_search_history"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:visibility="invisible">
+            android:layout_height="match_parent">
 
-            <TextView
-                style="@style/tv_search_history"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_42"
-                android:layout_marginBottom="@dimen/dp_12"
-                android:text="@string/search_history" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_140"
+                android:indeterminateTint="@color/YP_blue"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_search_history"
+                android:id="@+id/rv_tracks_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_16" />
 
-            <Button
-                android:id="@+id/clear_search_history_button"
-                style="@style/media_buttons"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_36"
-                android:layout_marginTop="@dimen/dp_24"
-                android:layout_marginBottom="@dimen/dp_12"
-                android:text="@string/clear_button_search_history" />
-        </LinearLayout>
-    </FrameLayout>
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity=""
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="@dimen/dp_120"
+                    android:layout_height="@dimen/dp_120"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_102">
+
+                    <ImageView
+                        android:id="@+id/iv_placeholder_empty_image"
+                        style="@style/error_image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/iv_placeholder_error_image"
+                        style="@style/internet_image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="invisible" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_placeholder_message"
+                    style="@style/text_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/refresh_button_search"
+                    style="@style/media_buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_36"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_24"
+                    android:insetTop="@dimen/dp_0"
+                    android:insetBottom="@dimen/dp_0"
+                    android:text="@string/button_refresh"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/vg_search_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <TextView
+                    style="@style/tv_search_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_42"
+                    android:layout_marginBottom="@dimen/dp_12"
+                    android:text="@string/search_history" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_search_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/clear_search_history_button"
+                    style="@style/media_buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_36"
+                    android:layout_marginTop="@dimen/dp_24"
+                    android:layout_marginBottom="@dimen/dp_12"
+                    android:text="@string/clear_button_search_history" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>
