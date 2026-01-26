@@ -11,11 +11,10 @@
     <TextView
         android:id="@+id/toolbar"
         style="@style/toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_16"
-        android:layout_marginTop="@dimen/dp_14"
-        android:layout_marginBottom="@dimen/dp_16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_56"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/dp_16"
         android:text="@string/search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_36"
         android:layout_marginHorizontal="@dimen/dp_16"
-        android:layout_marginVertical="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_8"
         app:cardCornerRadius="@dimen/dp_8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -74,7 +73,7 @@
         android:id="@+id/rv_tracks_list"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_0"
-        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_search" />
@@ -131,7 +130,7 @@
         android:id="@+id/vg_search_history"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_0"
-        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginTop="@dimen/dp_32"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_search">
 
