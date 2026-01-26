@@ -1,8 +1,10 @@
 package com.example.playlistmaker.media.ui.fragment
 
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -60,6 +63,23 @@ open class CreatePlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as RootActivity).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+        val viewTreeObserver = binding.root.viewTreeObserver
+        viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            binding.root.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = binding.root.rootView.height
+            val keyboardHeight = screenHeight - rect.bottom
+            if (keyboardHeight > screenHeight * 0.15) {
+                // Клавиатура появилась
+                binding.buttonCreate.isVisible = false
+                Log.d("Nico", "Keyboard is visible")
+            } else {
+                // Клавиатура исчезла
+                binding.buttonCreate.isVisible = true
+                Log.d("Nico", "Keyboard is not visible")
+            }
+        }
 
         binding.apply {
             backButton.setOnClickListener {
