@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
@@ -18,8 +19,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
-import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewModel
 import com.example.playlistmaker.media.domain.models.dpToPx
+import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewModel
+import com.example.playlistmaker.root.ui.activity.RootActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -56,6 +58,8 @@ open class CreatePlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as RootActivity).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         binding.apply {
             backButton.setOnClickListener {
@@ -99,6 +103,7 @@ open class CreatePlaylistFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        (activity as RootActivity).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         _binding = null
     }
 

@@ -32,4 +32,8 @@ class RootActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun setSoftInputMode(mode: Int) {
+        window.setSoftInputMode(mode)
+    }
 }
