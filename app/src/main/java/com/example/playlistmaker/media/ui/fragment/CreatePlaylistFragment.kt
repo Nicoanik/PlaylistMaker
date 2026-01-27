@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -36,6 +37,8 @@ open class CreatePlaylistFragment : Fragment() {
     open val binding get() = _binding!!
 
     var coverUri: Uri? = null
+
+    private lateinit var listener: ViewTreeObserver.OnGlobalLayoutListener
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -68,44 +71,44 @@ open class CreatePlaylistFragment : Fragment() {
         val paramsTitle = binding.inputLayoutTitle.layoutParams as ConstraintLayout.LayoutParams
         val paramsDescription = binding.inputLayoutDescription.layoutParams as ConstraintLayout.LayoutParams
 
-        val viewTreeObserver = binding.root.viewTreeObserver
-        viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            binding.root.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = binding.root.rootView.height
-            val keyboardHeight = screenHeight - rect.bottom
-            if (keyboardHeight > screenHeight * 0.15) {
-                // Клавиатура появилась
-                binding.buttonCreate.isVisible = false
+        listener = ViewTreeObserver.OnGlobalLayoutListener {
+            _binding?.let {
+                val rect = Rect()
+                binding.root.getWindowVisibleDisplayFrame(rect)
+                val screenHeight = binding.root.rootView.height
+                val keyboardHeight = screenHeight - rect.bottom
+                if (keyboardHeight > screenHeight * 0.15) {
+                    paramsCover.topToTop = ConstraintLayout.LayoutParams.UNSET
+                    paramsCover.bottomToTop = binding.inputLayoutTitle.id
+                    binding.ivPlaylistCover.layoutParams = paramsCover
 
-                paramsCover.topToTop = ConstraintLayout.LayoutParams.UNSET
-                paramsCover.bottomToTop = binding.inputLayoutTitle.id
-                binding.ivPlaylistCover.layoutParams = paramsCover
+                    paramsTitle.topToBottom = ConstraintLayout.LayoutParams.UNSET
+                    paramsTitle.bottomToTop = binding.inputLayoutDescription.id
+                    binding.inputLayoutTitle.layoutParams = paramsTitle
 
-                paramsTitle.topToBottom = ConstraintLayout.LayoutParams.UNSET
-                paramsTitle.bottomToTop = binding.inputLayoutDescription.id
-                binding.inputLayoutTitle.layoutParams = paramsTitle
+                    paramsDescription.topToBottom = ConstraintLayout.LayoutParams.UNSET
+                    paramsDescription.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                    binding.inputLayoutDescription.layoutParams = paramsDescription
 
-                paramsDescription.topToBottom = ConstraintLayout.LayoutParams.UNSET
-                paramsDescription.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-                binding.inputLayoutDescription.layoutParams = paramsDescription
-            } else {
-                // Клавиатура исчезла
-                binding.buttonCreate.isVisible = true
+                    binding.buttonCreate.isVisible = false
+                } else {
+                    paramsCover.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    paramsCover.bottomToTop = ConstraintLayout.LayoutParams.UNSET
+                    binding.ivPlaylistCover.layoutParams = paramsCover
 
-                paramsCover.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                paramsCover.bottomToTop = ConstraintLayout.LayoutParams.UNSET
-                binding.ivPlaylistCover.layoutParams = paramsCover
+                    paramsTitle.topToBottom = binding.ivPlaylistCover.id
+                    paramsTitle.bottomToTop = ConstraintLayout.LayoutParams.UNSET
+                    binding.inputLayoutTitle.layoutParams = paramsTitle
 
-                paramsTitle.topToBottom = binding.ivPlaylistCover.id
-                paramsTitle.bottomToTop = ConstraintLayout.LayoutParams.UNSET
-                binding.inputLayoutTitle.layoutParams = paramsTitle
+                    paramsDescription.topToBottom = binding.inputLayoutTitle.id
+                    paramsDescription.bottomToBottom = ConstraintLayout.LayoutParams.UNSET
+                    binding.inputLayoutDescription.layoutParams = paramsDescription
 
-                paramsDescription.topToBottom = binding.inputLayoutTitle.id
-                paramsDescription.bottomToBottom = ConstraintLayout.LayoutParams.UNSET
-                binding.inputLayoutDescription.layoutParams = paramsDescription
+                    binding.buttonCreate.isVisible = true
+                }
             }
         }
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(listener)
 
         binding.apply {
             backButton.setOnClickListener {
@@ -150,6 +153,7 @@ open class CreatePlaylistFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as RootActivity).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        binding.root.viewTreeObserver.removeOnGlobalLayoutListener(listener)
         _binding = null
     }
 

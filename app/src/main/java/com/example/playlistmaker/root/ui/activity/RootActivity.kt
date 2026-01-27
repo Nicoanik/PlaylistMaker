@@ -18,18 +18,6 @@ class RootActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.root)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
-////            val bottomPadding =systemBars.bottom
-//            val bottomPadding = if (ime.bottom > 0) {
-//                ime.bottom
-//            } else {
-//                systemBars.bottom
-//            }
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomPadding)
-//            insets
-//        }
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
