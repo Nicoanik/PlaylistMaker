@@ -4,7 +4,6 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
@@ -64,6 +64,10 @@ open class CreatePlaylistFragment : Fragment() {
 
         (activity as RootActivity).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
+        val paramsCover = binding.ivPlaylistCover.layoutParams as ConstraintLayout.LayoutParams
+        val paramsTitle = binding.inputLayoutTitle.layoutParams as ConstraintLayout.LayoutParams
+        val paramsDescription = binding.inputLayoutDescription.layoutParams as ConstraintLayout.LayoutParams
+
         val viewTreeObserver = binding.root.viewTreeObserver
         viewTreeObserver.addOnGlobalLayoutListener {
             val rect = Rect()
@@ -73,11 +77,33 @@ open class CreatePlaylistFragment : Fragment() {
             if (keyboardHeight > screenHeight * 0.15) {
                 // Клавиатура появилась
                 binding.buttonCreate.isVisible = false
-                Log.d("Nico", "Keyboard is visible")
+
+                paramsCover.topToTop = ConstraintLayout.LayoutParams.UNSET
+                paramsCover.bottomToTop = binding.inputLayoutTitle.id
+                binding.ivPlaylistCover.layoutParams = paramsCover
+
+                paramsTitle.topToBottom = ConstraintLayout.LayoutParams.UNSET
+                paramsTitle.bottomToTop = binding.inputLayoutDescription.id
+                binding.inputLayoutTitle.layoutParams = paramsTitle
+
+                paramsDescription.topToBottom = ConstraintLayout.LayoutParams.UNSET
+                paramsDescription.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                binding.inputLayoutDescription.layoutParams = paramsDescription
             } else {
                 // Клавиатура исчезла
                 binding.buttonCreate.isVisible = true
-                Log.d("Nico", "Keyboard is not visible")
+
+                paramsCover.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                paramsCover.bottomToTop = ConstraintLayout.LayoutParams.UNSET
+                binding.ivPlaylistCover.layoutParams = paramsCover
+
+                paramsTitle.topToBottom = binding.ivPlaylistCover.id
+                paramsTitle.bottomToTop = ConstraintLayout.LayoutParams.UNSET
+                binding.inputLayoutTitle.layoutParams = paramsTitle
+
+                paramsDescription.topToBottom = binding.inputLayoutTitle.id
+                paramsDescription.bottomToBottom = ConstraintLayout.LayoutParams.UNSET
+                binding.inputLayoutDescription.layoutParams = paramsDescription
             }
         }
 
