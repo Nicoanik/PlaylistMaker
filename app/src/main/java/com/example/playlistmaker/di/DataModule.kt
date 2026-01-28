@@ -16,6 +16,7 @@ import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.network.ItunesApiService
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.sharing.ExternalNavigator
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -66,4 +67,6 @@ val dataModule = module {
     factory<PlaylistDao> { get<AppDatabase>().playlistDao() }
 
     factory<PlaylistTrackDao> { get<AppDatabase>().playlistTrackDao() }
+
+    factory { FirebaseAnalytics.getInstance(androidContext()) }
 }
