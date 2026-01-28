@@ -23,11 +23,19 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "ITUNES_BASE_URL", "\"https://itunes.apple.com\"")
+            buildConfigField("String", "PLAYLIST_MAKER_PREFERENCES", "\"playlist_maker_preferences\"")
+        }
+        debug {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+            buildConfigField("String", "ITUNES_BASE_URL", "\"https://itunes.apple.com\"")
+            buildConfigField("String", "PLAYLIST_MAKER_PREFERENCES", "\"playlist_maker_preferences\"")
         }
     }
     compileOptions {
@@ -42,6 +50,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

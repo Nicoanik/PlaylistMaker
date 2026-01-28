@@ -3,8 +3,8 @@ package com.example.playlistmaker.di
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.room.Room
-import com.example.playlistmaker.App.Companion.ITUNES_BASE_URL
-import com.example.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.example.playlistmaker.BuildConfig.ITUNES_BASE_URL
+import com.example.playlistmaker.BuildConfig.PLAYLIST_MAKER_PREFERENCES
 import com.example.playlistmaker.media.data.converters.PlaylistDbConverter
 import com.example.playlistmaker.media.data.converters.PlaylistTrackDbConvertor
 import com.example.playlistmaker.media.data.converters.TrackDbConverter
