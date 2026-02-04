@@ -98,31 +98,17 @@
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@id/tv_artist_name" />
 
-<!--            <ImageButton-->
-<!--                android:id="@+id/play_button"-->
-<!--                style="@style/button_play"-->
-<!--                android:layout_width="100dp"-->
-<!--                android:layout_height="100dp"-->
-<!--                android:background="@drawable/round_button"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintBottom_toBottomOf="@id/queue_button"-->
-<!--                app:layout_constraintEnd_toStartOf="@id/favorite_button"-->
-<!--                app:layout_constraintStart_toEndOf="@id/queue_button"-->
-<!--                app:layout_constraintTop_toTopOf="@id/queue_button" />-->
-
             <com.example.playlistmaker.player.ui.fragment.PlaybackButtonView
                 android:id="@+id/play_button"
-                style="@style/button_play"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@drawable/round_button"
-                android:visibility="visible"
-                app:playButton="@drawable/play_button_100"
-                app:pauseButton="@drawable/pause_button_100"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/queue_button"
                 app:layout_constraintEnd_toStartOf="@id/favorite_button"
                 app:layout_constraintStart_toEndOf="@id/queue_button"
-                app:layout_constraintTop_toTopOf="@id/queue_button" />
+                app:layout_constraintTop_toTopOf="@id/queue_button"
+                app:pauseButton="@drawable/pause_button_100"
+                app:playButton="@drawable/play_button_100" />
 
             <ImageButton
                 android:id="@+id/favorite_button"
