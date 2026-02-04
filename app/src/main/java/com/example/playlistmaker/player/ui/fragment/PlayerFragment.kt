@@ -154,19 +154,19 @@ class PlayerFragment : Fragment() {
         Log.d("Nico", "Render state = $state")
         when (state) {
             is PlayerState.Prepared -> {
-                binding.playButton.setImageResource(R.drawable.play_button_100)
+//                binding.playButton.setImageResource(R.drawable.play_button_100)
                 binding.playButton.isVisible = true
                 binding.tvPlaybackProgress.text = PLAYBACK_DEF
             }
 
             is PlayerState.Playing -> {
-                binding.playButton.setImageResource(R.drawable.pause_button_100)
+//                binding.playButton.setImageResource(R.drawable.pause_button_100)
                 binding.playButton.isVisible = true
                 binding.tvPlaybackProgress.text = state.progress
             }
 
             is PlayerState.Paused -> {
-                binding.playButton.setImageResource(R.drawable.play_button_100)
+//                binding.playButton.setImageResource(R.drawable.play_button_100)
                 binding.playButton.isVisible = true
                 binding.tvPlaybackProgress.text = state.progress
             }
