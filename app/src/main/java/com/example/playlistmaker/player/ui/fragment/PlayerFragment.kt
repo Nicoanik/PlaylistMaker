@@ -1,5 +1,8 @@
 package com.example.playlistmaker.player.ui.fragment
 
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,6 +27,7 @@ import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel.Companion.PLAYBACK_DEF
+import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.clickDebounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -49,6 +53,12 @@ class PlayerFragment : Fragment() {
     ): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    private val receiver by lazy { ConnectedBroadcastReceiver() }
+    private val filter = IntentFilter().apply {
+        addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+        addAction("android.net.conn.CONNECTIVITY_CHANGE")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -148,6 +158,12 @@ class PlayerFragment : Fragment() {
         super.onResume()
         viewModel.onResume()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        requireActivity().registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().unregisterReceiver(receiver)
     }
 
     private fun render(state: PlayerState?) {
