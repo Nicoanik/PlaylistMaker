@@ -8,31 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".media.ui.fragment.CreatePlaylistFragment">
 
-    <ImageView
-        android:id="@+id/back_button"
-        style="@style/toolbar"
-        android:layout_width="@dimen/dp_48"
-        android:layout_height="@dimen/dp_48"
-        android:layout_marginStart="@dimen/dp_4"
-        android:layout_marginTop="@dimen/dp_4"
-        android:scaleType="center"
-        android:src="@drawable/ic_back_arrow_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/heading"
-        style="@style/toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/dp_12"
-        android:layout_marginTop="@dimen/dp_14"
-        android:text="@string/new_playlist"
-        android:textSize="@dimen/text_22sp"
-        app:layout_constraintStart_toEndOf="@id/back_button"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startBorder"
         android:layout_width="wrap_content"
@@ -55,6 +30,7 @@
         android:layout_height="@dimen/dp_0"
         android:layout_marginHorizontal="@dimen/dp_8"
         android:layout_marginTop="@dimen/dp_82"
+        android:layout_marginBottom="@dimen/dp_32"
         android:clickable="true"
         android:src="@drawable/create_playlist_cover"
         app:layout_constraintDimensionRatio="1:1"
@@ -66,6 +42,7 @@
         android:id="@+id/input_layout_title"
         style="@style/custom_text_input_layout"
         android:layout_marginTop="@dimen/dp_32"
+        android:layout_marginBottom="@dimen/dp_16"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintStart_toStartOf="@id/startBorder"
         app:layout_constraintTop_toBottomOf="@id/iv_playlist_cover">
@@ -82,6 +59,7 @@
         android:id="@+id/input_layout_description"
         style="@style/custom_text_input_layout"
         android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_16"
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintStart_toStartOf="@id/startBorder"
         app:layout_constraintTop_toBottomOf="@id/input_layout_title">
@@ -109,5 +87,37 @@
         app:layout_constraintEnd_toEndOf="@id/endBorder"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/startBorder" />
+
+    <View
+        style="@style/AppBackground"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_56"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/back_button"
+        style="@style/toolbar"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_4"
+        android:scaleType="center"
+        android:src="@drawable/ic_back_arrow_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/heading"
+        style="@style/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_14"
+        android:text="@string/new_playlist"
+        android:textSize="@dimen/text_22sp"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

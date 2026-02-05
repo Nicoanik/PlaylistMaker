@@ -10,6 +10,8 @@ import com.example.playlistmaker.media.domain.FavoritesInteractor
 import com.example.playlistmaker.media.domain.PlaylistInteractor
 import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.domain.models.Track
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,7 +23,8 @@ class PlayerViewModel(
     private val track: Track,
     private val mediaPlayer: MediaPlayer,
     private val favoritesInteractor: FavoritesInteractor,
-    private val playlistInteractor: PlaylistInteractor
+    private val playlistInteractor: PlaylistInteractor,
+    private val analytics: FirebaseAnalytics
 ) : ViewModel() {
 
     private var playerState = STATE_DEFAULT
@@ -77,7 +80,12 @@ class PlayerViewModel(
         viewModelScope.launch {
             when (isFavorite) {
                 true -> favoritesInteractor.deleteFromFavorites(track.trackId)
-                false -> favoritesInteractor.addToFavorites(track)
+                false -> {
+                    favoritesInteractor.addToFavorites(track)
+                    analytics.logEvent("Added To Favorite") {
+                        param("Track: ", track.trackName.toString())
+                    }
+                }
             }
             isFavorite()
         }

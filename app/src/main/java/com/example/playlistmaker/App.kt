@@ -27,9 +27,4 @@ class App : Application() {
 
         getKoin().get<SettingsInteractor>().getSettingThemMode()
     }
-
-    companion object {
-        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
-        const val ITUNES_BASE_URL = "https://itunes.apple.com"
-    }
 }

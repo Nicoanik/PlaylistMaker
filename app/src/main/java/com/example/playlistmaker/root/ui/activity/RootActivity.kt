@@ -2,6 +2,8 @@ package com.example.playlistmaker.root.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -31,5 +33,9 @@ class RootActivity : AppCompatActivity() {
                 else -> binding.bottomNavigationView.isVisible = false
             }
         }
+    }
+
+    fun setSoftInputMode(mode: Int) {
+        window.setSoftInputMode(mode)
     }
 }
