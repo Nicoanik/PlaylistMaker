@@ -149,11 +149,6 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
@@ -164,6 +159,11 @@ class PlayerFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         requireActivity().unregisterReceiver(receiver)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun render(state: PlayerState?) {

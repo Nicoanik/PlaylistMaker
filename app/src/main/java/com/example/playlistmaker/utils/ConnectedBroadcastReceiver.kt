@@ -7,14 +7,25 @@ import android.widget.Toast
 
 internal class ConnectedBroadcastReceiver : BroadcastReceiver() {
 
+    private var isConnected: Boolean? = null
+
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {
-            Intent.ACTION_AIRPLANE_MODE_CHANGED,
-            "android.net.conn.CONNECTIVITY_CHANGE" -> {
-                if (!isConnected(context)) Toast.makeText(
-                    context, "Отсутствует подключение к интернету",
-                    Toast.LENGTH_LONG
-                ).show()
+            Intent.ACTION_AIRPLANE_MODE_CHANGED -> {
+                if (isConnected == true && intent.getBooleanExtra("state", false)) {
+                    showMassage(context)
+                }
+            }
+            "android.net.conn.CONNECTIVITY_CHANGE" -> showMassage(context)
+        }
+    }
+
+    private fun showMassage(context: Context?) {
+        isConnected = isConnected(context)
+        isConnected?.let {
+            if (!it) {
+                Toast.makeText(context, "Отсутствует подключение к интернету", Toast.LENGTH_LONG)
+                    .show()
             }
         }
     }
