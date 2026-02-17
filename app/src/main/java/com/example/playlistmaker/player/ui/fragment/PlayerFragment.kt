@@ -1,16 +1,23 @@
 package com.example.playlistmaker.player.ui.fragment
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -28,7 +35,7 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
-import com.example.playlistmaker.player.ui.view_model.PlayerViewModel.Companion.PLAYBACK_DEF
+import com.example.playlistmaker.services.MusicService
 import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.clickDebounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -47,6 +54,28 @@ class PlayerFragment : Fragment() {
     private lateinit var adapter: PlayerAdapter
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
+    private val serviceConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removeAudioPlayerControl()
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            bindMusicService()
+        } else {
+            Toast.makeText(requireContext(), "Невозможно запустить сервис без разрешения!", Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,7 +132,22 @@ class PlayerFragment : Fragment() {
         )
         binding.rvAddToPlaylist.adapter = adapter
 
-        viewModel.state().observe(viewLifecycleOwner) {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            "Music Service Channel",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        val notificationManager: NotificationManager =
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService()
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -166,6 +210,7 @@ class PlayerFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        unbindMusicService()
         _binding = null
     }
 
@@ -230,10 +275,22 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    private fun bindMusicService() {
+        val intent = Intent(requireContext(), MusicService::class.java)
+        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        requireContext().unbindService(serviceConnection)
+    }
+
     companion object {
 
+        const val PLAYBACK_DEF = "00:00"
         private const val ARGS_TRACK = "track"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val NOTIFICATION_CHANNEL_ID = "music_service_channel"
         fun createArgs(track: Track) = Bundle().apply { putParcelable(ARGS_TRACK, track) }
     }
+
 }

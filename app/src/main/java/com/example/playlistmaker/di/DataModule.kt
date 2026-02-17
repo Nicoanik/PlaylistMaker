@@ -43,8 +43,6 @@ val dataModule = module {
 
     factory { Gson() }
 
-    factory { MediaPlayer() }
-
     single {
         Room.databaseBuilder(
             androidContext(),
