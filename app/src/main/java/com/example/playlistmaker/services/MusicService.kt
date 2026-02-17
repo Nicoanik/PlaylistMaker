@@ -30,6 +30,8 @@ class MusicService : Service(), AudioPlayerControl  {
 
     private var mediaPlayer: MediaPlayer? = null
 
+    private lateinit var track: Track
+
     private val _playerState = MutableStateFlow<PlayerState>(PlayerState.Default())
     val playerState = _playerState.asStateFlow()
 
@@ -56,6 +58,7 @@ class MusicService : Service(), AudioPlayerControl  {
     }
 
     override fun initMediaPlayer(track: Track) {
+        this.track = track
         if (track.previewUrl == null) return
 
         mediaPlayer?.setDataSource(track.previewUrl)
@@ -111,7 +114,7 @@ class MusicService : Service(), AudioPlayerControl  {
     private fun createServiceNotification(): Notification {
         return NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Playlist Maker")
-            .setContentText("Our service is working right now!")
+            .setContentText("${track.artistName} - ${track.trackName}")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
