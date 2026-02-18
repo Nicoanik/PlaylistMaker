@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Binder
@@ -135,10 +136,12 @@ class MusicService : Service(), AudioPlayerControl {
     }
 
     private fun createServiceNotification(): Notification {
+        val largeIconBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_round)
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Playlist Maker")
             .setContentText("${track?.artistName} - ${track?.trackName}")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
+            .setLargeIcon(largeIconBitmap)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
