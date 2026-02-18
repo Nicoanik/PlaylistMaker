@@ -55,6 +55,16 @@ class PlayerFragment : Fragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
+    private val track by lazy {
+        arguments?.getParcelable<Track>(ARGS_TRACK)!!
+    }
+
+    private val receiver by lazy { ConnectedBroadcastReceiver() }
+    private val filter = IntentFilter().apply {
+        addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+        addAction("android.net.conn.CONNECTIVITY_CHANGE")
+    }
+
     private val serviceConnection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -73,7 +83,11 @@ class PlayerFragment : Fragment() {
         if (isGranted) {
             bindMusicService()
         } else {
-            Toast.makeText(requireContext(), "Невозможно запустить сервис без разрешения!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Невозможно запустить музыкальный сервис без Вашего разрешения!",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -86,16 +100,8 @@ class PlayerFragment : Fragment() {
         return binding.root
     }
 
-    private val receiver by lazy { ConnectedBroadcastReceiver() }
-    private val filter = IntentFilter().apply {
-        addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
-        addAction("android.net.conn.CONNECTIVITY_CHANGE")
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val track: Track = arguments?.getParcelable(ARGS_TRACK)!!
 
         viewModel = getViewModel { parametersOf(track) }
 
@@ -131,15 +137,6 @@ class PlayerFragment : Fragment() {
             false
         )
         binding.rvAddToPlaylist.adapter = adapter
-
-        val channel = NotificationChannel(
-            NOTIFICATION_CHANNEL_ID,
-            "Music Service Channel",
-            NotificationManager.IMPORTANCE_DEFAULT
-        )
-        val notificationManager: NotificationManager =
-            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -199,12 +196,14 @@ class PlayerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
+        viewModel.stopForegroundService()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         requireActivity().registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onPause() {
         super.onPause()
+        viewModel.startForegroundService()
         requireActivity().unregisterReceiver(receiver)
     }
 
@@ -276,7 +275,10 @@ class PlayerFragment : Fragment() {
     }
 
     private fun bindMusicService() {
-        val intent = Intent(requireContext(), MusicService::class.java)
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            putExtra("track", track)
+        }
+
         requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
@@ -289,7 +291,6 @@ class PlayerFragment : Fragment() {
         const val PLAYBACK_DEF = "00:00"
         private const val ARGS_TRACK = "track"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-        const val NOTIFICATION_CHANNEL_ID = "music_service_channel"
         fun createArgs(track: Track) = Bundle().apply { putParcelable(ARGS_TRACK, track) }
     }
 

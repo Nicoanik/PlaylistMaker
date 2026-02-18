@@ -31,7 +31,7 @@ class PlayerViewModel(
         this.audioPlayerControl = audioPlayerControl
 
         viewModelScope.launch {
-            audioPlayerControl.initMediaPlayer(track)
+            audioPlayerControl.initMediaPlayer()
             audioPlayerControl.getMediaPlayerState().collect {
                 _state.postValue(it)
             }
@@ -40,6 +40,16 @@ class PlayerViewModel(
 
     fun removeAudioPlayerControl() {
         audioPlayerControl = null
+    }
+
+    fun startForegroundService() {
+        if (audioPlayerControl?.getMediaPlayerState()?.value is PlayerState.Playing) {
+            audioPlayerControl?.startForegroundService()
+        }
+    }
+
+    fun stopForegroundService() {
+        audioPlayerControl?.stopForegroundService()
     }
 
     fun getPlaylists() {
