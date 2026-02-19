@@ -63,7 +63,7 @@ class PlaylistRepositoryImpl(
         playlistDao.insertPlaylist(
             playlistBdConverter.map(
                 playlist.copy(
-                    trackIds = playlist.trackIds + track.trackId!!.toLong(),
+                    trackIds = playlist.trackIds + track.trackId!!,
                     playlistSize = playlist.playlistSize + 1
                 )
             )
@@ -111,4 +111,5 @@ class PlaylistRepositoryImpl(
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {
         return playlists.map { playlist -> playlistBdConverter.map(playlist) }
     }
+
 }

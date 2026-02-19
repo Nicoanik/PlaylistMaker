@@ -49,6 +49,7 @@
     <string name="edit">Редактировать</string>
     <string name="save">Сохранить</string>
     <string name="no_tracks_in_playlist">В этом плейлисте нет треков...</string>
+    <string name="no_internet">Отсутствует подключение к интернету</string>
 
     <plurals name="playlist_size" translatable="false">
         <item quantity="one">%d трек</item>

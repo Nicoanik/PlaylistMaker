@@ -19,8 +19,9 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,6 +39,7 @@ class MusicService : Service(), AudioPlayerControl {
     private val _playerState = MutableStateFlow<PlayerState>(PlayerState.Default())
     val playerState = _playerState.asStateFlow()
 
+    private val scope = CoroutineScope(SupervisorJob())
     private var timerJob: Job? = null
 
     override fun onCreate() {
@@ -64,9 +66,14 @@ class MusicService : Service(), AudioPlayerControl {
         return super.onUnbind(intent)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
+    }
+
     override fun initMediaPlayer() {
         track?.let {
-            mediaPlayer?.setDataSource(track!!.previewUrl)
+            mediaPlayer?.setDataSource(it.previewUrl)
             mediaPlayer?.prepareAsync()
             mediaPlayer?.setOnPreparedListener {
                 _playerState.value = PlayerState.Prepared()
@@ -112,7 +119,7 @@ class MusicService : Service(), AudioPlayerControl {
     }
 
     private fun startTimer() {
-        timerJob = CoroutineScope(Dispatchers.Default).launch {
+        timerJob = scope.launch {
             while (mediaPlayer?.isPlaying == true) {
                 delay(DELAY_TIME_PROGRESS)
                 _playerState.value = PlayerState.Playing(getCurrentPlayerPosition())
