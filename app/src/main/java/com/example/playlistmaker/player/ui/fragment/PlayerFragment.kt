@@ -1,8 +1,6 @@
 package com.example.playlistmaker.player.ui.fragment
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -11,7 +9,6 @@ import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,7 +53,7 @@ class PlayerFragment : Fragment() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     private val track by lazy {
-        arguments?.getParcelable<Track>(ARGS_TRACK)!!
+        arguments?.getParcelable<Track>(ARGS_TRACK) ?: error("Track is required!")
     }
 
     private val receiver by lazy { ConnectedBroadcastReceiver() }
@@ -85,7 +82,7 @@ class PlayerFragment : Fragment() {
         } else {
             Toast.makeText(
                 requireContext(),
-                "Невозможно запустить музыкальный сервис без Вашего разрешения!",
+                R.string.no_permission,
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -214,7 +211,6 @@ class PlayerFragment : Fragment() {
     }
 
     private fun render(state: PlayerState?) {
-        Log.d("Nico", "Render state = $state")
         when (state) {
             is PlayerState.Prepared -> {
                 binding.playButton.setImage(false)
@@ -235,7 +231,6 @@ class PlayerFragment : Fragment() {
             }
 
             is PlayerState.IsFavorite -> {
-                Log.d("Nico", "Render IsFavorite = ${state.isFavorite}")
                 when (state.isFavorite) {
                     true -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_true_51)
                     false -> binding.favoriteButton.setImageResource(R.drawable.button_favorite_false_51)

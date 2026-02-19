@@ -50,6 +50,7 @@
     <string name="save">Сохранить</string>
     <string name="no_tracks_in_playlist">В этом плейлисте нет треков...</string>
     <string name="no_internet">Отсутствует подключение к интернету</string>
+    <string name="no_permission">Невозможно запустить музыкальный сервис без Вашего разрешения!</string>
 
     <plurals name="playlist_size" translatable="false">
         <item quantity="one">%d трек</item>
