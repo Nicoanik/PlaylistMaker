@@ -1,6 +1,10 @@
 package com.example.playlistmaker.search.ui.fragment
 
+import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +14,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +27,7 @@ import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
+import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.clickDebounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
@@ -35,6 +41,12 @@ class SearchFragment : Fragment() {
 
     private lateinit var adapterSearch: TracksAdapter
     private lateinit var adapterHistory: TracksAdapter
+
+    private val receiver by lazy { ConnectedBroadcastReceiver() }
+    private val filter = IntentFilter().apply {
+        addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+        addAction("android.net.conn.CONNECTIVITY_CHANGE")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,6 +149,17 @@ class SearchFragment : Fragment() {
             placeholderInvisible()
             viewModel.searchRequest(binding.etQueryInput.text.toString())
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onResume() {
+        super.onResume()
+        requireActivity().registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().unregisterReceiver(receiver)
     }
 
     override fun onDestroyView() {

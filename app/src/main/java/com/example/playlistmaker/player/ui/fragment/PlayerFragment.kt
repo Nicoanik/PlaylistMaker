@@ -1,12 +1,24 @@
 package com.example.playlistmaker.player.ui.fragment
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +35,8 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
-import com.example.playlistmaker.player.ui.view_model.PlayerViewModel.Companion.PLAYBACK_DEF
+import com.example.playlistmaker.services.MusicService
+import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.clickDebounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -42,6 +55,42 @@ class PlayerFragment : Fragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
+    private val track by lazy {
+        arguments?.getParcelable<Track>(ARGS_TRACK)!!
+    }
+
+    private val receiver by lazy { ConnectedBroadcastReceiver() }
+    private val filter = IntentFilter().apply {
+        addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+        addAction("android.net.conn.CONNECTIVITY_CHANGE")
+    }
+
+    private val serviceConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removeAudioPlayerControl()
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            bindMusicService()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Невозможно запустить музыкальный сервис без Вашего разрешения!",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,8 +102,6 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val track: Track = arguments?.getParcelable(ARGS_TRACK)!!
 
         viewModel = getViewModel { parametersOf(track) }
 
@@ -91,7 +138,13 @@ class PlayerFragment : Fragment() {
         )
         binding.rvAddToPlaylist.adapter = adapter
 
-        viewModel.state().observe(viewLifecycleOwner) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService()
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -139,15 +192,25 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
+        viewModel.stopForegroundService()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        requireActivity().registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.startForegroundService()
+        requireActivity().unregisterReceiver(receiver)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unbindMusicService()
+        _binding = null
     }
 
     private fun render(state: PlayerState?) {
@@ -211,10 +274,24 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    private fun bindMusicService() {
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            putExtra("track", track)
+        }
+
+        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        requireContext().unbindService(serviceConnection)
+    }
+
     companion object {
 
+        const val PLAYBACK_DEF = "00:00"
         private const val ARGS_TRACK = "track"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         fun createArgs(track: Track) = Bundle().apply { putParcelable(ARGS_TRACK, track) }
     }
+
 }
