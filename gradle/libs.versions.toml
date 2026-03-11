@@ -1,7 +1,7 @@
 [versions]
 activityKtx = "1.12.4"
-agp = "9.0.1"
-firebaseBom = "34.9.0"
+agp = "9.1.0"
+firebaseBom = "34.10.0"
 fragmentKtx = "1.8.9"
 glide = "5.0.5"
 gson = "2.13.2"
