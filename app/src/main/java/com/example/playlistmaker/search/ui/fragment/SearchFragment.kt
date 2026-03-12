@@ -17,7 +17,9 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +31,7 @@ import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.clickDebounce
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
@@ -87,8 +90,15 @@ class SearchFragment : Fragment() {
         )
         binding.rvSearchHistory.adapter = adapterHistory
 
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            renderSearch(it)
+//        viewModel.state.observe(viewLifecycleOwner) {
+//            renderSearch(it)
+//        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { state ->
+                    renderSearch(state)
+                }
+            }
         }
 
         viewModel.observeShowToast().observe(viewLifecycleOwner) {
@@ -239,6 +249,7 @@ class SearchFragment : Fragment() {
 
     fun renderSearch(state: SearchState) {
         when (state) {
+            is SearchState.Default -> {}
             is SearchState.Loading -> showLoading()
             is SearchState.Content -> showContent(state.tracks)
             is SearchState.Error -> showError()

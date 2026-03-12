@@ -4,6 +4,7 @@ import com.example.playlistmaker.media.domain.models.Track
 
 sealed interface SearchState {
 
+    object Default : SearchState
     object Loading : SearchState
 
     data class Content(
