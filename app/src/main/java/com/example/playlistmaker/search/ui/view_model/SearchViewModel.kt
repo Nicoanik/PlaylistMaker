@@ -93,7 +93,7 @@ class SearchViewModel(
     }
 
     private fun renderSearchState(state: SearchState) {
-        _state.value = state
+//        _state.value = state
     }
 
     companion object {

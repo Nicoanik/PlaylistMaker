@@ -15,6 +15,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -27,8 +29,10 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.player.ui.fragment.PlayerFragment
+import com.example.playlistmaker.search.ui.screen.SearchScreen
 import com.example.playlistmaker.search.ui.view_model.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
+import com.example.playlistmaker.settings.ui.theme.PlaylistMakerTheme
 import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.clickDebounce
 import kotlinx.coroutines.launch
@@ -38,8 +42,8 @@ import kotlin.getValue
 class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+//    private var _binding: FragmentSearchBinding? = null
+//    private val binding get() = _binding!!
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private lateinit var adapterSearch: TracksAdapter
@@ -56,8 +60,18 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
+//        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+//        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                PlaylistMakerTheme() {
+                    SearchScreen(
+                        viewModel = viewModel,
+                        onTrackClick = { track -> onTrackClickDebounce(track) }
+                    )
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,24 +89,21 @@ class SearchFragment : Fragment() {
         }
 
         adapterSearch = TracksAdapter { track -> onTrackClickDebounce(track) }
-        binding.rvTracksList.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-        binding.rvTracksList.adapter = adapterSearch
+//        binding.rvTracksList.layoutManager = LinearLayoutManager(
+//            requireContext(),
+//            LinearLayoutManager.VERTICAL,
+//            false
+//        )
+//        binding.rvTracksList.adapter = adapterSearch
 
         adapterHistory = TracksAdapter { track -> onTrackClickDebounce(track) }
-        binding.rvSearchHistory.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-        binding.rvSearchHistory.adapter = adapterHistory
+//        binding.rvSearchHistory.layoutManager = LinearLayoutManager(
+//            requireContext(),
+//            LinearLayoutManager.VERTICAL,
+//            false
+//        )
+//        binding.rvSearchHistory.adapter = adapterHistory
 
-//        viewModel.state.observe(viewLifecycleOwner) {
-//            renderSearch(it)
-//        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
@@ -105,18 +116,18 @@ class SearchFragment : Fragment() {
             showToast(it.toString())
         }
 
-        binding.clearSearchHistoryButton.setOnClickListener {
-            viewModel.clearSearchHistory()
-            binding.vgSearchHistory.isVisible = false
-        }
+//        binding.clearSearchHistoryButton.setOnClickListener {
+//            viewModel.clearSearchHistory()
+//            binding.vgSearchHistory.isVisible = false
+//        }
 
-        binding.etQueryInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.searchRequest(binding.etQueryInput.text.toString())
-                true
-            }
-            false
-        }
+//        binding.etQueryInput.setOnEditorActionListener { _, actionId, _ ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                viewModel.searchRequest(binding.etQueryInput.text.toString())
+//                true
+//            }
+//            false
+//        }
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -125,40 +136,40 @@ class SearchFragment : Fragment() {
                 if (s.isNullOrEmpty()) {
                     viewModel.getSearchHistory()
                 } else {
-                    binding.vgSearchHistory.isVisible = false
+//                    binding.vgSearchHistory.isVisible = false
                 }
-                binding.clearButton.isVisible = !s.isNullOrEmpty()
+//                binding.clearButton.isVisible = !s.isNullOrEmpty()
                 viewModel.searchDebounce(s?.toString() ?: TEXT_DEF)
             }
 
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        binding.etQueryInput.addTextChangedListener(textWatcher)
+//        binding.etQueryInput.addTextChangedListener(textWatcher)
 
-        binding.clearButton.setOnClickListener {
-            placeholderInvisible()
-            binding.etQueryInput.setText(TEXT_DEF)
-            binding.rvTracksList.isVisible = false
-            binding.vgSearchHistory.isVisible = (adapterHistory.tracks.isNotEmpty())
-        }
+//        binding.clearButton.setOnClickListener {
+//            placeholderInvisible()
+//            binding.etQueryInput.setText(TEXT_DEF)
+//            binding.rvTracksList.isVisible = false
+//            binding.vgSearchHistory.isVisible = (adapterHistory.tracks.isNotEmpty())
+//        }
 
-        binding.rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    binding.etQueryInput.clearFocus()
-                    val imm =
-                        binding.etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(binding.etQueryInput.windowToken, 0)
-                }
-            }
-        })
+//        binding.rvTracksList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+//                    binding.etQueryInput.clearFocus()
+//                    val imm =
+//                        binding.etQueryInput.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//                    imm.hideSoftInputFromWindow(binding.etQueryInput.windowToken, 0)
+//                }
+//            }
+//        })
 
-        binding.refreshButtonSearch.setOnClickListener {
-            placeholderInvisible()
-            viewModel.searchRequest(binding.etQueryInput.text.toString())
-        }
+//        binding.refreshButtonSearch.setOnClickListener {
+//            placeholderInvisible()
+//            viewModel.searchRequest(binding.etQueryInput.text.toString())
+//        }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -174,36 +185,36 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+//        _binding = null
     }
 
     private fun placeholderInvisible() {
-        binding.apply {
-            tvPlaceholderMessage.isVisible = false
-            ivPlaceholderErrorImage.isVisible = false
-            ivPlaceholderEmptyImage.isVisible = false
-            refreshButtonSearch.isVisible = false
-        }
+//        binding.apply {
+//            tvPlaceholderMessage.isVisible = false
+//            ivPlaceholderErrorImage.isVisible = false
+//            ivPlaceholderEmptyImage.isVisible = false
+//            refreshButtonSearch.isVisible = false
+//        }
     }
 
     private fun showLoading() {
-        binding.apply {
-            rvTracksList.isVisible = false
-            tvPlaceholderMessage.isVisible = false
-            progressBar.isVisible = true
-        }
+//        binding.apply {
+//            rvTracksList.isVisible = false
+//            tvPlaceholderMessage.isVisible = false
+//            progressBar.isVisible = true
+//        }
     }
 
     private fun showError() {
-        binding.apply {
-            progressBar.isVisible = false
-            vgSearchHistory.isVisible = false
-            rvTracksList.isVisible = false
-            tvPlaceholderMessage.text = getString(R.string.something_went_wrong)
-            tvPlaceholderMessage.isVisible = true
-            ivPlaceholderErrorImage.isVisible = true
-            refreshButtonSearch.isVisible = true
-        }
+//        binding.apply {
+//            progressBar.isVisible = false
+//            vgSearchHistory.isVisible = false
+//            rvTracksList.isVisible = false
+//            tvPlaceholderMessage.text = getString(R.string.something_went_wrong)
+//            tvPlaceholderMessage.isVisible = true
+//            ivPlaceholderErrorImage.isVisible = true
+//            refreshButtonSearch.isVisible = true
+//        }
     }
 
     private fun showContent(tracks: List<Track>) {
@@ -211,22 +222,22 @@ class SearchFragment : Fragment() {
         adapterSearch.tracks.addAll(tracks)
         adapterSearch.notifyDataSetChanged()
         placeholderInvisible()
-        binding.apply {
-            progressBar.isVisible = false
-            vgSearchHistory.isVisible = false
-            rvTracksList.isVisible = true
-        }
+//        binding.apply {
+//            progressBar.isVisible = false
+//            vgSearchHistory.isVisible = false
+//            rvTracksList.isVisible = true
+//        }
     }
 
     private fun showEmpty() {
-        binding.apply {
-            progressBar.isVisible = false
-            vgSearchHistory.isVisible = false
-            rvTracksList.isVisible = false
-            tvPlaceholderMessage.text = getString(R.string.nothing_found)
-            tvPlaceholderMessage.isVisible = true
-            ivPlaceholderEmptyImage.isVisible = true
-        }
+//        binding.apply {
+//            progressBar.isVisible = false
+//            vgSearchHistory.isVisible = false
+//            rvTracksList.isVisible = false
+//            tvPlaceholderMessage.text = getString(R.string.nothing_found)
+//            tvPlaceholderMessage.isVisible = true
+//            ivPlaceholderEmptyImage.isVisible = true
+//        }
     }
 
     private fun showToast(message: String) {
@@ -239,11 +250,11 @@ class SearchFragment : Fragment() {
             adapterHistory.tracks.addAll(tracksHistory)
             adapterHistory.notifyDataSetChanged()
             placeholderInvisible()
-            binding.apply {
-                progressBar.isVisible = false
-                rvTracksList.isVisible = false
-                vgSearchHistory.isVisible = true
-            }
+//            binding.apply {
+//                progressBar.isVisible = false
+//                rvTracksList.isVisible = false
+//                vgSearchHistory.isVisible = true
+//            }
         }
     }
 
