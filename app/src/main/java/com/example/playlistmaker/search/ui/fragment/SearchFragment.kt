@@ -129,21 +129,21 @@ class SearchFragment : Fragment() {
 //            false
 //        }
 
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrEmpty()) {
-                    viewModel.getSearchHistory()
-                } else {
-//                    binding.vgSearchHistory.isVisible = false
-                }
-//                binding.clearButton.isVisible = !s.isNullOrEmpty()
-                viewModel.searchDebounce(s?.toString() ?: TEXT_DEF)
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        }
+//        val textWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                if (s.isNullOrEmpty()) {
+//                    viewModel.getSearchHistory()
+//                } else {
+////                    binding.vgSearchHistory.isVisible = false
+//                }
+////                binding.clearButton.isVisible = !s.isNullOrEmpty()
+//                viewModel.searchDebounce(s?.toString() ?: TEXT_DEF)
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {}
+//        }
 
 //        binding.etQueryInput.addTextChangedListener(textWatcher)
 
@@ -259,14 +259,14 @@ class SearchFragment : Fragment() {
     }
 
     fun renderSearch(state: SearchState) {
-        when (state) {
-            is SearchState.Default -> {}
-            is SearchState.Loading -> showLoading()
-            is SearchState.Content -> showContent(state.tracks)
-            is SearchState.Error -> showError()
-            is SearchState.Empty -> showEmpty()
-            is SearchState.History -> showHistory(state.tracksHistory)
-        }
+//        when (state) {
+//            is SearchState.Default -> {}
+//            is SearchState.Loading -> showLoading()
+//            is SearchState.Content -> showContent(state.tracks)
+//            is SearchState.Error -> showError()
+//            is SearchState.Empty -> showEmpty()
+//            is SearchState.History -> showHistory(state.tracksHistory)
+//        }
     }
 
     companion object {

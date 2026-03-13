@@ -1,5 +1,6 @@
 package com.example.playlistmaker.search.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,13 +16,13 @@ class SearchViewModel(
     private val searchHistoryInteractor: SearchHistoryInteractor
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<SearchState>(SearchState.Default)
+    private val _state = MutableStateFlow(SearchState())
     val state = _state
 
     private val showToast = SingleLiveEvent<String?>()
     fun observeShowToast(): LiveData<String?> = showToast
 
-    private var latestSearchText: String? = null
+//    private var latestSearchText: String? = null
     private val trackSearchDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,
@@ -35,15 +36,16 @@ class SearchViewModel(
     }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText != changedText) {
-            latestSearchText = changedText
+        if (_state.value.searchText != changedText) {
+            _state.value = _state.value.copy(searchText = changedText)
             trackSearchDebounce(changedText)
         }
     }
 
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-            renderSearchState(SearchState.Loading)
+//            renderSearchState(SearchState.Loading)
+            _state.value = _state.value.copy(isLoading = true)
             viewModelScope.launch {
                 searchTracksInteractor
                     .searchTracks(newSearchText)
@@ -61,31 +63,36 @@ class SearchViewModel(
             tracks.addAll(foundTracks)
         }
 
-        if (_state.value is SearchState.Loading) {
+//        if (_state.value is SearchState.Loading) {
+        if (_state.value.isLoading) {
             when {
                 errorMessage != null -> {
-                    renderSearchState(SearchState.Error)
+//                    renderSearchState(SearchState.Error)
+                    _state.value = _state.value.copy(error = true)
                     showToast.postValue(errorMessage)
                 }
 
                 tracks.isEmpty() -> {
-                    renderSearchState(SearchState.Empty)
+//                    renderSearchState(SearchState.Empty)
+                    _state.value = _state.value.copy(empty = true)
                 }
 
                 else -> {
-                    renderSearchState(SearchState.Content(tracks))
+//                    renderSearchState(SearchState.Content(tracks))
+                    _state.value = _state.value.copy(content = tracks)
                 }
             }
         }
     }
 
     fun getSearchHistory() {
-        renderSearchState(SearchState.History(searchHistoryInteractor.getSearchHistory()))
+//        renderSearchState(SearchState.History(searchHistoryInteractor.getSearchHistory()))
+        _state.value = _state.value.copy(history = searchHistoryInteractor.getSearchHistory())
     }
 
     fun addTrackToSearchHistory(track: Track) {
         searchHistoryInteractor.addTrackToSearchHistory(track)
-        if (_state.value is SearchState.History) getSearchHistory()
+//        if (_state.value is SearchState.History) getSearchHistory()
     }
 
     fun clearSearchHistory() {

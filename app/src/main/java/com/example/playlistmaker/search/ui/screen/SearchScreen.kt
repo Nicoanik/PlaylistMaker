@@ -1,23 +1,26 @@
 package com.example.playlistmaker.search.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,14 +29,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.example.playlistmaker.R
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
@@ -48,7 +53,6 @@ fun SearchScreen(
     onTrackClick: (Track) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -67,19 +71,30 @@ fun SearchScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            SearchTextField()
+            SearchTextField(state.searchText) { viewModel.searchDebounce(it) }
+
+            if (state.history.isNotEmpty() && state.searchText.isEmpty()) {
+                History(state.history) {  }
+            }
+
+            Text(
+                text = "Треков в истории поиска = ${state.history.size}"
+            )
+
+            Text(
+                text = "Треков найдено = ${state.content.size}"
+            )
         }
     }
 }
 
 @Composable
 private fun SearchTextField(
-//    text: String,
-//    onTextChange: (String) -> Unit,
+    text: String,
+    onTextChange: (String) -> Unit,
 //    onClickClear: () -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
-
+//    var text by remember { mutableStateOf("") }
     BasicTextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,7 +105,8 @@ private fun SearchTextField(
                 color = MaterialTheme.colorScheme.surfaceVariant,
             ),
         value = text,
-        onValueChange = { newText -> text = newText },
+//        onValueChange = { newText -> text = newText },
+        onValueChange = onTextChange,
         textStyle = Typography.ysRegular16.copy(
             color = YP_black,
             textAlign = TextAlign.Start,
@@ -112,6 +128,7 @@ private fun SearchTextField(
                     Modifier.weight(1f),
                     contentAlignment = Alignment.CenterStart
                 ) {
+                    innerTextField()
                     if (text.isEmpty()) {
                         Text(
                             text = stringResource(R.string.search),
@@ -119,18 +136,64 @@ private fun SearchTextField(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-
-                    innerTextField()
                 }
                 if (text.isNotEmpty()) {
                     Icon(
-                        modifier = Modifier.padding(horizontal = 12.dp),
+                        modifier = Modifier
+                            .clickable(onClick = { onTextChange("") })
+                            .padding(horizontal = 12.dp),
                         painter = painterResource(R.drawable.ic_x_16),
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
         }
     )
+}
+
+@Composable
+private fun History(
+    tracks: List<Track>,
+    onTrackClick: (Track) -> Unit
+) {
+    Column(Modifier.fillMaxWidth()) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 42.dp, bottom = 20.dp),
+            text = stringResource(R.string.search_history),
+            style = Typography.ysMedium19
+        )
+        LazyColumn(Modifier.fillMaxWidth()) {
+            items(tracks, key = { it.trackId!! }) { track ->
+                TrackItem(track = track) { onTrackClick(track) }
+            }
+        }
+
+    }
+}
+
+@Composable
+fun TrackItem(
+    track: Track,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(61.dp)
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
+        AsyncImage(
+            model = track.artworkUrl100,
+            contentDescription = track.trackName,
+            modifier = Modifier
+                .size(45.dp)
+                .clip(RoundedCornerShape(2.dp)),
+            placeholder = painterResource(R.drawable.album_cover_placeholder),
+            error = painterResource(R.drawable.album_cover_placeholder),
+            contentScale = ContentScale.Crop
+        )
+    }
 }
