@@ -67,7 +67,8 @@ class SearchFragment : Fragment() {
                 PlaylistMakerTheme() {
                     SearchScreen(
                         viewModel = viewModel,
-                        onTrackClick = { track -> onTrackClickDebounce(track) }
+                        onTrackClick = { track -> onTrackClickDebounce(track) },
+                        onClearHistory = { viewModel.clearSearchHistory() }
                     )
                 }
             }

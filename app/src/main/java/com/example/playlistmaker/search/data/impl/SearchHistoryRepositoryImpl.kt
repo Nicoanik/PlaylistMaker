@@ -1,6 +1,7 @@
 package com.example.playlistmaker.search.data.impl
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.edit
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.search.domain.SearchHistoryRepository
@@ -14,19 +15,21 @@ class SearchHistoryRepositoryImpl(
     private val tracksHistory: MutableList<Track> = mutableListOf()
 
     override fun addTrackToSearchHistory(track: Track) {
+        Log.d("Nico", "Before add: ${tracksHistory.size} tracks, hash: ${System.identityHashCode(tracksHistory)}")
         tracksHistory.remove(track)
         tracksHistory.add(0, track)
         if (tracksHistory.size > MAX_SEARCH_HISTORY) tracksHistory.removeAt(MAX_SEARCH_HISTORY)
         sharedPrefs.edit { putString(SEARCH_HISTORY_KEY, gson.toJson(tracksHistory)) }
+        Log.d("Nico", "After add: ${tracksHistory.size} tracks, hash: ${System.identityHashCode(tracksHistory)}")
     }
 
     override fun getSearchHistory(): List<Track> {
         if (sharedPrefs.contains(SEARCH_HISTORY_KEY)) {
-            tracksHistory.clear()
             val json = sharedPrefs.getString(SEARCH_HISTORY_KEY, "")
-            tracksHistory.addAll(gson.fromJson(json, Array<Track>::class.java))
+            return gson.fromJson(json, Array<Track>::class.java).toList()
         }
-        return tracksHistory
+        Log.d("Nico", "getSearchHistory returned: ${tracksHistory.size} tracks, hash: ${System.identityHashCode(tracksHistory)}")
+        return emptyList()
     }
 
     override fun clearSearchHistory() {

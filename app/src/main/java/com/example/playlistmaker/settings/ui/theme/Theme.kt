@@ -25,7 +25,8 @@ private val LightColorScheme = lightColorScheme(
     surface = YP_white,
     onSurface = YP_black,
     surfaceVariant = YP_light_gray,
-    onSurfaceVariant = YP_text_gray
+    onSurfaceVariant = YP_text_gray,
+    onSecondary = YP_text_gray
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -34,5 +35,6 @@ private val DarkColorScheme = darkColorScheme(
     surface = YP_black,
     onSurface = YP_white,
     surfaceVariant = YP_white,
-    onSurfaceVariant = YP_black
+    onSurfaceVariant = YP_black,
+    onSecondary = YP_white
 )

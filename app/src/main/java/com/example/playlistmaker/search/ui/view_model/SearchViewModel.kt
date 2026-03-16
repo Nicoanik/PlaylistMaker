@@ -1,6 +1,7 @@
 package com.example.playlistmaker.search.ui.view_model
 
 import android.util.Log
+import androidx.compose.runtime.currentComposer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,8 @@ import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.utils.debounce
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -22,7 +25,7 @@ class SearchViewModel(
     private val showToast = SingleLiveEvent<String?>()
     fun observeShowToast(): LiveData<String?> = showToast
 
-//    private var latestSearchText: String? = null
+    //    private var latestSearchText: String? = null
     private val trackSearchDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,
@@ -36,8 +39,12 @@ class SearchViewModel(
     }
 
     fun searchDebounce(changedText: String) {
-        if (_state.value.searchText != changedText) {
-            _state.value = _state.value.copy(searchText = changedText)
+        if (state.value.searchText != changedText) {
+            _state.update { current -> current.copy(searchText = changedText) }
+            if (changedText == "") {
+                _state.update { current -> current.copy(content = emptyList()) }
+                getSearchHistory()
+            }
             trackSearchDebounce(changedText)
         }
     }
@@ -45,7 +52,7 @@ class SearchViewModel(
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
 //            renderSearchState(SearchState.Loading)
-            _state.value = _state.value.copy(isLoading = true)
+            _state.update { current -> current.copy(isLoading = true) }
             viewModelScope.launch {
                 searchTracksInteractor
                     .searchTracks(newSearchText)
@@ -64,39 +71,42 @@ class SearchViewModel(
         }
 
 //        if (_state.value is SearchState.Loading) {
-        if (_state.value.isLoading) {
+        if (state.value.isLoading) {
+            _state.update { current -> current.copy(isLoading = false) }
             when {
                 errorMessage != null -> {
 //                    renderSearchState(SearchState.Error)
-                    _state.value = _state.value.copy(error = true)
+                    _state.update { current -> current.copy(error = true) }
                     showToast.postValue(errorMessage)
                 }
 
                 tracks.isEmpty() -> {
 //                    renderSearchState(SearchState.Empty)
-                    _state.value = _state.value.copy(empty = true)
+                    _state.update { current -> current.copy(empty = true) }
                 }
 
                 else -> {
 //                    renderSearchState(SearchState.Content(tracks))
-                    _state.value = _state.value.copy(content = tracks)
+                    _state.update { current -> current.copy(content = tracks) }
                 }
             }
         }
     }
 
-    fun getSearchHistory() {
-//        renderSearchState(SearchState.History(searchHistoryInteractor.getSearchHistory()))
-        _state.value = _state.value.copy(history = searchHistoryInteractor.getSearchHistory())
+    private fun getSearchHistory() {
+//        _state.update { current -> current.copy(history = searchHistoryInteractor.getSearchHistory()) }
+        _state.update { current -> current.copy(history = searchHistoryInteractor.getSearchHistory()) }
     }
 
     fun addTrackToSearchHistory(track: Track) {
+        Log.d("Nico", "ViewModel: addTrackToSearchHistory called")
         searchHistoryInteractor.addTrackToSearchHistory(track)
 //        if (_state.value is SearchState.History) getSearchHistory()
     }
 
     fun clearSearchHistory() {
         searchHistoryInteractor.clearSearchHistory()
+        getSearchHistory()
     }
 
     private fun renderSearchState(state: SearchState) {
