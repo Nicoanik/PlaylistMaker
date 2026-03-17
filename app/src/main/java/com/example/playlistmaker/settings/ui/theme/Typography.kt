@@ -5,10 +5,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 val Typography = CustomTypography(
+    ysRegular11 = TextStyle(
+        fontFamily = YsDisplayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 11.sp
+    ),
     ysRegular16 = TextStyle(
         fontFamily = YsDisplayFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
+    ),
+    ysMedium14 = TextStyle(
+        fontFamily = YsDisplayFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp
     ),
     ysMedium19 = TextStyle(
         fontFamily = YsDisplayFontFamily,
@@ -19,16 +29,6 @@ val Typography = CustomTypography(
         fontFamily = YsDisplayFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 22.sp
-    ),
-    ysRegular11 = TextStyle(
-        fontFamily = YsDisplayFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 11.sp
-    ),
-    ysMedium14 = TextStyle(
-        fontFamily = YsDisplayFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp
     )
 )
 

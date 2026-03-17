@@ -1,26 +1,27 @@
 package com.example.playlistmaker.settings.ui.view_model
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.sharing.domain.SharingInteractor
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
     private val sharingInteractor: SharingInteractor
 ) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<Boolean>()
-    fun observeState(): LiveData<Boolean> = stateLiveData
+    private val _isChecked = MutableStateFlow(false)
+    val isChecked = _isChecked
+
+    init { getSetSwitcher() }
 
     fun changeThemeMode(checked: Boolean) {
         settingsInteractor.saveSettingsThemeMode(checked)
-        stateLiveData.postValue(settingsInteractor.getSettingThemMode())
+        getSetSwitcher()
     }
 
     fun getSetSwitcher() {
-        stateLiveData.postValue(settingsInteractor.getSettingThemMode())
+        _isChecked.value = settingsInteractor.getSettingThemMode()
     }
 
     fun shareApp() {
@@ -34,4 +35,5 @@ class SettingsViewModel(
     fun openSupport() {
         sharingInteractor.openSupport()
     }
+
 }

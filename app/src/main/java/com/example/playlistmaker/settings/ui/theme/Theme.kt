@@ -20,21 +20,25 @@ fun PlaylistMakerTheme(
 }
 
 private val LightColorScheme = lightColorScheme(
-    background = YP_white,
-    onBackground = YP_black,
-    surface = YP_white,
-    onSurface = YP_black,
-    surfaceVariant = YP_light_gray,
-    onSurfaceVariant = YP_text_gray,
-    onSecondary = YP_text_gray
+    background = ypWhite,
+    onBackground = ypBlack,
+    surface = ypWhite,
+    onSurface = ypBlack,
+    surfaceVariant = ypLightGray,
+    onSurfaceVariant = ypTextGray,
+    onSecondary = ypTextGray,
+    tertiary = ypLightGray,
+    onTertiary = ypTextGray
 )
 
 private val DarkColorScheme = darkColorScheme(
-    background = YP_black,
-    onBackground = YP_white,
-    surface = YP_black,
-    onSurface = YP_white,
-    surfaceVariant = YP_white,
-    onSurfaceVariant = YP_black,
-    onSecondary = YP_white
+    background = ypBlack,
+    onBackground = ypWhite,
+    surface = ypBlack,
+    onSurface = ypWhite,
+    surfaceVariant = ypWhite,
+    onSurfaceVariant = ypBlack,
+    onSecondary = ypWhite,
+    tertiary = switchTrackDark,
+    onTertiary = ypBlue
 )

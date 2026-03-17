@@ -58,8 +58,8 @@ import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.media.domain.models.timeConversion
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.example.playlistmaker.settings.ui.theme.Typography
-import com.example.playlistmaker.settings.ui.theme.YP_black
-import com.example.playlistmaker.settings.ui.theme.YP_blue
+import com.example.playlistmaker.settings.ui.theme.ypBlack
+import com.example.playlistmaker.settings.ui.theme.ypBlue
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,7 +105,7 @@ fun SearchScreen(
                         .padding(top = 140.dp)
                         .align(Alignment.CenterHorizontally)
                         .size(44.dp),
-                    color = YP_blue
+                    color = ypBlue
                 )
             } else {
                 when {
@@ -144,12 +144,12 @@ private fun SearchTextField(
         value = text,
         onValueChange = onTextChange,
         textStyle = Typography.ysRegular16.copy(
-            color = YP_black,
+            color = ypBlack,
             textAlign = TextAlign.Start,
             lineHeight = 20.sp
         ),
         singleLine = true,
-        cursorBrush = SolidColor(YP_blue),
+        cursorBrush = SolidColor(ypBlue),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(
             onDone = { onEnterPressed(text) }
