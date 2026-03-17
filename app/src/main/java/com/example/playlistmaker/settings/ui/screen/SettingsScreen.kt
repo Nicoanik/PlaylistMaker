@@ -33,7 +33,12 @@ import com.example.playlistmaker.settings.ui.theme.Typography
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,11 +86,20 @@ private fun SettingSwitch(
     isChecked: Boolean,
     onClick: () -> Unit
 ) {
+    var isClicked by remember { mutableStateOf(isChecked) }
+
+    LaunchedEffect(isClicked != isChecked) {
+        if (isClicked != isChecked) {
+            delay(300L)
+            onClick()
+        }
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(61.dp)
-            .clickable { onClick() },
+            .clickable { isClicked = !isClicked },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -95,13 +109,7 @@ private fun SettingSwitch(
             text = stringResource(R.string.dark_theme),
             style = Typography.ysRegular16
         )
-        CustomSwitch(
-            checked = isChecked,
-            32.dp,
-            12.dp,
-            18.dp,
-            15.dp
-        )
+        CustomSwitch(isClicked = isClicked, 32.dp, 12.dp, 18.dp)
     }
 }
 
@@ -136,27 +144,26 @@ private fun SettingItem(
 
 @Composable
 fun CustomSwitch(
-    checked: Boolean,
+    isClicked: Boolean,
     trackWidth: Dp,
     trackHeight: Dp,
-    thumbSize: Dp,
-    endPadding: Dp
+    thumbSize: Dp
 ) {
     val boxWidth = if (thumbSize > trackHeight) (thumbSize - trackHeight + trackWidth) else trackWidth
     val boxHeight = if (thumbSize > trackHeight) thumbSize else trackHeight
-    val thumbX by animateDpAsState(
-        targetValue = if (checked) boxWidth - thumbSize else 0.dp,
-        animationSpec = tween(durationMillis = 1000),
+    val offset by animateDpAsState(
+        targetValue = if (isClicked) boxWidth - thumbSize else 0.dp,
+        animationSpec = tween(durationMillis = 300),
         label = "offset"
     )
 
     Box(
         modifier = Modifier
             .size(
-                width = boxWidth + endPadding,
+                width = boxWidth + 15.dp,
                 height = boxHeight
             )
-            .padding(end = endPadding)
+            .padding(end = 15.dp)
     ) {
         Box(
             modifier = Modifier
@@ -171,7 +178,7 @@ fun CustomSwitch(
         Box(
             modifier = Modifier
                 .size(thumbSize)
-                .offset(x = thumbX)
+                .offset(x = offset)
                 .background(MaterialTheme.colorScheme.onTertiary, shape = CircleShape)
                 .align(Alignment.CenterStart)
         )
