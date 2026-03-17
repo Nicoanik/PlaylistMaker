@@ -1,8 +1,10 @@
 package com.example.playlistmaker.search.ui.screen
 
-import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,14 +29,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -52,11 +66,9 @@ import java.util.UUID
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel,
-    onTrackClick: (Track) -> Unit,
-    onClearHistory: () -> Unit
+    onTrackClick: (Track) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    Log.d("Nico", "SearchScreen recomposition. History size: ${state.history.size}")
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,12 +82,22 @@ fun SearchScreen(
             )
         }
     ) { paddingValues ->
+        val focusManager = LocalFocusManager.current
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        focusManager.clearFocus()
+                    }
+                }
         ) {
-            SearchTextField(state.searchText) { viewModel.searchDebounce(it) }
+            SearchTextField(
+                state.searchText,
+                { viewModel.searchDebounce(it) },
+                { viewModel.searchRequest(it) }
+            )
 
             if (state.isLoading) {
                 CircularProgressIndicator(
@@ -86,13 +108,18 @@ fun SearchScreen(
                     color = YP_blue
                 )
             } else {
-
-                if (state.history.isNotEmpty() && state.searchText.isEmpty()) {
-                    SearchHistory(state.history, onTrackClick, onClearHistory)
-                }
-
-                if (state.content.isNotEmpty()) {
-                    FoundTracks(state.content, onTrackClick)
+                when {
+                    state.history.isNotEmpty() && state.searchText.isEmpty() ->
+                        SearchHistory(
+                            state.history,
+                            onTrackClick
+                        ) { viewModel.clearSearchHistory() }
+                    state.content.isNotEmpty() -> FoundTracks(state.content, onTrackClick)
+                    state.error -> {
+                        ShowError {viewModel.searchRequest(state.searchText) }
+                        ShowToast(state.toastMessage) { viewModel.toastShown() }
+                    }
+                    state.empty -> ShowEmpty()
                 }
             }
         }
@@ -102,7 +129,8 @@ fun SearchScreen(
 @Composable
 private fun SearchTextField(
     text: String,
-    onTextChange: (String) -> Unit
+    onTextChange: (String) -> Unit,
+    onEnterPressed: (String) -> Unit
 ) {
     BasicTextField(
         modifier = Modifier
@@ -122,6 +150,10 @@ private fun SearchTextField(
         ),
         singleLine = true,
         cursorBrush = SolidColor(YP_blue),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(
+            onDone = { onEnterPressed(text) }
+        ),
         decorationBox = { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -175,8 +207,14 @@ private fun SearchHistory(
             style = Typography.ysMedium19
         )
 
-        LazyColumn(Modifier.fillMaxWidth()) {
-            items(tracks, key = { it.trackId?.toString() ?: "temp_${tracks.indexOf(it)}" }) { track ->
+        LazyColumn(
+            Modifier
+                .fillMaxWidth()
+                .dismissKeyboardOnScroll()
+        ) {
+            items(
+                tracks,
+                key = { it.trackId?.toString() ?: "temp_${tracks.indexOf(it)}" }) { track ->
                 TrackItem(track) { onTrackClick(track) }
             }
             item {
@@ -215,11 +253,79 @@ private fun FoundTracks(
             .fillMaxWidth()
             .padding(top = 16.dp)
     ) {
-        LazyColumn(Modifier.fillMaxWidth()) {
+        LazyColumn(
+            Modifier
+                .fillMaxWidth()
+                .dismissKeyboardOnScroll()
+        ) {
             items(tracks, key = { it.trackId ?: UUID.randomUUID() }) { track ->
                 TrackItem(track) { onTrackClick(track) }
             }
         }
+    }
+}
+
+@Composable
+private fun ShowError(
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = Modifier
+                .padding(top = 102.dp),
+            painter = painterResource(R.drawable.ic_no_internet_120),
+            contentDescription = null
+        )
+        Text(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .padding(horizontal = 24.dp),
+            text = stringResource(R.string.something_went_wrong),
+            style = Typography.ysMedium19,
+            textAlign = TextAlign.Center
+        )
+        Button(
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .height(36.dp),
+            shape = RoundedCornerShape(54.dp),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onBackground),
+            onClick = { onClick() }
+        ) {
+            Text(
+                text = stringResource(R.string.button_refresh),
+                style = Typography.ysMedium14,
+                color = MaterialTheme.colorScheme.background
+            )
+        }
+    }
+}
+
+@Composable
+private fun ShowEmpty() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = Modifier
+                .padding(top = 102.dp),
+            painter = painterResource(R.drawable.ic_empty_120),
+            contentDescription = null
+        )
+        Text(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .padding(horizontal = 24.dp),
+            text = stringResource(R.string.nothing_found),
+            style = Typography.ysMedium19,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -290,4 +396,32 @@ fun TrackItem(
             tint = MaterialTheme.colorScheme.onSecondary
         )
     }
+}
+
+@Composable
+fun ShowToast(
+    message: String,
+    toastShown: () -> Unit
+) {
+    val context = LocalContext.current
+    LaunchedEffect(message) {
+        if (message.isNotEmpty()) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            toastShown()
+        }
+    }
+}
+
+@Composable
+fun Modifier.dismissKeyboardOnScroll(): Modifier {
+    val focusManager = LocalFocusManager.current
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                focusManager.clearFocus()
+                return Offset.Zero
+            }
+        }
+    }
+    return this.nestedScroll(nestedScrollConnection)
 }
