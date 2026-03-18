@@ -43,11 +43,16 @@ class SearchViewModel(
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun startNetworkReceiver(context: Context) {
+    fun registerNetworkReceiver(context: Context) {
+        networkReceiver.apply {
+            onNetworkChange = { isConnected ->
+                _state.update { it.copy(isConnected = isConnected) }
+            }
+        }
         context.registerReceiver(networkReceiver, networkFilter, Context.RECEIVER_NOT_EXPORTED)
     }
 
-    fun stopNetworkReceiver(context: Context) {
+    fun unregisterNetworkReceiver(context: Context) {
         context.unregisterReceiver(networkReceiver)
     }
 
@@ -87,7 +92,7 @@ class SearchViewModel(
                     error = errorMessage != null,
                     empty = foundTracks?.isEmpty() == true,
                     content = foundTracks ?: emptyList(),
-                    toastMessage = errorMessage ?: ""
+                    errorMessage = errorMessage ?: ""
                 )
             }
         }
@@ -108,7 +113,7 @@ class SearchViewModel(
     }
 
     fun toastShown() {
-        _state.update { it.copy(toastMessage = "") }
+        _state.update { it.copy(errorMessage = "", isConnected = true) }
     }
 
     companion object {

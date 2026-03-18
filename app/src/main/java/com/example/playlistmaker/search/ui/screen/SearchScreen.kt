@@ -2,6 +2,7 @@ package com.example.playlistmaker.search.ui.screen
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -88,11 +89,11 @@ fun SearchScreen(
         }
     }
 
-    DisposableEffect(Unit) {
-        viewModel.startNetworkReceiver(context)
+    DisposableEffect(viewModel) {
+        viewModel.registerNetworkReceiver(context)
 
         onDispose {
-            viewModel.stopNetworkReceiver(context)
+            viewModel.unregisterNetworkReceiver(context)
         }
     }
 
@@ -126,6 +127,11 @@ fun SearchScreen(
                 { viewModel.searchRequest(it) }
             )
 
+            if (!state.isConnected) ShowToast(
+                context,
+                stringResource(R.string.no_internet)
+            ) { viewModel.toastShown() }
+
             if (state.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -145,7 +151,7 @@ fun SearchScreen(
                     state.content.isNotEmpty() -> FoundTracks(state.content, onTrackClick)
                     state.error -> {
                         ShowError { viewModel.searchRequest(state.searchText) }
-                        ShowToast(context, state.toastMessage) { viewModel.toastShown() }
+                        ShowToast(context, state.errorMessage) { viewModel.toastShown() }
                     }
 
                     state.empty -> ShowEmpty()

@@ -7,8 +7,8 @@ data class SearchState(
     val isLoading: Boolean = false,
     val empty: Boolean = false,
     val error: Boolean = false,
+    val errorMessage: String = "",
     val history: List<Track> = emptyList(),
     val content: List<Track> = emptyList(),
-    val toastMessage: String = "",
-    val isConnected: Boolean = false
+    val isConnected: Boolean = true
 )
