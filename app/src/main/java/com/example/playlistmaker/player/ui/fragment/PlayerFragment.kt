@@ -34,7 +34,7 @@ import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.media.domain.models.timeConversion
 import com.example.playlistmaker.services.MusicService
 import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
-import com.example.playlistmaker.utils.clickDebounce
+import com.example.playlistmaker.utils.antiRepetition
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -120,7 +120,7 @@ class PlayerFragment : Fragment() {
             }
         })
 
-        onPlaylistClickDebounce = clickDebounce(
+        onPlaylistClickDebounce = antiRepetition(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope
         ) { playlist ->

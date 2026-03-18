@@ -22,7 +22,7 @@ import com.example.playlistmaker.media.domain.models.dpToPx
 import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.playlist.ui.view_model.PlaylistState
 import com.example.playlistmaker.playlist.ui.view_model.PlaylistViewModel
-import com.example.playlistmaker.utils.clickDebounce
+import com.example.playlistmaker.utils.antiRepetition
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -79,7 +79,7 @@ class PlaylistFragment : Fragment() {
             renderState(it)
         }
 
-        onTrackClickDebounce = clickDebounce(
+        onTrackClickDebounce = antiRepetition(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope
         ) { track ->

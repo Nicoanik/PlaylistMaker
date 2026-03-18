@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,15 +61,27 @@ import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.example.playlistmaker.settings.ui.theme.Typography
 import com.example.playlistmaker.settings.ui.theme.ypBlack
 import com.example.playlistmaker.settings.ui.theme.ypBlue
+import com.example.playlistmaker.utils.antiRepetition
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel,
-    onTrackClick: (Track) -> Unit
+    onNavigateToPlayer: (Track) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+    val onTrackClick: (Track) -> Unit = remember {
+        antiRepetition(
+            SearchViewModel.CLICK_DEBOUNCE_DELAY,
+            scope
+        ) { track ->
+            viewModel.addTrackToSearchHistory(track)
+            onNavigateToPlayer(track)
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -95,7 +108,7 @@ fun SearchScreen(
         ) {
             SearchTextField(
                 state.searchText,
-                { viewModel.searchDebounce(it) },
+                { viewModel.onSearchTextChanged(it) },
                 { viewModel.searchRequest(it) }
             )
 
@@ -114,11 +127,13 @@ fun SearchScreen(
                             state.history,
                             onTrackClick
                         ) { viewModel.clearSearchHistory() }
+
                     state.content.isNotEmpty() -> FoundTracks(state.content, onTrackClick)
                     state.error -> {
-                        ShowError {viewModel.searchRequest(state.searchText) }
+                        ShowError { viewModel.searchRequest(state.searchText) }
                         ShowToast(state.toastMessage) { viewModel.toastShown() }
                     }
+
                     state.empty -> ShowEmpty()
                 }
             }
@@ -404,11 +419,9 @@ fun ShowToast(
     toastShown: () -> Unit
 ) {
     val context = LocalContext.current
-    LaunchedEffect(message) {
-        if (message.isNotEmpty()) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-            toastShown()
-        }
+    if (message.isNotEmpty()) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        toastShown()
     }
 }
 

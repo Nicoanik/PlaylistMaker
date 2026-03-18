@@ -11,23 +11,19 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.media.domain.models.Track
 import com.example.playlistmaker.player.ui.fragment.PlayerFragment
 import com.example.playlistmaker.search.ui.screen.SearchScreen
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.example.playlistmaker.settings.ui.theme.PlaylistMakerTheme
 import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
-import com.example.playlistmaker.utils.clickDebounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
 class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
-    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val receiver by lazy { ConnectedBroadcastReceiver() }
     private val filter = IntentFilter().apply {
@@ -42,28 +38,18 @@ class SearchFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                PlaylistMakerTheme() {
+                PlaylistMakerTheme {
                     SearchScreen(
                         viewModel = viewModel,
-                        onTrackClick = { track -> onTrackClickDebounce(track) }
+                        onNavigateToPlayer = { track ->
+                            findNavController().navigate(
+                                R.id.action_searchFragment_to_playerFragment,
+                                PlayerFragment.createArgs(track)
+                            )
+                        }
                     )
                 }
             }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        onTrackClickDebounce = clickDebounce(
-            CLICK_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope
-        ) { track ->
-            viewModel.addTrackToSearchHistory(track)
-            findNavController().navigate(
-                R.id.action_searchFragment_to_playerFragment,
-                PlayerFragment.createArgs(track)
-            )
         }
     }
 
@@ -78,7 +64,4 @@ class SearchFragment : Fragment() {
         requireActivity().unregisterReceiver(receiver)
     }
 
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
 }

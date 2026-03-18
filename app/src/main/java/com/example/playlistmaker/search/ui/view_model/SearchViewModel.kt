@@ -1,8 +1,5 @@
 package com.example.playlistmaker.search.ui.view_model
 
-import android.util.Log
-import androidx.compose.runtime.currentComposer
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.SearchHistoryInteractor
@@ -32,22 +29,19 @@ class SearchViewModel(
         getSearchHistory()
     }
 
-    fun searchDebounce(changedText: String) {
-        if (state.value.searchText != changedText) {
-            _state.update { current -> current.copy(searchText = changedText) }
-            if (changedText == "") {
-                _state.update { current -> current.copy(content = emptyList()) }
-                getSearchHistory()
-            }
-            trackSearchDebounce(changedText)
+    fun onSearchTextChanged(text: String) {
+        _state.update { it.copy(searchText = text) }
+        if (text.isEmpty()) {
+            _state.update { it.copy(content = emptyList(), error = false, empty = false) }
+            getSearchHistory()
         }
+        trackSearchDebounce(text)
     }
 
-    fun searchRequest(newSearchText: String) {
-        Log.d("Nico", "searchRequest($newSearchText)")
-        if (newSearchText.isNotEmpty()) {
-            _state.update { current ->
-                current.copy(
+    fun searchRequest(text: String) {
+        if (text.isNotEmpty()) {
+            _state.update {
+                it.copy(
                     isLoading = true,
                     error = false,
                     empty = false
@@ -55,7 +49,7 @@ class SearchViewModel(
             }
             viewModelScope.launch {
                 searchTracksInteractor
-                    .searchTracks(newSearchText)
+                    .searchTracks(text)
                     .collect { pair ->
                         processResult(pair.first, pair.second)
                     }
@@ -64,32 +58,21 @@ class SearchViewModel(
     }
 
     private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
-        val tracks = mutableListOf<Track>()
-
-        if (foundTracks != null) {
-            tracks.addAll(foundTracks)
-        }
-
         if (state.value.isLoading) {
-            _state.update { current -> current.copy(isLoading = false) }
-            when {
-                errorMessage != null -> {
-                    _state.update { current -> current.copy(error = true, toastMessage = errorMessage) }
-                }
-
-                tracks.isEmpty() -> {
-                    _state.update { current -> current.copy(empty = true) }
-                }
-
-                else -> {
-                    _state.update { current -> current.copy(content = tracks) }
-                }
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    error = errorMessage != null,
+                    empty = foundTracks?.isEmpty() == true,
+                    content = foundTracks ?: emptyList(),
+                    toastMessage = errorMessage ?: ""
+                )
             }
         }
     }
 
     private fun getSearchHistory() {
-        _state.update { current -> current.copy(history = searchHistoryInteractor.getSearchHistory()) }
+        _state.update { it.copy(history = searchHistoryInteractor.getSearchHistory()) }
     }
 
     fun addTrackToSearchHistory(track: Track) {
@@ -103,10 +86,12 @@ class SearchViewModel(
     }
 
     fun toastShown() {
-        _state.update { current -> current.copy(toastMessage = "") }
+        _state.update { it.copy(toastMessage = "") }
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
 }

@@ -15,7 +15,7 @@ import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.ui.view_model.PlaylistsState
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
 import com.example.playlistmaker.playlist.ui.fragment.PlaylistFragment
-import com.example.playlistmaker.utils.clickDebounce
+import com.example.playlistmaker.utils.antiRepetition
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -43,7 +43,7 @@ class PlaylistsFragment : Fragment() {
 
         viewModel.getPlaylists()
 
-        onPlaylistClickDebounce = clickDebounce(
+        onPlaylistClickDebounce = antiRepetition(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope
         ) { playlist ->

@@ -12,6 +12,7 @@ fun <T> debounce(
     action: (T) -> Unit
 ): (T) -> Unit {
     var debounceJob: Job? = null
+
     return { param: T ->
         if (useLastParam) {
             debounceJob?.cancel()
@@ -25,17 +26,20 @@ fun <T> debounce(
     }
 }
 
-fun <T> clickDebounce(
-    delayMillis: Long,
+fun <T> antiRepetition(
+    lockTimeMillis: Long,
     coroutineScope: CoroutineScope,
     action: (T) -> Unit
 ): (T) -> Unit {
-    var debounceJob: Job? = null
+    var isLocked = false
+
     return { param: T ->
-        if (debounceJob?.isCompleted != false) {
-            debounceJob = coroutineScope.launch {
-                action(param)
-                delay(delayMillis)
+        if (!isLocked) {
+            action(param)
+            isLocked = true
+            coroutineScope.launch {
+                delay(lockTimeMillis)
+                isLocked = false
             }
         }
     }

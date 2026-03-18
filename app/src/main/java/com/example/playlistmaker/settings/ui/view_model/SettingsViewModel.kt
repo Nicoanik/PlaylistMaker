@@ -13,7 +13,9 @@ class SettingsViewModel(
     private val _isChecked = MutableStateFlow(false)
     val isChecked = _isChecked
 
-    init { getSetSwitcher() }
+    init {
+        getSetSwitcher()
+    }
 
     fun changeThemeMode(checked: Boolean) {
         settingsInteractor.saveSettingsThemeMode(checked)
