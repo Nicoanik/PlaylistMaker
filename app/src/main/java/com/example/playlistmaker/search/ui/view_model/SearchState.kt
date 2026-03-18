@@ -9,5 +9,6 @@ data class SearchState(
     val error: Boolean = false,
     val history: List<Track> = emptyList(),
     val content: List<Track> = emptyList(),
-    val toastMessage: String = ""
+    val toastMessage: String = "",
+    val isConnected: Boolean = false
 )

@@ -17,6 +17,7 @@ internal class ConnectedBroadcastReceiver : BroadcastReceiver() {
                     showMessage(context)
                 }
             }
+
             "android.net.conn.CONNECTIVITY_CHANGE" -> showMessage(context)
         }
     }
@@ -32,3 +33,23 @@ internal class ConnectedBroadcastReceiver : BroadcastReceiver() {
     }
 
 }
+
+//class ConnectedBroadcastReceiver : BroadcastReceiver() {
+//
+//    var onNetworkChange: ((Boolean) -> Unit)? = null
+//
+//    override fun onReceive(context: Context?, intent: Intent?) {
+//        val isConnected = when (intent?.action) {
+//            Intent.ACTION_AIRPLANE_MODE_CHANGED -> {
+//                val isEnabled = intent.getBooleanExtra("state", false)
+//                !isEnabled
+//            }
+//            "android.net.conn.CONNECTIVITY_CHANGE" -> {
+//                // Здесь можно добавить детальную проверку подключения
+//                true
+//            }
+//            else -> true
+//        }
+//        onNetworkChange?.invoke(isConnected)
+//    }
+//}

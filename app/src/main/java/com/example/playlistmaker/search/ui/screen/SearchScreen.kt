@@ -1,6 +1,9 @@
 package com.example.playlistmaker.search.ui.screen
 
+import android.content.Context
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,7 +32,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,6 +67,7 @@ import com.example.playlistmaker.settings.ui.theme.ypBlue
 import com.example.playlistmaker.utils.antiRepetition
 import java.util.UUID
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
@@ -71,7 +75,9 @@ fun SearchScreen(
     onNavigateToPlayer: (Track) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
     val onTrackClick: (Track) -> Unit = remember {
         antiRepetition(
             SearchViewModel.CLICK_DEBOUNCE_DELAY,
@@ -79,6 +85,14 @@ fun SearchScreen(
         ) { track ->
             viewModel.addTrackToSearchHistory(track)
             onNavigateToPlayer(track)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        viewModel.startNetworkReceiver(context)
+
+        onDispose {
+            viewModel.stopNetworkReceiver(context)
         }
     }
 
@@ -131,7 +145,7 @@ fun SearchScreen(
                     state.content.isNotEmpty() -> FoundTracks(state.content, onTrackClick)
                     state.error -> {
                         ShowError { viewModel.searchRequest(state.searchText) }
-                        ShowToast(state.toastMessage) { viewModel.toastShown() }
+                        ShowToast(context, state.toastMessage) { viewModel.toastShown() }
                     }
 
                     state.empty -> ShowEmpty()
@@ -415,10 +429,10 @@ fun TrackItem(
 
 @Composable
 fun ShowToast(
+    context: Context,
     message: String,
     toastShown: () -> Unit
 ) {
-    val context = LocalContext.current
     if (message.isNotEmpty()) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         toastShown()

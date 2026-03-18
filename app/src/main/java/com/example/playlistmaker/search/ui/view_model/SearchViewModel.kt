@@ -1,10 +1,16 @@
 package com.example.playlistmaker.search.ui.view_model
 
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.media.domain.models.Track
+import com.example.playlistmaker.utils.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.debounce
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,6 +23,13 @@ class SearchViewModel(
 
     private val _state = MutableStateFlow(SearchState())
     val state = _state
+
+    private val networkReceiver by lazy { ConnectedBroadcastReceiver() }
+    private val networkFilter = IntentFilter().apply {
+        addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+        addAction("android.net.conn.CONNECTIVITY_CHANGE")
+    }
+
     private val trackSearchDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,
@@ -27,6 +40,15 @@ class SearchViewModel(
 
     init {
         getSearchHistory()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun startNetworkReceiver(context: Context) {
+        context.registerReceiver(networkReceiver, networkFilter, Context.RECEIVER_NOT_EXPORTED)
+    }
+
+    fun stopNetworkReceiver(context: Context) {
+        context.unregisterReceiver(networkReceiver)
     }
 
     fun onSearchTextChanged(text: String) {
