@@ -7,16 +7,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabIndicatorScope
+import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.PrimaryIndicator
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,9 +32,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
 import com.example.playlistmaker.settings.ui.theme.Typography
+import com.example.playlistmaker.settings.ui.theme.ypBlack
+import com.example.playlistmaker.settings.ui.theme.ypBlue
+import com.example.playlistmaker.settings.ui.theme.ypLightGray
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,13 +74,19 @@ fun MediaScreen(
                 .padding(paddingValues)
         ) {
             PrimaryTabRow(
+                modifier = Modifier.height(48.dp),
                 selectedTabIndex = selectedTabIndex,
-                modifier = Modifier.fillMaxWidth()
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                indicator = {
+                    PrimaryIndicator(
+                        height = 2.dp,
+                        width = 148.dp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             ) {
                 Tab(
                     selected = selectedTabIndex == 0,
-                    selectedContentColor = MaterialTheme.colorScheme.primary,
-                    unselectedContentColor = MaterialTheme.colorScheme.outline,
                     onClick = {
                         scope.launch {
                             pagerState.animateScrollToPage(0)
@@ -84,8 +102,6 @@ fun MediaScreen(
 
                 Tab(
                     selected = selectedTabIndex == 1,
-                    selectedContentColor = MaterialTheme.colorScheme.primary,
-                    unselectedContentColor = MaterialTheme.colorScheme.outline,
                     onClick = {
                         scope.launch {
                             pagerState.animateScrollToPage(1)
@@ -146,4 +162,21 @@ fun SecondScreen() {
                 .align(Alignment.Center)
         )
     }
+}
+
+@Composable
+private fun CustomIndicator(tabPositions: List<TabPosition>, selectedTabIndex: Int) {
+    Box(
+        modifier = Modifier
+            .tabIndicatorOffset(tabPositions[selectedTabIndex])
+            .height(2.dp)
+            .width(148.dp)
+            .background(MaterialTheme.colorScheme.onSurface)
+    )
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun Main() {
+    MediaScreen()
 }
