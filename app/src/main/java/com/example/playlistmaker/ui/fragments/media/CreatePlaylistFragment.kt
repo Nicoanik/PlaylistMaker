@@ -24,7 +24,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.domain.media.models.dpToPx
-import com.example.playlistmaker.ui.view_models.media.CreatePlaylistViewModel
+import com.example.playlistmaker.presentation.media.CreatePlaylistViewModel
 import com.example.playlistmaker.ui.activity.RootActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel

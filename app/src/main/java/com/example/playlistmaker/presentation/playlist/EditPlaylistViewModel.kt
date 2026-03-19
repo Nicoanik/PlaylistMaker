@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.view_models.playlist
+package com.example.playlistmaker.presentation.playlist
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.media.PlaylistInteractor
 import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.ui.view_models.media.CreatePlaylistViewModel
+import com.example.playlistmaker.presentation.media.CreatePlaylistViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 

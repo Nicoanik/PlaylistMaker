@@ -1,13 +1,13 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.ui.view_models.media.CreatePlaylistViewModel
-import com.example.playlistmaker.ui.view_models.player.PlayerViewModel
+import com.example.playlistmaker.presentation.media.CreatePlaylistViewModel
+import com.example.playlistmaker.presentation.player.PlayerViewModel
 import com.example.playlistmaker.domain.media.models.Track
-import com.example.playlistmaker.ui.view_models.media.MediaViewModel
-import com.example.playlistmaker.ui.view_models.playlist.EditPlaylistViewModel
-import com.example.playlistmaker.ui.view_models.playlist.PlaylistViewModel
-import com.example.playlistmaker.ui.view_models.search.SearchViewModel
-import com.example.playlistmaker.ui.view_models.settings.SettingsViewModel
+import com.example.playlistmaker.presentation.media.MediaViewModel
+import com.example.playlistmaker.presentation.playlist.EditPlaylistViewModel
+import com.example.playlistmaker.presentation.playlist.PlaylistViewModel
+import com.example.playlistmaker.presentation.search.SearchViewModel
+import com.example.playlistmaker.presentation.settings.SettingsViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 

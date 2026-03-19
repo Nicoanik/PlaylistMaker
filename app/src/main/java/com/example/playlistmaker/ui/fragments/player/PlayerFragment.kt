@@ -27,8 +27,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.ui.view_models.player.PlayerState
-import com.example.playlistmaker.ui.view_models.player.PlayerViewModel
+import com.example.playlistmaker.presentation.player.PlayerState
+import com.example.playlistmaker.presentation.player.PlayerViewModel
 import com.example.playlistmaker.domain.media.models.Track
 import com.example.playlistmaker.domain.media.models.dpToPx
 import com.example.playlistmaker.domain.media.models.timeConversion

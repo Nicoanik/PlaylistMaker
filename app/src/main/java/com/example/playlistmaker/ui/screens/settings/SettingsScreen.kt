@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.playlistmaker.R
 import com.example.playlistmaker.ui.theme.Typography
-import com.example.playlistmaker.ui.view_models.settings.SettingsViewModel
+import com.example.playlistmaker.presentation.settings.SettingsViewModel
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect

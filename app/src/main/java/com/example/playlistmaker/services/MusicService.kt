@@ -17,7 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.media.models.Track
-import com.example.playlistmaker.ui.view_models.player.PlayerState
+import com.example.playlistmaker.presentation.player.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob

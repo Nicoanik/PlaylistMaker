@@ -20,8 +20,8 @@ import com.example.playlistmaker.domain.media.models.Playlist
 import com.example.playlistmaker.domain.media.models.Track
 import com.example.playlistmaker.domain.media.models.dpToPx
 import com.example.playlistmaker.ui.fragments.player.PlayerFragment
-import com.example.playlistmaker.ui.view_models.playlist.PlaylistState
-import com.example.playlistmaker.ui.view_models.playlist.PlaylistViewModel
+import com.example.playlistmaker.presentation.playlist.PlaylistState
+import com.example.playlistmaker.presentation.playlist.PlaylistViewModel
 import com.example.playlistmaker.utils.antiRepetition
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

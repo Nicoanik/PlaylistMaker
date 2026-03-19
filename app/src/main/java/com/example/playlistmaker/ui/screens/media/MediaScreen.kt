@@ -28,7 +28,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.media.models.Playlist
 import com.example.playlistmaker.domain.media.models.Track
 import com.example.playlistmaker.ui.theme.Typography
-import com.example.playlistmaker.ui.view_models.media.MediaViewModel
+import com.example.playlistmaker.presentation.media.MediaViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

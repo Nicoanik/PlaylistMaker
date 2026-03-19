@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.ui.fragments.player.PlayerFragment
 import com.example.playlistmaker.ui.screens.search.SearchScreen
-import com.example.playlistmaker.ui.view_models.search.SearchViewModel
+import com.example.playlistmaker.presentation.search.SearchViewModel
 import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue

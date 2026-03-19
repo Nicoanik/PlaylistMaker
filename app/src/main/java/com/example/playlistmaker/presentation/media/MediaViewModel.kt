@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.view_models.media
+package com.example.playlistmaker.presentation.media
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

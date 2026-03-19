@@ -12,7 +12,7 @@ import com.example.playlistmaker.ui.fragments.player.PlayerFragment
 import com.example.playlistmaker.ui.fragments.playlist.PlaylistFragment
 import com.example.playlistmaker.ui.screens.media.MediaScreen
 import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
-import com.example.playlistmaker.ui.view_models.media.MediaViewModel
+import com.example.playlistmaker.presentation.media.MediaViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaFragment : Fragment() {

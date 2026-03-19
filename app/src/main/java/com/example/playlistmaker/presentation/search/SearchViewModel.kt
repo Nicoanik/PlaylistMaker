@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.view_models.search
+package com.example.playlistmaker.presentation.search
 
 import android.content.Context
 import android.content.Intent

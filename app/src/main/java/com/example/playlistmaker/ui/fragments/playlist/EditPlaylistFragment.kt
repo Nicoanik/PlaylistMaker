@@ -11,8 +11,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.media.models.Playlist
 import com.example.playlistmaker.domain.media.models.dpToPx
 import com.example.playlistmaker.ui.fragments.media.CreatePlaylistFragment
-import com.example.playlistmaker.ui.view_models.playlist.EditPlaylistState
-import com.example.playlistmaker.ui.view_models.playlist.EditPlaylistViewModel
+import com.example.playlistmaker.presentation.playlist.EditPlaylistState
+import com.example.playlistmaker.presentation.playlist.EditPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

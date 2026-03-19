@@ -1,6 +1,6 @@
 package com.example.playlistmaker.services
 
-import com.example.playlistmaker.ui.view_models.player.PlayerState
+import com.example.playlistmaker.presentation.player.PlayerState
 import kotlinx.coroutines.flow.StateFlow
 
 interface AudioPlayerControl {
