@@ -36,4 +36,5 @@ class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             )
             .into(artworkUrl100View)
     }
+
 }

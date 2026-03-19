@@ -26,4 +26,5 @@ class PlaylistAdapter(
     }
 
     override fun getItemCount(): Int = tracks.size
+
 }

@@ -222,4 +222,5 @@ class PlaylistFragment : Fragment() {
         private const val ARGS_PLAYLIST_ID = "playlist"
         fun createArgs(playlistId: Long) = Bundle().apply { putLong(ARGS_PLAYLIST_ID, playlistId) }
     }
+
 }

@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.AddToPlaylistViewBinding
 import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.ui.fragments.media.PlaylistAdapter.OnItemClickListener
 
 class PlayerAdapter(
     val onItemClickListener: OnItemClickListener
@@ -32,4 +31,9 @@ class PlayerAdapter(
     }
 
     override fun getItemCount(): Int = playlists.size
+
+    fun interface OnItemClickListener {
+        fun onItemClick(playlist: Playlist)
+    }
+
 }
