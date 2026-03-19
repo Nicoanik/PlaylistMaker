@@ -10,6 +10,11 @@ val Typography = CustomTypography(
         fontWeight = FontWeight.Normal,
         fontSize = 11.sp
     ),
+    ysRegular12 = TextStyle(
+        fontFamily = YsDisplayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
+    ),
     ysRegular16 = TextStyle(
         fontFamily = YsDisplayFontFamily,
         fontWeight = FontWeight.Normal,
@@ -34,6 +39,7 @@ val Typography = CustomTypography(
 
 data class CustomTypography(
     val ysRegular11: TextStyle,
+    val ysRegular12: TextStyle,
     val ysRegular16: TextStyle,
     val ysMedium14: TextStyle,
     val ysMedium19: TextStyle,

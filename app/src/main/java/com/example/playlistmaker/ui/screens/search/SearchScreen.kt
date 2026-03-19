@@ -255,8 +255,7 @@ private fun SearchHistory(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(
-                        modifier = Modifier
-                            .height(36.dp),
+                        modifier = Modifier.height(36.dp),
                         shape = RoundedCornerShape(54.dp),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onBackground),
                         onClick = { onClearHistory() }

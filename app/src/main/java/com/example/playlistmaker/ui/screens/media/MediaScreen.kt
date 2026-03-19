@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.media.models.Playlist
 import com.example.playlistmaker.domain.media.models.Track
 import com.example.playlistmaker.ui.theme.Typography
 import com.example.playlistmaker.ui.view_models.media.MediaViewModel
@@ -34,7 +35,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun MediaScreen(
     viewModel: MediaViewModel,
-    onTrackClick: (Track) -> Unit
+    onTrackClick: (Track) -> Unit,
+    onNewPlaylistClick: () -> Unit,
+    onPlaylistClick: (Playlist) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
@@ -112,7 +115,7 @@ fun MediaScreen(
             ) { page ->
                 when (page) {
                     0 -> FavoriteScreen(state.favoriteTracks, onTrackClick)
-                    1 -> PlaylistsScreen()
+                    1 -> PlaylistsScreen(state.playlists, onNewPlaylistClick, onPlaylistClick)
                 }
             }
         }
