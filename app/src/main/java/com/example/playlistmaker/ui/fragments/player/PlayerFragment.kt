@@ -154,13 +154,13 @@ class PlayerFragment : Fragment() {
             )
             .into(binding.ivAlbumCover)
         binding.apply {
-            FragmentPlayerBinding.tvTrackName.text = track.trackName
-            FragmentPlayerBinding.tvArtistName.text = track.artistName
-            FragmentPlayerBinding.tvTrackTime.text = timeConversion(track.trackTime)
-            FragmentPlayerBinding.tvCollectionName.text = track.collectionName
-            FragmentPlayerBinding.tvReleaseDate.text = track.releaseDate?.substring(0, 4)
-            FragmentPlayerBinding.tvPrimaryGenreName.text = track.primaryGenreName
-            FragmentPlayerBinding.tvCountry.text = track.country
+            tvTrackName.text = track.trackName
+            tvArtistName.text = track.artistName
+            tvTrackTime.text = timeConversion(track.trackTime)
+            tvCollectionName.text = track.collectionName
+            tvReleaseDate.text = track.releaseDate?.substring(0, 4)
+            tvPrimaryGenreName.text = track.primaryGenreName
+            tvCountry.text = track.country
         }
 
         binding.backButtonAudioPlayer.setOnClickListener {
