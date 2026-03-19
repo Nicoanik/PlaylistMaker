@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".settings.ui.fragment.SettingsFragment">
+    tools:context=".ui.fragments.settings.SettingsFragment">
 
     <TextView
         style="@style/toolbar"
