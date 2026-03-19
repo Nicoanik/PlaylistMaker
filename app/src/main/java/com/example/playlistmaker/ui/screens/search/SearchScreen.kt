@@ -300,13 +300,11 @@ private fun ShowError(
     onClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier
-                .padding(top = 102.dp),
+            modifier = Modifier.padding(top = 102.dp),
             painter = painterResource(R.drawable.ic_no_internet_120),
             contentDescription = null
         )
@@ -338,13 +336,11 @@ private fun ShowError(
 @Composable
 private fun ShowEmpty() {
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier
-                .padding(top = 102.dp),
+            modifier = Modifier.padding(top = 102.dp),
             painter = painterResource(R.drawable.ic_empty_120),
             contentDescription = null
         )

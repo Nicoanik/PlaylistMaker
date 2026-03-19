@@ -108,9 +108,7 @@ fun MediaScreen(
 
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+                modifier = Modifier.fillMaxSize()
             ) { page ->
                 when (page) {
                     0 -> FavoriteScreen(state.favoriteTracks, onTrackClick)
