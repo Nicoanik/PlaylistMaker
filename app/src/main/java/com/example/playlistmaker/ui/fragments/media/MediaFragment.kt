@@ -6,13 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
+import com.example.playlistmaker.ui.fragments.player.PlayerFragment
 import com.example.playlistmaker.ui.screens.media.MediaScreen
 import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
+import com.example.playlistmaker.ui.view_models.media.MediaViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaFragment : Fragment() {
 
-    private lateinit var tabMediator: TabLayoutMediator
+    private val viewModel by viewModel<MediaViewModel>()
+
+//    private lateinit var tabMediator: TabLayoutMediator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,7 +29,15 @@ class MediaFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 PlaylistMakerTheme {
-                    MediaScreen()
+                    MediaScreen(
+                        viewModel = viewModel,
+                        onTrackClick = { track ->
+                            findNavController().navigate(
+                                R.id.action_mediaFragment_to_playerFragment,
+                                PlayerFragment.createArgs(track)
+                            )
+                        }
+                    )
                 }
             }
         }

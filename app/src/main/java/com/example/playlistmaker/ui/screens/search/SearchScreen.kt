@@ -38,28 +38,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.media.models.Track
-import com.example.playlistmaker.domain.media.models.timeConversion
+import com.example.playlistmaker.ui.components.TrackItem
 import com.example.playlistmaker.ui.view_models.search.SearchViewModel
 import com.example.playlistmaker.ui.theme.Typography
 import com.example.playlistmaker.ui.theme.ypBlack
@@ -359,75 +355,6 @@ private fun ShowEmpty() {
             text = stringResource(R.string.nothing_found),
             style = Typography.ysMedium19,
             textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-fun TrackItem(
-    track: Track,
-    onClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(61.dp)
-            .padding(horizontal = 12.dp)
-            .clickable { onClick() },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        AsyncImage(
-            model = track.artworkUrl100,
-            contentDescription = track.trackName,
-            modifier = Modifier
-                .size(45.dp)
-                .clip(RoundedCornerShape(2.dp)),
-            placeholder = painterResource(R.drawable.album_cover_placeholder),
-            error = painterResource(R.drawable.album_cover_placeholder),
-            contentScale = ContentScale.Crop
-        )
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp)
-        ) {
-            track.trackName?.let {
-                Text(
-                    text = it,
-                    style = Typography.ysRegular16,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            Row(modifier = Modifier.fillMaxWidth()) {
-                track.artistName?.let {
-                    Text(
-                        modifier = Modifier.weight(1f, fill = false),
-                        text = it,
-                        style = Typography.ysRegular11,
-                        color = MaterialTheme.colorScheme.onSecondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Icon(
-                    painter = painterResource(R.drawable.ic_dot_dash_13),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSecondary
-                )
-                track.trackTime?.let {
-                    Text(
-                        text = timeConversion(it),
-                        style = Typography.ysRegular11,
-                        color = MaterialTheme.colorScheme.onSecondary
-                    )
-                }
-            }
-        }
-        Icon(
-            painter = painterResource(R.drawable.ic_forward_arrow_24),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSecondary
         )
     }
 }

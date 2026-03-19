@@ -23,15 +23,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.media.models.Track
 import com.example.playlistmaker.ui.theme.Typography
+import com.example.playlistmaker.ui.view_models.media.MediaViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaScreen(
-
+    viewModel: MediaViewModel,
+    onTrackClick: (Track) -> Unit
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 2 })
     val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
@@ -108,7 +113,7 @@ fun MediaScreen(
                     .weight(1f)
             ) { page ->
                 when (page) {
-                    0 -> FavoriteScreen()
+                    0 -> FavoriteScreen(state.favoriteTracks, onTrackClick)
                     1 -> PlaylistsScreen()
                 }
             }
