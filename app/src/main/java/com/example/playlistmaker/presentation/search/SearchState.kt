@@ -1,6 +1,6 @@
 package com.example.playlistmaker.presentation.search
 
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 
 data class SearchState(
     val searchText: String = "",

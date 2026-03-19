@@ -1,9 +1,7 @@
 package com.example.playlistmaker.ui.screens.media
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.components.TrackItem
 import com.example.playlistmaker.ui.screens.search.dismissKeyboardOnScroll
 import com.example.playlistmaker.ui.theme.Typography

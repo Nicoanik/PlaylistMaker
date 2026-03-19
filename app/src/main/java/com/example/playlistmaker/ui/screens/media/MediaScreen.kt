@@ -25,8 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.theme.Typography
 import com.example.playlistmaker.presentation.media.MediaViewModel
 import kotlinx.coroutines.launch

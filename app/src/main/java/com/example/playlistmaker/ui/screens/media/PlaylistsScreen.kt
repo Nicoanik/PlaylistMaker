@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.media.models.Playlist
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.ui.components.PlaylistItem
 import com.example.playlistmaker.ui.theme.Typography
 

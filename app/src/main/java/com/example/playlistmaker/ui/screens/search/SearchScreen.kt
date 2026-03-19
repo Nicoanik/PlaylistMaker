@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.components.TrackItem
 import com.example.playlistmaker.presentation.search.SearchViewModel
 import com.example.playlistmaker.ui.theme.Typography

@@ -21,8 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.media.models.Track
-import com.example.playlistmaker.domain.media.models.timeConversion
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.models.timeConversion
 import com.example.playlistmaker.ui.theme.Typography
 
 @Composable

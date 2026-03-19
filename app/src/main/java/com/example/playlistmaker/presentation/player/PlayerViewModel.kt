@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.media.FavoritesInteractor
 import com.example.playlistmaker.domain.media.PlaylistInteractor
-import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.services.AudioPlayerControl
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent

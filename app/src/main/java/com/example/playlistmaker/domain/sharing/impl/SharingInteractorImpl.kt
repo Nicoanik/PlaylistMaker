@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.playlistmaker.R
 import com.example.playlistmaker.services.ExternalNavigator
 import com.example.playlistmaker.domain.sharing.SharingInteractor
-import com.example.playlistmaker.domain.sharing.model.EmailData
+import com.example.playlistmaker.domain.models.EmailData
 
 class SharingInteractorImpl(
     private val externalNavigator: ExternalNavigator,

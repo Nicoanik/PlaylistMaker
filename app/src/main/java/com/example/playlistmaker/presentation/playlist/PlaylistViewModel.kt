@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.media.PlaylistInteractor
-import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 

@@ -1,8 +1,8 @@
 package com.example.playlistmaker.domain.media
 
 import android.net.Uri
-import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistInteractor {

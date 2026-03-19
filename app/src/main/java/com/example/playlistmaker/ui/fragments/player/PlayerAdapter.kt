@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.AddToPlaylistViewBinding
-import com.example.playlistmaker.domain.media.models.Playlist
+import com.example.playlistmaker.domain.models.Playlist
 
 class PlayerAdapter(
     val onItemClickListener: OnItemClickListener

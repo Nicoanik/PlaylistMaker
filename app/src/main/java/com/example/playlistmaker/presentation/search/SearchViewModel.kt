@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.SearchTracksInteractor
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.data.network.receivers.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.debounce
 import kotlinx.coroutines.flow.MutableStateFlow

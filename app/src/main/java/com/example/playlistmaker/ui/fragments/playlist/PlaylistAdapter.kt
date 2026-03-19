@@ -2,7 +2,7 @@ package com.example.playlistmaker.ui.fragments.playlist
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 
 class PlaylistAdapter(
     private val onClick: (Track) -> Unit,

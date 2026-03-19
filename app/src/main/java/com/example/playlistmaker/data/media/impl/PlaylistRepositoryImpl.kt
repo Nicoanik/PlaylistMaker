@@ -11,8 +11,8 @@ import com.example.playlistmaker.data.media.db.dao.PlaylistDao
 import com.example.playlistmaker.data.media.db.dao.PlaylistTrackDao
 import com.example.playlistmaker.data.media.db.entity.PlaylistEntity
 import com.example.playlistmaker.domain.media.PlaylistRepository
-import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.domain.models.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

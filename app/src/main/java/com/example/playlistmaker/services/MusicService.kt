@@ -16,7 +16,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.player.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

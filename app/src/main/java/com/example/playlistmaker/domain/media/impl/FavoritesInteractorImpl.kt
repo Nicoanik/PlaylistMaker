@@ -2,7 +2,7 @@ package com.example.playlistmaker.domain.media.impl
 
 import com.example.playlistmaker.domain.media.FavoritesInteractor
 import com.example.playlistmaker.domain.media.FavoritesRepository
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 class FavoritesInteractorImpl(

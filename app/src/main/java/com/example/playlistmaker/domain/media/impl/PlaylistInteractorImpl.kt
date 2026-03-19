@@ -5,9 +5,9 @@ import android.net.Uri
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.media.PlaylistInteractor
 import com.example.playlistmaker.domain.media.PlaylistRepository
-import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.domain.media.models.Track
-import com.example.playlistmaker.domain.media.models.timeConversion
+import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.models.timeConversion
 import com.example.playlistmaker.services.ExternalNavigator
 import kotlinx.coroutines.flow.Flow
 

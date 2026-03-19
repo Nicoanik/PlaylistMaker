@@ -2,7 +2,7 @@ package com.example.playlistmaker.di
 
 import com.example.playlistmaker.presentation.media.CreatePlaylistViewModel
 import com.example.playlistmaker.presentation.player.PlayerViewModel
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.media.MediaViewModel
 import com.example.playlistmaker.presentation.playlist.EditPlaylistViewModel
 import com.example.playlistmaker.presentation.playlist.PlaylistViewModel

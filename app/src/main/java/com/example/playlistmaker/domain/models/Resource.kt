@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.media.models
+package com.example.playlistmaker.domain.models
 
 sealed interface Resource<T> {
     data class Success<T>(val data: T) : Resource<T>

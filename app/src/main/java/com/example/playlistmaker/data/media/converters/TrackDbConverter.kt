@@ -1,7 +1,7 @@
 package com.example.playlistmaker.data.media.converters
 
 import com.example.playlistmaker.data.media.db.entity.FavoriteTrackEntity
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 
 class TrackDbConverter {
 

@@ -1,6 +1,6 @@
 package com.example.playlistmaker.domain.search
 
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 
 interface SearchHistoryRepository {
     fun addTrackToSearchHistory(track: Track)

@@ -9,9 +9,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.media.models.Track
-import com.example.playlistmaker.domain.media.models.dpToPx
-import com.example.playlistmaker.domain.media.models.timeConversion
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.models.dpToPx
+import com.example.playlistmaker.domain.models.timeConversion
 
 class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)

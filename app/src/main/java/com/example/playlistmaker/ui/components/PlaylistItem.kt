@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.media.models.Playlist
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.ui.theme.Typography
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.media.models
+package com.example.playlistmaker.domain.models
 
 import android.content.Context
 import android.os.Parcelable

@@ -26,12 +26,12 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
-import com.example.playlistmaker.domain.media.models.Playlist
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.presentation.player.PlayerState
 import com.example.playlistmaker.presentation.player.PlayerViewModel
-import com.example.playlistmaker.domain.media.models.Track
-import com.example.playlistmaker.domain.media.models.dpToPx
-import com.example.playlistmaker.domain.media.models.timeConversion
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.models.dpToPx
+import com.example.playlistmaker.domain.models.timeConversion
 import com.example.playlistmaker.services.MusicService
 import com.example.playlistmaker.data.network.receivers.ConnectedBroadcastReceiver
 import com.example.playlistmaker.utils.antiRepetition

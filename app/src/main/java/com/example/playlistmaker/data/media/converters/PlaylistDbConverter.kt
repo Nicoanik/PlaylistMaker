@@ -1,7 +1,7 @@
 package com.example.playlistmaker.data.media.converters
 
 import com.example.playlistmaker.data.media.db.entity.PlaylistEntity
-import com.example.playlistmaker.domain.media.models.Playlist
+import com.example.playlistmaker.domain.models.Playlist
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

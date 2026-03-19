@@ -4,7 +4,7 @@ import com.example.playlistmaker.data.media.converters.TrackDbConverter
 import com.example.playlistmaker.data.media.db.dao.FavoriteTrackDao
 import com.example.playlistmaker.data.media.db.entity.FavoriteTrackEntity
 import com.example.playlistmaker.domain.media.FavoritesRepository
-import com.example.playlistmaker.domain.media.models.Track
+import com.example.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

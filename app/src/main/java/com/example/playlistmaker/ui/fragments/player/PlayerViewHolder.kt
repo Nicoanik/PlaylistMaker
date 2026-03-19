@@ -6,8 +6,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.AddToPlaylistViewBinding
-import com.example.playlistmaker.domain.media.models.Playlist
-import com.example.playlistmaker.domain.media.models.dpToPx
+import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.domain.models.dpToPx
 
 class PlayerViewHolder(
     private val binding: AddToPlaylistViewBinding
