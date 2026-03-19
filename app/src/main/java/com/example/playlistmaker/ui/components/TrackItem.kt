@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.playlistmaker.R
@@ -28,14 +29,14 @@ import com.example.playlistmaker.ui.theme.Typography
 @Composable
 fun TrackItem(
     track: Track,
-    onClick: () -> Unit,
+    onTrackClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(61.dp)
             .padding(horizontal = 12.dp)
-            .clickable { onClick() },
+            .clickable { onTrackClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
@@ -92,4 +93,24 @@ fun TrackItem(
             tint = MaterialTheme.colorScheme.onSecondary
         )
     }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+private fun Preview() {
+    TrackItem(
+        Track(
+            trackId = null,
+            trackName = "Master Of Puppets",
+            artistName = "Metallica",
+            trackTime = 52698,
+            collectionName = null,
+            releaseDate = null,
+            primaryGenreName = null,
+            country = null,
+            artworkUrl100 = null,
+            previewUrl = null
+        ),
+        onTrackClick = {  }
+    )
 }

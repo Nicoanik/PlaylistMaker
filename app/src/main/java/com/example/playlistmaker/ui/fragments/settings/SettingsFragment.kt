@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.ui.screens.settings.SettingsScreen
 import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
@@ -19,14 +20,14 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                PlaylistMakerTheme() {
-                    SettingsScreen(
-                        viewModel = viewModel
-                    )
-                }
+    ): View = ComposeView(requireContext()).apply {
+        // Устанавливаем стратегию уничтожения композиции
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setContent {
+            PlaylistMakerTheme() {
+                SettingsScreen(
+                    viewModel = viewModel
+                )
             }
         }
     }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
@@ -23,31 +24,31 @@ class MediaFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                PlaylistMakerTheme {
-                    MediaScreen(
-                        viewModel = viewModel,
-                        onTrackClick = { track ->
-                            findNavController().navigate(
-                                R.id.action_mediaFragment_to_playerFragment,
-                                PlayerFragment.createArgs(track)
-                            )
-                        },
-                        onNewPlaylistClick = {
-                            findNavController().navigate(
-                                R.id.action_mediaFragment_to_newPlaylist
-                            )
-                        },
-                        onPlaylistClick = { playlist ->
-                            findNavController().navigate(
-                                R.id.action_mediaFragment_to_playlistFragment,
-                                PlaylistFragment.createArgs(playlist.id)
-                            )
-                        }
-                    )
-                }
+    ): View = ComposeView(requireContext()).apply {
+        // Устанавливаем стратегию уничтожения композиции
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setContent {
+            PlaylistMakerTheme {
+                MediaScreen(
+                    viewModel = viewModel,
+                    onTrackClick = { track ->
+                        findNavController().navigate(
+                            R.id.action_mediaFragment_to_playerFragment,
+                            PlayerFragment.createArgs(track)
+                        )
+                    },
+                    onNewPlaylistClick = {
+                        findNavController().navigate(
+                            R.id.action_mediaFragment_to_newPlaylist
+                        )
+                    },
+                    onPlaylistClick = { playlist ->
+                        findNavController().navigate(
+                            R.id.action_mediaFragment_to_playlistFragment,
+                            PlaylistFragment.createArgs(playlist.id)
+                        )
+                    }
+                )
             }
         }
     }

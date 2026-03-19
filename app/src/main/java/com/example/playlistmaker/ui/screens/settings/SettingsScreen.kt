@@ -38,6 +38,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import com.example.playlistmaker.utils.AppConstants.SWITCH_ANIMATION
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +91,7 @@ private fun SettingSwitch(
 
     LaunchedEffect(isClicked != isChecked) {
         if (isClicked != isChecked) {
-            delay(300L)
+            delay(SWITCH_ANIMATION.toLong())
             onClick()
         }
     }
@@ -153,7 +154,7 @@ fun CustomSwitch(
     val boxHeight = if (thumbSize > trackHeight) thumbSize else trackHeight
     val offset by animateDpAsState(
         targetValue = if (isClicked) boxWidth - thumbSize else 0.dp,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = tween(durationMillis = SWITCH_ANIMATION),
         label = "offset"
     )
 

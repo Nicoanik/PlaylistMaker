@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
@@ -26,20 +27,20 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                PlaylistMakerTheme {
-                    SearchScreen(
-                        viewModel = viewModel,
-                        onNavigateToPlayer = { track ->
-                            findNavController().navigate(
-                                R.id.action_searchFragment_to_playerFragment,
-                                PlayerFragment.createArgs(track)
-                            )
-                        }
-                    )
-                }
+    ): View = ComposeView(requireContext()).apply {
+        // Устанавливаем стратегию уничтожения композиции
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setContent {
+            PlaylistMakerTheme {
+                SearchScreen(
+                    viewModel = viewModel,
+                    onNavigateToPlayer = { track ->
+                        findNavController().navigate(
+                            R.id.action_searchFragment_to_playerFragment,
+                            PlayerFragment.createArgs(track)
+                        )
+                    }
+                )
             }
         }
     }
