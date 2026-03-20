@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -36,12 +37,19 @@ fun <T> debounce(
 }
 
 fun Modifier.debounceClick(
-    coroutineScope: CoroutineScope,
     delayMillis: Long = DEBOUNCE_TIME,
     useLastParam: Boolean = true,
     onDebouncedClick: () -> Unit
 ): Modifier = composed {
+    val scope = rememberCoroutineScope()
     var debounceJob: Job? by remember { mutableStateOf(null) }
+
+    fun startDelay() {
+        debounceJob = scope.launch {
+            delay(delayMillis)
+            onDebouncedClick()
+        }
+    }
 
     this.then(
         Modifier.pointerInput(Unit) {
@@ -49,18 +57,10 @@ fun Modifier.debounceClick(
                 while (true) {
                     awaitFirstDown(requireUnconsumed = false)
 
-                    if (useLastParam) {
-                        debounceJob?.cancel()
-                    }
+                    if (useLastParam) debounceJob?.cancel()
 
-                    if (debounceJob?.isCompleted == true || useLastParam) {
-                        debounceJob = coroutineScope.launch {
-                            Log.d("Nico", "Start Delay")
-                            delay(delayMillis)
-                            Log.d("Nico", "Start Delay")
-                            onDebouncedClick()
-                        }
-                    }
+                    if (debounceJob?.isCompleted != true && !useLastParam) continue
+                    startDelay()
                 }
             }
         }

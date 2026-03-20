@@ -1,9 +1,11 @@
 package com.example.playlistmaker.utils
 
+import android.util.Log
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -32,11 +34,18 @@ fun <T> antiRepetition(
 }
 
 fun Modifier.antiRepetitionClick(
-    coroutineScope: CoroutineScope,
     lockTimeMillis: Long = LOCK_TIME,
     onClick: () -> Unit
 ): Modifier = composed {
+    val scope = rememberCoroutineScope()
     var isLocked by remember { mutableStateOf(false) }
+
+    fun startDelay() {
+        scope.launch {
+            delay(lockTimeMillis)
+            isLocked = false
+        }
+    }
 
     this.then(
         Modifier.pointerInput(Unit) {
@@ -44,14 +53,11 @@ fun Modifier.antiRepetitionClick(
                 while (true) {
                     awaitFirstDown(requireUnconsumed = false)
 
-                    if (!isLocked) {
-                        onClick()
-                        isLocked = true
-                        coroutineScope.launch {
-                            delay(lockTimeMillis)
-                            isLocked = false
-                        }
-                    }
+                    if (isLocked) continue
+
+                    onClick()
+                    isLocked = true
+                    startDelay()
                 }
             }
         }
