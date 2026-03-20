@@ -121,7 +121,6 @@ class PlayerFragment : Fragment() {
         })
 
         onPlaylistClickDebounce = antiRepetition(
-            CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope
         ) { playlist ->
             viewModel.addTrackToPlaylist(playlist)
@@ -285,7 +284,6 @@ class PlayerFragment : Fragment() {
 
         const val PLAYBACK_DEF = "00:00"
         private const val ARGS_TRACK = "track"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
         fun createArgs(track: Track) = Bundle().apply { putParcelable(ARGS_TRACK, track) }
     }
 

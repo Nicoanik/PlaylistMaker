@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +26,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.models.timeConversion
 import com.example.playlistmaker.ui.theme.Typography
+import com.example.playlistmaker.utils.antiRepetitionClick
+import com.example.playlistmaker.utils.debounceClick
 
 @Composable
 fun TrackItem(
@@ -36,7 +39,10 @@ fun TrackItem(
             .fillMaxWidth()
             .height(61.dp)
             .padding(horizontal = 12.dp)
-            .clickable { onTrackClick() },
+            .antiRepetitionClick(
+                coroutineScope = rememberCoroutineScope(),
+                onClick = onTrackClick
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(

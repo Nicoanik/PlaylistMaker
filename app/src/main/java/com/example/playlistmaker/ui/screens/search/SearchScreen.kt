@@ -60,7 +60,6 @@ import com.example.playlistmaker.presentation.search.SearchViewModel
 import com.example.playlistmaker.ui.theme.Typography
 import com.example.playlistmaker.ui.theme.ypBlack
 import com.example.playlistmaker.ui.theme.ypBlue
-import com.example.playlistmaker.utils.antiRepetition
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -72,17 +71,6 @@ fun SearchScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
-    val onTrackClick: (Track) -> Unit = remember {
-        antiRepetition(
-            SearchViewModel.CLICK_DEBOUNCE_DELAY,
-            scope
-        ) { track ->
-            viewModel.addTrackToSearchHistory(track)
-            onNavigateToPlayer(track)
-        }
-    }
 
     DisposableEffect(viewModel) {
         viewModel.registerNetworkReceiver(context)
@@ -140,10 +128,13 @@ fun SearchScreen(
                     state.history.isNotEmpty() && state.searchText.isEmpty() ->
                         SearchHistory(
                             state.history,
-                            onTrackClick
+                            onNavigateToPlayer
                         ) { viewModel.clearSearchHistory() }
 
-                    state.content.isNotEmpty() -> FoundTracks(state.content, onTrackClick)
+                    state.content.isNotEmpty() -> {
+                        FoundTracks(state.content, onNavigateToPlayer)
+                    }
+
                     state.error -> {
                         ShowError { viewModel.searchRequest(state.searchText) }
                         ShowToast(context, state.errorMessage) { viewModel.toastShown() }

@@ -23,6 +23,7 @@ import com.example.playlistmaker.ui.fragments.player.PlayerFragment
 import com.example.playlistmaker.presentation.playlist.PlaylistState
 import com.example.playlistmaker.presentation.playlist.PlaylistViewModel
 import com.example.playlistmaker.utils.antiRepetition
+import com.example.playlistmaker.utils.antiRepetitionClick
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -80,7 +81,6 @@ class PlaylistFragment : Fragment() {
         }
 
         onTrackClickDebounce = antiRepetition(
-            CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope
         ) { track ->
             findNavController().navigate(
@@ -218,7 +218,6 @@ class PlaylistFragment : Fragment() {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
         private const val ARGS_PLAYLIST_ID = "playlist"
         fun createArgs(playlistId: Long) = Bundle().apply { putLong(ARGS_PLAYLIST_ID, playlistId) }
     }
