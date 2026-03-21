@@ -7,6 +7,7 @@ import com.example.playlistmaker.domain.media.PlaylistInteractor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.collections.immutable.toImmutableList
 
 class MediaViewModel(
     private val favoritesInteractor: FavoritesInteractor,
@@ -26,7 +27,7 @@ class MediaViewModel(
             favoritesInteractor
                 .getFavorites()
                 .collect { tracks ->
-                    _state.update { it.copy(favoriteTracks = tracks) }
+                    _state.update { it.copy(favoriteTracks = tracks.toImmutableList()) }
                 }
         }
     }
@@ -36,7 +37,7 @@ class MediaViewModel(
             playlistInteractor
                 .getPlaylists()
                 .collect { playlists ->
-                    _state.update { it.copy(playlists = playlists) }
+                    _state.update { it.copy(playlists = playlists.toImmutableList()) }
                 }
         }
     }

@@ -11,7 +11,11 @@ import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.SearchTracksInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.data.network.receivers.ConnectedBroadcastReceiver
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.utils.debounce
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -59,7 +63,7 @@ class SearchViewModel(
     fun onSearchTextChanged(text: String) {
         _state.update { it.copy(searchText = text) }
         if (text.isEmpty()) {
-            _state.update { it.copy(content = emptyList(), error = false, empty = false) }
+            _state.update { it.copy(content = persistentListOf(), error = false, empty = false) }
             getSearchHistory()
         }
         trackSearchDebounce(text)
@@ -91,7 +95,7 @@ class SearchViewModel(
                     isLoading = false,
                     error = errorMessage != null,
                     empty = foundTracks?.isEmpty() == true,
-                    content = foundTracks ?: emptyList(),
+                    content = foundTracks?.toImmutableList() ?: persistentListOf(),
                     errorMessage = errorMessage ?: ""
                 )
             }
@@ -99,7 +103,7 @@ class SearchViewModel(
     }
 
     private fun getSearchHistory() {
-        _state.update { it.copy(history = searchHistoryInteractor.getSearchHistory()) }
+        _state.update { it.copy(history = searchHistoryInteractor.getSearchHistory().toImmutableList()) }
     }
 
     fun addTrackToSearchHistory(track: Track) {

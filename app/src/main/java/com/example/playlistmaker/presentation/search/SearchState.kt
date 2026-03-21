@@ -1,6 +1,9 @@
 package com.example.playlistmaker.presentation.search
 
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.domain.models.Track
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class SearchState(
     val searchText: String = "",
@@ -8,7 +11,7 @@ data class SearchState(
     val empty: Boolean = false,
     val error: Boolean = false,
     val errorMessage: String = "",
-    val history: List<Track> = emptyList(),
-    val content: List<Track> = emptyList(),
+    val history: ImmutableList<Track> = persistentListOf(),
+    val content: ImmutableList<Track> = persistentListOf(),
     val isConnected: Boolean = true
 )
