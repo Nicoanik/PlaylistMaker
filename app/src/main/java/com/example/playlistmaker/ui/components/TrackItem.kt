@@ -25,6 +25,7 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.models.timeConversion
 import com.example.playlistmaker.ui.theme.Typography
 import com.example.playlistmaker.utils.antiRepetitionClick
+import com.example.playlistmaker.utils.debounceClick
 
 @Composable
 fun TrackItem(

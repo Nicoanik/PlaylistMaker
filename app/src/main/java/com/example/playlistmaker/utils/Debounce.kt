@@ -2,6 +2,7 @@ package com.example.playlistmaker.utils
 
 import android.util.Log
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,15 +63,9 @@ fun <T> Modifier.debounceClick(
 
     this.then(
         Modifier.pointerInput(Unit) {
-            awaitPointerEventScope {
-                while (true) {
-                    awaitFirstDown(requireUnconsumed = false)
-
-                    if (useLastParam) debounceJob?.cancel()
-
-                    if (shouldSkipClick(debounceJob, useLastParam)) continue
-                    startDelay()
-                }
+            detectTapGestures {
+                if (useLastParam) debounceJob?.cancel()
+                if (shouldSkipClick(debounceJob, useLastParam)) startDelay()
             }
         }
     )
@@ -79,6 +74,6 @@ fun <T> Modifier.debounceClick(
 private fun shouldSkipClick(
     job: Job?,
     useLastParam: Boolean
-): Boolean = job?.isCompleted != true && !useLastParam
+): Boolean = job?.isCompleted == true || useLastParam
 
 private const val DEBOUNCE_TIME = 2000L
