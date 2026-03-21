@@ -36,6 +36,14 @@ fun <T> antiRepetition(
 fun Modifier.antiRepetitionClick(
     lockTimeMillis: Long = LOCK_TIME,
     onClick: () -> Unit
+): Modifier = antiRepetitionClick(lockTimeMillis, Unit) { _ ->
+    onClick()
+}
+
+fun <T> Modifier.antiRepetitionClick(
+    lockTimeMillis: Long = LOCK_TIME,
+    param: T,
+    onClick: (T) -> Unit
 ): Modifier = composed {
     val scope = rememberCoroutineScope()
     var isLocked by remember { mutableStateOf(false) }
@@ -55,7 +63,7 @@ fun Modifier.antiRepetitionClick(
 
                     if (isLocked) continue
 
-                    onClick()
+                    onClick(param)
                     isLocked = true
                     startDelay()
                 }
