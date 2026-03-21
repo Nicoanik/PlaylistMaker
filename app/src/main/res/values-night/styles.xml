@@ -76,11 +76,11 @@
     </style>
 
     <style name="error_image_view">
-        <item name="android:src">@drawable/ic_errors_dark_120</item>
+        <item name="android:src">@drawable/ic_empty_120</item>
     </style>
 
     <style name="internet_image_view">
-        <item name="android:src">@drawable/ic_internet_dark_120</item>
+        <item name="android:src">@drawable/ic_no_internet_120</item>
     </style>
 
     <style name="text_placeholder">

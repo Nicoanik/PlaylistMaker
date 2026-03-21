@@ -1,0 +1,24 @@
+package com.example.playlistmaker.data.media.db.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.example.playlistmaker.data.media.db.entity.FavoriteTrackEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface FavoriteTrackDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTrack(track: FavoriteTrackEntity)
+
+    @Query("DELETE FROM favorite_tracks WHERE trackId = :trackId")
+    suspend fun deleteTrack(trackId: Long?)
+
+    @Query("SELECT * FROM favorite_tracks ORDER BY timestamp DESC")
+    fun getTracks(): Flow<List<FavoriteTrackEntity>>
+
+    @Query("SELECT trackId FROM favorite_tracks")
+    suspend fun getTracksId(): List<Long>
+}

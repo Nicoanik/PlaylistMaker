@@ -6,7 +6,7 @@
     style="@style/AppBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".player.ui.fragment.PlayerFragment">
+    tools:context=".ui.fragments.player.PlayerFragment">
 
     <ImageView
         android:id="@+id/back_button_audio_player"
@@ -98,7 +98,7 @@
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@id/tv_artist_name" />
 
-            <com.example.playlistmaker.player.ui.fragment.PlaybackButtonView
+            <com.example.playlistmaker.ui.fragments.player.PlaybackButtonView
                 android:id="@+id/play_button"
                 android:layout_width="100dp"
                 android:layout_height="100dp"

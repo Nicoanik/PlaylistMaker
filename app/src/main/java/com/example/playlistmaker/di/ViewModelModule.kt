@@ -1,48 +1,31 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewModel
-import com.example.playlistmaker.media.ui.view_model.FavoriteTracksViewModel
-import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
-import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
-import com.example.playlistmaker.media.domain.models.Track
-import com.example.playlistmaker.playlist.ui.view_model.EditPlaylistViewModel
-import com.example.playlistmaker.playlist.ui.view_model.PlaylistViewModel
-import com.example.playlistmaker.search.ui.view_model.SearchViewModel
-import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
+import com.example.playlistmaker.presentation.media.CreatePlaylistViewModel
+import com.example.playlistmaker.presentation.player.PlayerViewModel
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.media.MediaViewModel
+import com.example.playlistmaker.presentation.playlist.EditPlaylistViewModel
+import com.example.playlistmaker.presentation.playlist.PlaylistViewModel
+import com.example.playlistmaker.presentation.search.SearchViewModel
+import com.example.playlistmaker.presentation.settings.SettingsViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel {
-        SearchViewModel(get(), get())
-    }
+    viewModel { SearchViewModel(get(), get()) }
 
-    viewModel {
-        SettingsViewModel(get(), get())
-    }
+    viewModel { SettingsViewModel(get(), get()) }
 
     viewModel { (track: Track) ->
         PlayerViewModel(track, get(), get(), get())
     }
 
-    viewModel {
-        FavoriteTracksViewModel(get())
-    }
+    viewModel { CreatePlaylistViewModel(get()) }
 
-    viewModel {
-        PlaylistsViewModel(get())
-    }
+    viewModel { (playlistId: Long) -> PlaylistViewModel(playlistId, get()) }
 
-    viewModel {
-        CreatePlaylistViewModel(get())
-    }
+    viewModel { (playlistId: Long) -> EditPlaylistViewModel(playlistId, get()) }
 
-    viewModel { (playlistId: Long) ->
-        PlaylistViewModel(playlistId, get())
-    }
-
-    viewModel { (playlistId: Long) ->
-        EditPlaylistViewModel(playlistId, get())
-    }
+    viewModel { MediaViewModel(get(), get()) }
 }

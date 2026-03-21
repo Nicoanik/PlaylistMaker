@@ -1,17 +1,17 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.media.domain.FavoritesInteractor
-import com.example.playlistmaker.media.domain.PlaylistInteractor
-import com.example.playlistmaker.media.domain.impl.FavoritesInteractorImpl
-import com.example.playlistmaker.media.domain.impl.PlaylistInteractorImpl
-import com.example.playlistmaker.search.domain.SearchHistoryInteractor
-import com.example.playlistmaker.search.domain.SearchTracksInteractor
-import com.example.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
-import com.example.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
-import com.example.playlistmaker.settings.domain.SettingsInteractor
-import com.example.playlistmaker.settings.domain.impl.SettingsInteractorImpl
-import com.example.playlistmaker.sharing.domain.SharingInteractor
-import com.example.playlistmaker.sharing.domain.impl.SharingInteractorImpl
+import com.example.playlistmaker.domain.media.FavoritesInteractor
+import com.example.playlistmaker.domain.media.PlaylistInteractor
+import com.example.playlistmaker.domain.media.impl.FavoritesInteractorImpl
+import com.example.playlistmaker.domain.media.impl.PlaylistInteractorImpl
+import com.example.playlistmaker.domain.search.SearchHistoryInteractor
+import com.example.playlistmaker.domain.search.SearchTracksInteractor
+import com.example.playlistmaker.domain.search.impl.SearchHistoryInteractorImpl
+import com.example.playlistmaker.domain.search.impl.SearchTracksInteractorImpl
+import com.example.playlistmaker.domain.settings.SettingsInteractor
+import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
+import com.example.playlistmaker.domain.sharing.SharingInteractor
+import com.example.playlistmaker.domain.sharing.impl.SharingInteractorImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

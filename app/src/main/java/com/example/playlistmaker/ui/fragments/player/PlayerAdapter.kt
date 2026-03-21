@@ -1,0 +1,39 @@
+package com.example.playlistmaker.ui.fragments.player
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.databinding.AddToPlaylistViewBinding
+import com.example.playlistmaker.domain.models.Playlist
+
+class PlayerAdapter(
+    val onItemClickListener: OnItemClickListener
+): RecyclerView.Adapter<PlayerViewHolder>() {
+
+    val playlists: MutableList<Playlist> = mutableListOf()
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): PlayerViewHolder {
+        val binding = AddToPlaylistViewBinding.inflate(LayoutInflater.from(parent.context))
+        return PlayerViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(
+        holder: PlayerViewHolder,
+        position: Int
+    ) {
+        holder.bind(playlists[position])
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(playlists[position])
+        }
+    }
+
+    override fun getItemCount(): Int = playlists.size
+
+    fun interface OnItemClickListener {
+        fun onItemClick(playlist: Playlist)
+    }
+
+}
