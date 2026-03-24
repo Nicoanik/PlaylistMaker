@@ -3,6 +3,7 @@ package com.example.playlistmaker.data.search.impl
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.dto.TracksSearchRequest
 import com.example.playlistmaker.data.search.dto.TracksSearchResponse
+import com.example.playlistmaker.data.search.dto.toDomain
 import com.example.playlistmaker.domain.models.Resource
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.SearchTracksRepository
@@ -20,20 +21,7 @@ class SearchTracksRepositoryImpl(
             200 -> with(response as TracksSearchResponse) {
                 emit(
                     Resource.Success(
-                        results.map {
-                            Track(
-                                it.trackId,
-                                it.trackName,
-                                it.artistName,
-                                it.trackTime,
-                                it.collectionName,
-                                it.releaseDate,
-                                it.primaryGenreName,
-                                it.country,
-                                it.artworkUrl100,
-                                it.previewUrl
-                            )
-                        }
+                        results.map { it.toDomain() }
                     )
                 )
             }
